@@ -7,8 +7,6 @@ import { UserType } from '../../core/models/user.model';
 })
 export class UserTypePipe implements PipeTransform {
   public transform(value: string): unknown {
-    console.log(value);
-
     switch (value) {
       case 'ADMINISTRATOR':
         return 'Administrador';

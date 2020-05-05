@@ -1,18 +1,24 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="(isHandset$ | async) === false">
-    <mat-toolbar>Menu</mat-toolbar>
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <mat-toolbar>
+      <a mat-list-item routerLink="/inicio">
+        <mat-icon>insert_chart_outlined</mat-icon>
+      </a>
+    </mat-toolbar>
     <mat-nav-list>
       <mat-divider></mat-divider>
-      <a mat-list-item routerLink="/inicio">Inicio</a>
+      <a mat-list-item routerLink="/usuario/lista">Usuarios</a>
       <mat-divider></mat-divider>
-      <a mat-list-item routerLink="/usuario/registrar">Registar Usuario</a>
+      <a mat-list-item>Certificados</a>
       <mat-divider></mat-divider>
-      <a mat-list-item routerLink="/usuario/lista">Consultar Usuarios</a>
-      <mat-divider></mat-divider>
-      <a mat-list-item href="#">Link 3</a>
+      <a mat-list-item>Entregas y Devoluciones</a>
       <mat-divider></mat-divider>
     </mat-nav-list>
   </mat-sidenav>
@@ -23,7 +29,8 @@
         aria-label="Toggle sidenav"
         mat-icon-button
         (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
+        *ngIf="isHandset$ | async"
+      >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>Control de Papelería del Instituto Departamental de Salud de Norte de Santander</span>

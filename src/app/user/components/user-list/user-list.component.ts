@@ -1,43 +1,31 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTable } from '@angular/material/table';
-import { UserListDataSource, UserListItem } from './user-list-datasource';
+import { Component, OnInit } from '@angular/core';
 
-import { UserService } from 'src/app/core/services/user.service';
+import { UserService } from '../../../core/services/user.service';
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.scss']
+  styleUrls: ['./user-list.component.scss'],
 })
-export class UserListComponent implements AfterViewInit, OnInit {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<UserListItem>;
-  dataSource: UserListDataSource;
-
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'name'];
+export class UserListComponent implements OnInit {
+  public users = [];
+  public displayedColumns: string[] = ['identificationCard', 'name', 'email', 'phone', 'userType', 'actions'];
 
   constructor(private service: UserService) {}
 
   ngOnInit() {
-    this.dataSource = new UserListDataSource();
     this.loadUsers();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.table.dataSource = this.dataSource;
-  }
-
   public loadUsers() {
-    console.log('Hola');
-    this.service.findAll(0).subscribe(data => {
-      console.log(data);
-    });
+    this.service.findAll(0).subscribe(
+      (resp) => {
+        this.users = resp;
+      },
+      (err) => {
+        // TODO
+        alert(err.error.message);
+      }
+    );
   }
-
 }

@@ -3,13 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { User } from '../models/user.model';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
-
   private endPoint = environment.APIUrl + 'user';
 
   constructor(private http: HttpClient) {}
@@ -37,5 +36,4 @@ export class UserService {
   public delete(id: string) {
     return this.http.delete(this.endPoint + '/' + id);
   }
-
 }

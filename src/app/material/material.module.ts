@@ -37,7 +37,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatToolbarModule,
     MatSidenavModule,
     MatGridListModule,
-    MatPaginatorModule
+    MatPaginatorModule,
   ],
   exports: [
     LayoutModule,
@@ -57,7 +57,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatToolbarModule,
     MatSidenavModule,
     MatGridListModule,
-    MatPaginatorModule
-  ]
+    MatPaginatorModule,
+  ],
 })
 export class MaterialModule {}

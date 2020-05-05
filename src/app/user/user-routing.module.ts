@@ -7,16 +7,20 @@ import { UserListComponent } from './components/user-list/user-list.component';
 const routes: Routes = [
   {
     path: 'registrar',
-    component: UserFormComponent
+    component: UserFormComponent,
   },
   {
     path: 'lista',
-    component: UserListComponent
-  }
+    component: UserListComponent,
+  },
+  {
+    path: 'editar/:identificationCard',
+    component: UserFormComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class UserRoutingModule { }
+export class UserRoutingModule {}

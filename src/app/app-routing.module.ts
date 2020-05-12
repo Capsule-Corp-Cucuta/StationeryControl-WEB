@@ -12,28 +12,26 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'inicio',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       {
         path: 'inicio',
-        component: DashboardComponent
+        component: DashboardComponent,
       },
       {
         path: 'usuario',
-        loadChildren: () => import('./user/user.module').then(m => m.UserModule)
+        loadChildren: () => import('./user/user.module').then((m) => m.UserModule),
       },
-    ]
-  }
-  //{
-  //  path: '**',
-  //  component: PageNotFoundComponent
-  //}
+    ],
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {
-    preloadingStrategy: PreloadAllModules
-  })],
-  exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot(routes, {
+      preloadingStrategy: PreloadAllModules,
+    }),
+  ],
+  exports: [RouterModule],
 })
 export class AppRoutingModule {}

@@ -1,12 +1,25 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { UserType } from '../../core/models/user.model';
+
 @Pipe({
-  name: 'userType'
+  name: 'userType',
 })
 export class UserTypePipe implements PipeTransform {
-
-  transform(value: unknown, ...args: unknown[]): unknown {
-    return null;
+  public transform(value: string): unknown {
+    switch (value) {
+      case 'ADMINISTRATOR':
+        return 'Administrador';
+      case 'IDS':
+        return 'IDS';
+      case 'DANE':
+        return 'DANE';
+      case 'DEPARTMENTAL':
+        return 'Departamental';
+      case 'MUNICIPAL':
+        return 'Municipal';
+      case 'INSTITUTIONAL':
+        return ' Institucional';
+    }
   }
-
 }

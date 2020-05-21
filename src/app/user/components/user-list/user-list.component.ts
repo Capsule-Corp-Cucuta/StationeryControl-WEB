@@ -16,7 +16,7 @@ export class UserListComponent implements OnInit {
   ngOnInit() {
     this.loadUsers();
   }
-
+  s;
   public loadUsers() {
     this.service.findAll(0).subscribe(
       (resp) => {

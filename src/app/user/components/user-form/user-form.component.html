@@ -1,12 +1,14 @@
-<form [formGroup]="form" class="form">
-  <mat-card class="form__card">
+<form [formGroup]="form" class="form-card mat-elevation-z8">
+  <mat-card>
     <mat-card-header class="form__card--header">
-      <mat-card-title>Usuario</mat-card-title>
+      <mat-icon>account_box</mat-icon>
+      <h3>Registrar usuario</h3>
     </mat-card-header>
-    <mat-card-content class="form__card--content">
+    <mat-divider></mat-divider>
+    <mat-card-content class="card-content">
       <div class="row">
         <div class="col-xs">
-          <mat-form-field>
+          <mat-form-field class="example-full-width">
             <input matInput type="text" placeholder="Cédula" formControlName="identificationCard" />
           </mat-form-field>
         </div>
@@ -14,7 +16,7 @@
 
       <div class="row">
         <div class="col-xs">
-          <mat-form-field>
+          <mat-form-field class="example-full-width">
             <input matInput type="text" placeholder="Nombre" formControlName="name" />
           </mat-form-field>
         </div>
@@ -22,7 +24,7 @@
 
       <div class="row">
         <div class="col-xs">
-          <mat-form-field>
+          <mat-form-field class="example-full-width">
             <input matInput type="email" placeholder="Correo" formControlName="email" />
           </mat-form-field>
         </div>
@@ -30,16 +32,40 @@
 
       <div class="row">
         <div class="col-xs">
-          <mat-form-field>
+          <mat-form-field class="example-full-width">
             <input matInput type="tel" placeholder="Teléfono" formControlName="phone" />
           </mat-form-field>
         </div>
       </div>
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <mat-label>Tipo de Usuario</mat-label>
+            <!--<input matInput type="text" placeholder="Tipo de Usuario" formControlName="userType" />-->
+            <mat-select formControlName="userType" placeholder="Tipo de usuario" value="userType">
+              <mat-option *ngFor="let op of types" [value]="op"> {{ op | userType }} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
     </mat-card-content>
-    <mat-card-actions class="form__card--actions">
-      <button *ngIf="isCreate" mat-stroked-button color="primary" (click)="create($event)">Registrar</button>
-      <button *ngIf="!isCreate" mat-stroked-button color="accent" (click)="update($event)">Actualizar</button>
-      <button *ngIf="!isCreate" mat-stroked-button color="warn" (click)="delete($event)">Eliminar</button>
+    <mat-card-actions>
+      <button *ngIf="isCreate" mat-raised-button class="button-form-r" (click)="create($event)">
+        <mat-icon class="separation">save</mat-icon> <span>Registrar</span>
+      </button>
+      <div class="row">
+        <div class="col-xs">
+          <button *ngIf="!isCreate" mat-raised-button color="accent" class="button-form" (click)="update($event)">
+            Actualizar
+          </button>
+        </div>
+        <div class="col-xs">
+          <button *ngIf="!isCreate" mat-raised-button color="warn" class="button-form" (click)="delete($event)">
+            Eliminar
+          </button>
+        </div>
+      </div>
     </mat-card-actions>
+    <div style="clear: both;"></div>
   </mat-card>
 </form>

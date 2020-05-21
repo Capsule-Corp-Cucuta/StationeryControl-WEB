@@ -1,0 +1,57 @@
+<form [formGroup]="form" class="form-card mat-elevation-z8">
+  <mat-card>
+    <mat-card-header>
+      <mat-icon>assignment</mat-icon>
+      <h3>Entregas y Devoluciones</h3>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content class="card-content">
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input matInput type="text" placeholder="N° Oficio" formControlName="tradeNumber" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="Certificado inicial" formControlName="firstCertificate" />
+          </mat-form-field>
+        </div>
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="Certificado final" formControlName="lastCertificate" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="Remitente" formControlName="sender" />
+          </mat-form-field>
+        </div>
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="Receptor" formControlName="receiver" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <mat-select formControlName="deliveryType" placeholder="Tipo de Entrega" value="deliveryType">
+              <mat-option *ngFor="let op of types" [value]="op"> {{ op | deliveryType }} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button class="button-form" (click)="create($event)">
+        <mat-icon class="separation">save</mat-icon> Registrar
+      </button>
+    </mat-card-actions>
+    <div style="clear: both;"></div>
+  </mat-card>
+</form>

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { UserType, User } from '../../../core/models/user.model';
 import { UserService } from '../../../core/services/user.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-form',
@@ -13,12 +14,14 @@ import { UserService } from '../../../core/services/user.service';
 export class UserFormComponent implements OnInit {
   public form: FormGroup;
   public isCreate: boolean;
+  public types = ['ADMINISTRATOR', 'IDS', 'DANE', 'DEPARTMENTAL', 'MUNICIPAL', 'INSTITUTIONAL'];
 
   constructor(
     private router: Router,
     private builder: FormBuilder,
     private service: UserService,
-    private activeRoute: ActivatedRoute
+    private activeRoute: ActivatedRoute,
+    private _snackBar: MatSnackBar
   ) {
     this.buildForm();
   }
@@ -49,11 +52,15 @@ export class UserFormComponent implements OnInit {
 
   public create(e: Event) {
     e.preventDefault();
+
     if (this.form.valid) {
       const user = this.form.value;
       this.service.create(user).subscribe(
         (resp) => {
           // TODO
+          this._snackBar.open('Registro Exitoso', 'OK', {
+            duration: 2000,
+          });
           this.router.navigate(['./usuario/lista']);
         },
         (err) => {
@@ -71,6 +78,9 @@ export class UserFormComponent implements OnInit {
       this.service.update(user.identificationCard, user).subscribe(
         (resp) => {
           // TODO
+          this._snackBar.open('Usuario Actualizado', 'OK', {
+            duration: 2000,
+          });
           this.router.navigate(['./usuario/lista']);
         },
         (err) => {

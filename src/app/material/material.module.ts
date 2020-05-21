@@ -16,6 +16,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [],
@@ -38,6 +41,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatSidenavModule,
     MatGridListModule,
     MatPaginatorModule,
+    MatTooltipModule,
+    MatSnackBarModule,
+    MatDialogModule,
   ],
   exports: [
     LayoutModule,
@@ -58,6 +64,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatSidenavModule,
     MatGridListModule,
     MatPaginatorModule,
+    MatTooltipModule,
+    MatSnackBarModule,
+    MatDialogModule,
   ],
 })
 export class MaterialModule {}

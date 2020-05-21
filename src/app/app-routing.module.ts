@@ -22,7 +22,23 @@ const routes: Routes = [
         path: 'usuario',
         loadChildren: () => import('./user/user.module').then((m) => m.UserModule),
       },
+      {
+        path: 'certificado',
+        loadChildren: () => import('./certificado/certificado.module').then((m) => m.CertificadoModule),
+      },
+      {
+        path: 'entrega',
+        loadChildren: () => import('./delivery/delivery.module').then((m) => m.DeliveryModule),
+      },
+      {
+        path: 'user',
+        loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+      },
     ],
+  },
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
   },
 ];
 

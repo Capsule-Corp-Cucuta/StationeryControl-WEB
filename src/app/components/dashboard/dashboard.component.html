@@ -1,24 +1,243 @@
-<div class="grid-container">
-  <h1 class="mat-h1">Dashboard</h1>
-  <mat-grid-list cols="2" rowHeight="350px">
-    <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
-      <mat-card class="dashboard-card">
-        <mat-card-header>
-          <mat-card-title>
-            {{ card.title }}
-            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu" xPosition="before">
-              <button mat-menu-item>Expand</button>
-              <button mat-menu-item>Remove</button>
-            </mat-menu>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <div>Card Content Here</div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
-</div>
+<section class="container">
+  <div class="grid-container">
+    <div class="row">
+      <div class="col-md-6">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>Total Certificados</h3>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content>
+            <canvas id="canvas">
+              {{ chart }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-md-6">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>Certificados Registrados por Tipos</h3>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content>
+            <canvas id="types">
+              {{ chartTypes }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>Certificados Registrados por Estado</h3>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content>
+            <canvas id="states">
+              {{ chartStates }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>Certificados Registrados por Cedula</h3>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content>
+            <div class="example-header" fxLayout="row">
+              <mat-form-field>
+                <input matInput (change)="certificatesByAttendant($event.target.value)" placeholder="Ingrese cedula" />
+              </mat-form-field>
+            </div>
+            <canvas id="attendant">
+              {{ chartAttendant }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-md-4">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>Certificados Registrados por Municipio</h3>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content>
+            <div class="example-header row">
+              <div class="col-xs">
+                <mat-form-field>
+                  <mat-label>Seleccione municipio</mat-label>
+                  <mat-select [(ngModel)]="municipioSeleccionado">
+                    <mat-option *ngFor="let op of municipios" [value]="op"> {{ op }} </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-xs espacio">
+                <button mat-stroked-button (click)="certificatesByTownship()">Buscar</button>
+              </div>
+            </div>
+            <canvas id="township">
+              {{ chartTownship }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-md-4">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>Certificados Registrados por Institucion</h3>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content>
+            <div class="example-header" fxLayout="row">
+              <mat-form-field>
+                <input
+                  matInput
+                  (change)="certificatesByInstitution($event.target.value)"
+                  placeholder="Ingrese institucion"
+                />
+              </mat-form-field>
+            </div>
+            <canvas id="institution">
+              {{ chartInstitution }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>Certificador por Tipo y Cedula</h3>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content>
+            <div class="example-header" class="row">
+              <div class="col-xs">
+                <mat-form-field>
+                  <mat-label>Seleccione tipo</mat-label>
+                  <mat-select [(ngModel)]="typeAttendant.type">
+                    <mat-option *ngFor="let op of types" [value]="op"> {{ op }} </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-xs">
+                <mat-form-field>
+                  <input matInput placeholder="Ingrese cedula" [(ngModel)]="typeAttendant.attendant" />
+                </mat-form-field>
+              </div>
+              <div class="col-xs espacio">
+                <button mat-stroked-button (click)="certificatesByTypeAttendant()">Buscar</button>
+              </div>
+            </div>
+            <canvas id="typeAttendant">
+              {{ chartTypeAttendant }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-md-6">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>Certificados por Tipo e Institucion</h3>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content>
+            <div class="example-header" class="row">
+              <div class="col-xs">
+                <mat-form-field>
+                  <mat-label>Seleccione Tipo</mat-label>
+                  <mat-select [(ngModel)]="typeInstitution.type">
+                    <mat-option *ngFor="let op of types" [value]="op"> {{ op }} </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-xs">
+                <mat-form-field>
+                  <input matInput placeholder="Ingrese institucion" [(ngModel)]="typeInstitution.institution" />
+                </mat-form-field>
+              </div>
+              <div class="col-xs espacio">
+                <button mat-stroked-button (click)="certificatesByTypeInstitution()">Buscar</button>
+              </div>
+            </div>
+            <canvas id="typeInstitution">
+              {{ chartTypeInstitution }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>Certificador por Estado y Cedula</h3>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content>
+            <div class="example-header" class="row">
+              <div class="col-xs">
+                <mat-form-field>
+                  <mat-label>Seleccione estado</mat-label>
+                  <mat-select [(ngModel)]="stateAttendant.state">
+                    <mat-option *ngFor="let op of states" [value]="op"> {{ op }} </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-xs">
+                <mat-form-field>
+                  <input matInput placeholder="Ingrese cedula" [(ngModel)]="stateAttendant.attendant" />
+                </mat-form-field>
+              </div>
+              <div class="col-xs espacio">
+                <button mat-stroked-button (click)="certificatesByStateAttendant()">Buscar</button>
+              </div>
+            </div>
+            <canvas id="stateAttendant">
+              {{ chartStateAttendant }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="col-md-6">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>Certificados por Estado e Institucion</h3>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content>
+            <div class="example-header" class="row">
+              <div class="col-xs">
+                <mat-form-field>
+                  <mat-label>Seleccione Estado</mat-label>
+                  <mat-select [(ngModel)]="stateInstitution.state">
+                    <mat-option *ngFor="let op of states" [value]="op"> {{ op }} </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-xs">
+                <mat-form-field>
+                  <input matInput placeholder="Ingrese institucion" [(ngModel)]="stateInstitution.institution" />
+                </mat-form-field>
+              </div>
+              <div class="col-xs espacio">
+                <button mat-stroked-button (click)="certificatesByStateInstitution()">Buscar</button>
+              </div>
+            </div>
+            <canvas id="stateInstitution">
+              {{ chartStateInstitution }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</section>

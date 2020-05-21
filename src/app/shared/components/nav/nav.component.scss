@@ -3,15 +3,53 @@
 }
 
 .sidenav {
-  width: 200px;
+  width: 205px;
+  background: white;
 }
 
 .sidenav .mat-toolbar {
-  background: inherit;
+  background: white;
 }
 
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
   z-index: 1;
+}
+.mifuente {
+  font-size: 2vw;
+}
+.toolbar-ids {
+  width: 100%;
+  /* background: #e74c3c;*/
+  background: #e74c3c;
+  color: white;
+}
+.nav-list-ids {
+  padding-top: 0px;
+}
+.active-ids {
+  background: #e4e3e7;
+}
+.logo-ids {
+  height: 50px;
+  width: 60px;
+  padding-left: 50px;
+}
+.cuerpo {
+  background-color: #ececeb;
+}
+.example-icon {
+  padding: 0 14px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+.separation {
+  padding-left: 5px;
+  padding-top: 20px;
+}
+.card-nav {
+  padding-top: 10px;
 }

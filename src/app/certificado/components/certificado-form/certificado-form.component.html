@@ -1,0 +1,125 @@
+<form [formGroup]="form" class="form-card">
+  <mat-card>
+    <mat-card-header>
+      <mat-icon>library_books</mat-icon>
+      <h3>Registrar Certificado</h3>
+    </mat-card-header>
+
+    <mat-divider></mat-divider>
+    <mat-card-content class="card-content">
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input matInput type="text" placeholder="Cedula" formControlName="attendant" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="Numero" formControlName="number" />
+          </mat-form-field>
+        </div>
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="Codigo Verificacion" formControlName="verificationCode" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <!--<mat-label>Tipo de Certificado</mat-label>
+            <input matInput type="text" placeholder="Tipo de Certificado" formControlName="type" />-->
+            <mat-select formControlName="type" placeholder="Tipo de Certificado" value="type">
+              <mat-option *ngFor="let op of types" [value]="op.valor"> {{ op.valor | certificateType }} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <mat-select formControlName="state" placeholder="Estado de Certificado" value="state">
+              <mat-option *ngFor="let op of states" [value]="op"> {{ op | certificateState }} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input matInput type="text" placeholder="Departamento" formControlName="department" />
+          </mat-form-field>
+        </div>
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <!--<input matInput type="text" placeholder="Municipio" formControlName="township" />-->
+            <mat-select formControlName="township" placeholder="Municipio" value="township">
+              <mat-option *ngFor="let op of municipios" [value]="op"> {{ op }} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input matInput type="text" placeholder="Institucion" formControlName="institution" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div *ngIf="tipo">
+        <div class="row">
+          <div class="col-xs">
+            Adjuntar archivo excel:
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs">
+            <input type="file" id="file" (change)="fileChange($event)" />
+            <label for="file" class="btn-1">Selecciona archivo</label>
+            <span class="span-file"> <b>Nombre del arhivo: </b> {{ nameFile }}</span>
+          </div>
+          <button mat-raised-button (click)="adjuntarArchivo()"><mat-icon>cloud_upload </mat-icon></button>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button *ngIf="isCreate" mat-raised-button class="button-form" (click)="create($event)">
+        <mat-icon class="separation">save</mat-icon> <span>Registrar</span>
+      </button>
+      <button *ngIf="!isCreate" mat-raised-button color="accent" class="button-form" (click)="update($event)">
+        Actualizar
+      </button>
+    </mat-card-actions>
+    <div style="clear: both;"></div>
+  </mat-card>
+</form>
+<form [formGroup]="form2" class="form-card" *ngIf="isCreate" enctype="multipart/form-data">
+  <mat-card>
+    <mat-card-header>
+      <mat-icon>library_books</mat-icon>
+      <h3>Certificados Multiples</h3>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content class="card-content">
+      <div class="row">
+        <div class="col-xs">
+          Adjuntar archivo excel:
+        </div>
+      </div>
+      <div class="row" class="card-content">
+        <div class="col-xs">
+          <!--<input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".pdf" />-->
+
+          <input type="file" id="file" (change)="fileChangeExcel($event)" placeholder="Upload file" accept=".pdf" />
+          <label for="file" class="btn-1">Selecciona archivo</label>
+          <span class="span-file"> <b>Nombre del arhivo: </b> {{ nameFile }}</span>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" class="button-form" (click)="adjuntarArchivoExcel()">
+        <mat-icon class="separation">cloud_upload </mat-icon>
+        Subir
+      </button>
+    </mat-card-actions>
+    <div style="clear: both;"></div>
+  </mat-card>
+</form>

@@ -1,0 +1,64 @@
+<section class="container">
+  <div class="row">
+    <div class="col-md-4"></div>
+
+    <div class="col-xs col-md-4">
+      <form [formGroup]="form">
+        <mat-card class="mat-elevation-z8 conf-card">
+          <mat-card-header mat-card-avatar>
+            <div mat-card-avatar class="header-image"></div>
+
+            <mat-card-title>{{ LABELS.TITLE }}</mat-card-title>
+
+            <mat-card-subtitle>{{ LABELS.SUBTITLE }}</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-divider class="conf-content-divider"></mat-divider>
+
+          <mat-card-content class="conf-content">
+            <div align="center">
+              <img class="avatar" src="{{ LINKS.AVATAR }}" alt="" />
+            </div>
+
+            <div class="row">
+              <div class="col-xs">
+                <mat-form-field class="full-width">
+                  <mat-icon matSuffix>{{ ICONS.PERSON }}</mat-icon>
+                  <input placeholder="{{ LABELS.PLACEHOLDER.USER }}" formControlName="user" matInput type="text" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-xs">
+                <mat-form-field class="full-width">
+                  <mat-icon matSuffix>{{ ICONS.VPN_KEY }}</mat-icon>
+                  <input
+                    placeholder="{{ LABELS.PLACEHOLDER.PASS }}"
+                    formControlName="password"
+                    matInput
+                    type="password"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-raised-button color="warn" class="full-width">
+              {{ LABELS.BUTTON }}
+            </button>
+          </mat-card-actions>
+
+          <mat-card-footer>
+            <p align="center">
+              <a routerLink="{{ URIS.RECOVER_PASS }}">{{ LABELS.LINK }}</a>
+            </p>
+          </mat-card-footer>
+        </mat-card>
+      </form>
+    </div>
+
+    <div class="col-md-4"></div>
+  </div>
+</section>

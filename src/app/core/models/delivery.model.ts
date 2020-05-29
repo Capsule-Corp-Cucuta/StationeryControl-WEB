@@ -1,12 +1,13 @@
 export interface Delivery {
-  tradeNumber?: string;
+  tradeNumber: string;
+  deliveryType: DeliveryType;
   firstCertificate?: number;
   lastCertificate?: number;
   sender?: string;
   receiver?: string;
-  deliveryType?: DeliveryType;
 }
 
 export enum DeliveryType {
   DEPARTURE,
+  REGRESS,
 }

@@ -1,0 +1,175 @@
+<section class="container">
+  <div class="grid-container">
+    <!-- TODO show number of total of certificates on a label -->
+
+    <div class="row">
+      <div class="col-md-6">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>{{ LABELS.CHART_TYPES.TITLE }}</h3>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content>
+            <canvas id="{{ LABELS.CHART_TYPES.ID }}">
+              {{ chartTypes }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="col-md-6">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>{{ LABELS.CHART_STATES.TITLE }}</h3>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content>
+            <canvas id="{{ LABELS.CHART_STATES.ID }}">
+              {{ chartStates }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>{{ LABELS.CHART_TYPES_AND_ATTENDANT.TITLE }}</h3>
+          </mat-card-header>
+
+          <mat-divider></mat-divider>
+
+          <mat-card-content>
+            <div class="header" class="row">
+              <div class="col-xs">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="{{ LABELS.CHART_TYPES_AND_ATTENDANT.PLACEHOLDER }}"
+                    [(ngModel)]="typeAndAttendant"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-xs space">
+                <button mat-stroked-button (click)="printCertificatesByTypeAndAttendant()">
+                  {{ LABELS.CHART_TYPES_AND_ATTENDANT.BUTTON }}
+                </button>
+              </div>
+            </div>
+
+            <canvas id="{{ LABELS.CHART_TYPES_AND_ATTENDANT.ID }}">
+              {{ chartTypeAndAttendant }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="col-md-6">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>{{ LABELS.CHART_TYPES_AND_INSTITUTION.TITLE }}</h3>
+          </mat-card-header>
+
+          <mat-divider></mat-divider>
+
+          <mat-card-content>
+            <div class="header" class="row">
+              <div class="col-xs">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="{{ LABELS.CHART_TYPES_AND_INSTITUTION.PLACEHOLDER }}"
+                    [(ngModel)]="typeAndInstitution"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-xs space">
+                <button mat-stroked-button (click)="printCertificatesByTypeAndInstitution()">
+                  {{ LABELS.CHART_TYPES_AND_INSTITUTION.BUTTON }}
+                </button>
+              </div>
+            </div>
+
+            <canvas id="{{ LABELS.CHART_TYPES_AND_INSTITUTION.ID }}">
+              {{ chartTypeAndInstitution }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>{{ LABELS.CHART_STATES_AND_ATTENDANT.TITLE }}</h3>
+          </mat-card-header>
+
+          <mat-divider></mat-divider>
+
+          <mat-card-content>
+            <div class="header" class="row">
+              <div class="col-xs">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="{{ LABELS.CHART_STATES_AND_ATTENDANT.PLACEHOLDER }}"
+                    [(ngModel)]="stateAndAttendant"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-xs space">
+                <button mat-stroked-button (click)="printCertificatesByStateAttendant()">
+                  {{ LABELS.CHART_STATES_AND_ATTENDANT.BUTTON }}
+                </button>
+              </div>
+            </div>
+
+            <canvas id="{{ LABELS.CHART_STATES_AND_ATTENDANT.ID }}">
+              {{ chartStateAndAttendant }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="col-md-6">
+        <mat-card class="card-content mat-elevation-z8">
+          <mat-card-header>
+            <h3>{{ LABELS.CHART_STATES_AND_INSTITUTION.TITLE }}</h3>
+          </mat-card-header>
+
+          <mat-divider></mat-divider>
+
+          <mat-card-content>
+            <div class="header" class="row">
+              <div class="col-xs">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="{{ LABELS.CHART_STATES_AND_INSTITUTION.PLACEHOLDER }}"
+                    [(ngModel)]="stateAndInstitution"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div class="col-xs space">
+                <button mat-stroked-button (click)="printCertificatesByStateInstitution()">
+                  {{ LABELS.CHART_STATES_AND_INSTITUTION.BUTTON }}
+                </button>
+              </div>
+            </div>
+
+            <canvas id="{{ LABELS.CHART_STATES_AND_INSTITUTION.ID }}">
+              {{ chartStateAndInstitution }}
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</section>

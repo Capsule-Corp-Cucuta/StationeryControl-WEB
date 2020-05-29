@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { Delivery } from '../models/delivery.model';
 import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+import { Delivery } from '../models/delivery.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,15 +13,15 @@ export class DeliveryService {
 
   constructor(private http: HttpClient) {}
 
-  public create(delivery: Delivery) {
+  public create(delivery: Delivery): Observable<Delivery> {
     return this.http.post<Delivery>(this.endPoint, delivery);
   }
 
-  public findAll(page: number): Observable<any> {
+  public findAll(page: number): Observable<Delivery[]> {
     return this.http.get<Delivery[]>(this.endPoint + '/all/' + page);
   }
 
-  public findByID(id: string) {
-    return this.http.get(this.endPoint + '/' + id);
+  public findByID(id: string): Observable<Delivery> {
+    return this.http.get<Delivery>(this.endPoint + '/' + id);
   }
 }

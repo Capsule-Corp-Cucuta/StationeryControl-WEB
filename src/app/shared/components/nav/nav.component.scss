@@ -3,8 +3,8 @@
 }
 
 .sidenav {
-  width: 205px;
   background: white;
+  width: 205px;
 }
 
 .sidenav .mat-toolbar {
@@ -16,40 +16,48 @@
   top: 0;
   z-index: 1;
 }
-.mifuente {
+
+.title {
   font-size: 2vw;
 }
+
 .toolbar-ids {
-  width: 100%;
-  /* background: #e74c3c;*/
   background: #e74c3c;
   color: white;
+  width: 100%;
 }
+
 .nav-list-ids {
   padding-top: 0px;
 }
+
 .active-ids {
   background: #e4e3e7;
 }
+
 .logo-ids {
   height: 50px;
-  width: 60px;
   padding-left: 50px;
+  width: 60px;
 }
-.cuerpo {
+
+.body {
   background-color: #ececeb;
 }
-.example-icon {
+
+.icon {
   padding: 0 14px;
 }
 
-.example-spacer {
+.spacer {
   flex: 1 1 auto;
 }
+
 .separation {
   padding-left: 5px;
   padding-top: 20px;
 }
+
 .card-nav {
   padding-top: 10px;
 }

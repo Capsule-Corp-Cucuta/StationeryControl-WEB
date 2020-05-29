@@ -9,42 +9,57 @@
   >
     <mat-toolbar>
       <div align="center">
-        <a mat-list-item routerLink="/inicio">
-          <img
-            src="https://ids.gov.co/web/wp-content/uploads/2018/01/images_favicons_favicon114.png"
-            alt="Logo ids"
-            class="logo-ids"
-          />
+        <a mat-list-item routerLink="/{{ ROUTES.PRINCIPAL }}">
+          <img src="{{ LINKS.LOGO_IDS }}" alt="Logo IDS" class="logo-ids" />
         </a>
       </div>
     </mat-toolbar>
+
     <mat-divider></mat-divider>
+
     <mat-card-content>
       <div align="center" class="card-nav">
-        <mat-card-title>Administrador</mat-card-title>
+        <mat-card-title>
+          --Tipo de Usuario--
+          <!--TODO-->
+        </mat-card-title>
       </div>
     </mat-card-content>
+
     <mat-nav-list class="nav-list-ids">
       <mat-divider></mat-divider>
-      <a mat-list-item routerLink="/usuario/lista" routerLinkActive="active"
-        ><mat-icon>people_alt</mat-icon>
-        <h4 class="separation">Usuarios</h4>
+
+      <a mat-list-item routerLink="/{{ ROUTES.PRINCIPAL }}" routerLinkActive="active"
+        ><mat-icon>{{ ICONS.DASHBOARD }}</mat-icon>
+        <h4 class="separation">{{ LABELS.PRINCIPAL }}</h4>
       </a>
+
       <mat-divider></mat-divider>
-      <a mat-list-item routerLink="/certificado/lista" routerLinkActive="active">
-        <mat-icon>library_books</mat-icon>
-        <h4 class="separation">Certificados</h4>
+
+      <a mat-list-item routerLink="/{{ ROUTES.USER }}/{{ ROUTES.LIST }}" routerLinkActive="active"
+        ><mat-icon>{{ ICONS.PEOPLE_ALT }}</mat-icon>
+        <h4 class="separation">{{ LABELS.USERS }}</h4>
       </a>
+
       <mat-divider></mat-divider>
-      <a mat-list-item routerLink="/entrega/lista" routerLinkActive="active">
-        <mat-icon>assignment_ind</mat-icon>
-        <h4 class="separation">Entregas y Devoluciones</h4></a
-      >
+
+      <a mat-list-item routerLink="/{{ ROUTES.CERTIFICATE }}/{{ ROUTES.LIST }}" routerLinkActive="active">
+        <mat-icon>{{ ICONS.LIBRARY_BOOKS }}</mat-icon>
+        <h4 class="separation">{{ LABELS.CERTIFICATES }}</h4>
+      </a>
+
+      <mat-divider></mat-divider>
+
+      <a mat-list-item routerLink="/{{ ROUTES.DELIVERY }}/{{ ROUTES.LIST }}" routerLinkActive="active">
+        <mat-icon>{{ ICONS.EVENT }}</mat-icon>
+        <h4 class="separation">{{ LABELS.DELIVERIES }}</h4>
+      </a>
 
       <mat-divider></mat-divider>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content class="cuerpo">
+
+  <mat-sidenav-content class="body">
     <mat-toolbar class="toolbar-ids mat-elevation-z4">
       <mat-toolbar-row>
         <button
@@ -54,20 +69,37 @@
           (click)="drawer.toggle()"
           *ngIf="isHandset$ | async"
         >
-          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+          <mat-icon aria-label="Side nav toggle icon">
+            {{ ICONS.MENU }}
+          </mat-icon>
         </button>
-        <span class="mifuente">Control de Papelería</span>
-        <span class="example-spacer"></span>
+
+        <span class="title">{{ LABELS.TITLE }}</span>
+
+        <span class="spacer"></span>
 
         <button mat-stroked-button [matMenuTriggerFor]="menu">
-          <mat-icon class="example-icon" aria-hidden="true">account_circle</mat-icon>1090494956
+          <mat-icon class="icon" aria-hidden="true">
+            {{ ICONS.ACCOUNT_CIRCLE }}
+          </mat-icon>
+          -- Nro. Cédula --
+          <!--TODO-->
         </button>
+
         <mat-menu #menu="matMenu">
-          <button mat-menu-item routerLink="/user/cambiar"><mat-icon>lock</mat-icon>Cambiar contraseña</button>
-          <button mat-menu-item><mat-icon>power_settings_new</mat-icon>Salir</button>
+          <button mat-menu-item routerLink="/{{ ROUTES.SECURITY }}/{{ ROUTES.CHANGE_PASS }}">
+            <mat-icon>{{ ICONS.LOCK }}</mat-icon>
+            {{ LABELS.CHANGE_PASS }}
+          </button>
+
+          <button mat-menu-item>
+            <mat-icon>{{ ICONS.POWER_SETTINGS_NEW }}</mat-icon>
+            {{ LABELS.SIGN_OUT }}
+          </button>
         </mat-menu>
       </mat-toolbar-row>
     </mat-toolbar>
+
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

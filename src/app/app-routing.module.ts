@@ -31,11 +31,11 @@ const routes: Routes = [
         path: Constants.ROUTES.DELIVERY,
         loadChildren: () => import('./feature/delivery/delivery.module').then((m) => m.DeliveryModule),
       },
+      {
+        path: Constants.ROUTES.SECURITY,
+        loadChildren: () => import('./feature/auth/auth.module').then((m) => m.AuthModule),
+      },
     ],
-  },
-  {
-    path: Constants.ROUTES.SECURITY,
-    loadChildren: () => import('./feature/auth/auth.module').then((m) => m.AuthModule),
   },
 ];
 

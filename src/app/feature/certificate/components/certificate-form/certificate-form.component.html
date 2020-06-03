@@ -11,39 +11,51 @@
       <mat-card-content class="card-content">
         <div class="row">
           <div class="col-xs">
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" placeholder="LABELS.PLACEHOLDER.ATTENDANT" formControlName="attendant" />
+            <mat-form-field class="full-width">
+              <input
+                matInput
+                type="text"
+                placeholder="{{ LABELS.PLACEHOLDER.ATTENDANT }}"
+                formControlName="attendant"
+              />
             </mat-form-field>
           </div>
         </div>
 
         <div class="row">
           <div class="col-xs">
-            <mat-form-field class="example-full-width">
-              <input matInput type="number" placeholder="LABELS.PLACEHOLDER.ID" formControlName="number" />
+            <mat-form-field class="full-width">
+              <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.ID }}" formControlName="number" />
             </mat-form-field>
           </div>
 
           <div class="col-xs">
-            <mat-form-field class="example-full-width">
-              <input matInput type="number" placeholder="LABELS.PLACEHOLDER.CODE" formControlName="verificationCode" />
+            <mat-form-field class="full-width">
+              <input
+                matInput
+                type="number"
+                placeholder="{{ LABELS.PLACEHOLDER.CODE }}"
+                formControlName="verificationCode"
+              />
             </mat-form-field>
           </div>
         </div>
 
         <div class="row">
           <div class="col-xs">
-            <mat-form-field class="example-full-width">
-              <mat-select formControlName="type" placeholder="LABELS.PLACEHOLDER.TYPE" value="type">
-                <mat-option *ngFor="let op of types" [value]="op.value"> {{ op.value | certificateType }} </mat-option>
+            <mat-form-field class="full-width">
+              <mat-select formControlName="type" placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" value="type">
+                <mat-option *ngFor="let op of TYPES" [value]="op.value"> {{ op.value | certificateType }} </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
 
           <div class="col-xs">
-            <mat-form-field class="example-full-width">
-              <mat-select formControlName="state" placeholder="LABELS.PLACEHOLDER.STATE" value="state">
-                <mat-option *ngFor="let op of states" [value]="op"> {{ op | certificateState }} </mat-option>
+            <mat-form-field class="full-width">
+              <mat-select formControlName="state" placeholder="{{ LABELS.PLACEHOLDER.STATE }}" value="state">
+                <mat-option *ngFor="let op of STATES" [value]="op.value">
+                  {{ op.value | certificateState }}
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -51,22 +63,32 @@
 
         <div class="row">
           <div class="col-xs">
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" placeholder="LABELS.PLACEHOLDER.DEPARTMENT" formControlName="department" />
+            <mat-form-field class="full-width">
+              <input
+                matInput
+                type="text"
+                placeholder="{{ LABELS.PLACEHOLDER.DEPARTMENT }}"
+                formControlName="department"
+              />
             </mat-form-field>
           </div>
 
           <div class="col-xs">
-            <mat-form-field class="example-full-width">
-              <mat-select formControlName="township" placeholder="LABELS.PLACEHOLDER.TOWNSHIP" value="township">
+            <mat-form-field class="full-width">
+              <mat-select formControlName="township" placeholder="{{ LABELS.PLACEHOLDER.TOWNSHIP }}" value="township">
                 <mat-option *ngFor="let op of TOWNSHIPS" [value]="op"> {{ op }} </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
 
           <div class="col-xs">
-            <mat-form-field class="example-full-width">
-              <input matInput type="text" placeholder="LABELS.PLACEHOLDER.INSTITUTION" formControlName="institution" />
+            <mat-form-field class="full-width">
+              <input
+                matInput
+                type="text"
+                placeholder="{{ LABELS.PLACEHOLDER.INSTITUTION }}"
+                formControlName="institution"
+              />
             </mat-form-field>
           </div>
         </div>

@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { DeliveryType } from '../../../../core/models/delivery.model';
+import { Constants } from '../../../../shared/constants/global-constants';
 import { DeliveryService } from '../../../../core/services/delivery.service';
 
 @Component({
@@ -13,7 +14,10 @@ import { DeliveryService } from '../../../../core/services/delivery.service';
 })
 export class DeliveryFormComponent implements OnInit {
   public form: FormGroup;
-  public types = ['DEPARTURE', 'REGRESS'];
+
+  public ICONS = Constants.ICONS;
+  public LABELS = Constants.LABELS.DELIVERY.FORM;
+  public TYPES = Constants.DELIVERIES_TYPES_MAPPER;
 
   constructor(
     private formBuilder: FormBuilder,

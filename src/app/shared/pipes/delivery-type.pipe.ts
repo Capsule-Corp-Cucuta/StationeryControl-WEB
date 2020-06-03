@@ -7,9 +7,9 @@ export class DeliveryTypePipe implements PipeTransform {
   public transform(value: string): unknown {
     switch (value) {
       case 'DEPARTURE':
-        return 'Salida';
+        return 'Entrega';
       case 'REGRESS':
-        return 'Regreso';
+        return 'Devolución';
     }
   }
 }

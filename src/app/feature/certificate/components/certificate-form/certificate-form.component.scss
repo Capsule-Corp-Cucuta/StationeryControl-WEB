@@ -37,14 +37,6 @@
   margin-right: 5px;
 }
 
-.izquierda {
-  float: left;
-}
-
-.derecha {
-  float: right;
-}
-
 .no-padding {
   padding: 0px !important;
 }
@@ -162,20 +154,12 @@
       }
     }
   }
-
-  .alto {
-    padding-top: 15px;
-  }
 }
 
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
   z-index: 1;
-}
-
-.mifuente {
-  font-size: 2vw;
 }
 
 .toolbar-ids {

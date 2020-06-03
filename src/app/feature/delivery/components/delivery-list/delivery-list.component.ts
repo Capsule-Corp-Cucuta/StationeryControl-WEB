@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+
+import { Constants } from '../../../../shared/constants/global-constants';
 import { DeliveryService } from '../../../../core/services/delivery.service';
 
 @Component({
@@ -8,15 +10,12 @@ import { DeliveryService } from '../../../../core/services/delivery.service';
 })
 export class DeliveryListComponent implements OnInit {
   public deliverys = [];
-  public displayedColumns: string[] = [
-    'tradeNumber',
-    'deliveryType',
-    'firstCertificate',
-    'lastCertificate',
-    'sender',
-    'receiver',
-    'actions',
-  ];
+
+  public ICONS = Constants.ICONS;
+  public ROUTES = Constants.ROUTES;
+  public CELLS = Constants.LABELS.DELIVERY.LIST.CELLS;
+  public TOOLTIP = Constants.LABELS.DELIVERY.LIST.TOOLTIP;
+  public COLUMNS = Constants.LABELS.DELIVERY.LIST.COLUMNS;
 
   constructor(private deliveryService: DeliveryService) {}
 

@@ -3,11 +3,11 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-certificate-modal',
-  templateUrl: './certificate-modal.component.html',
-  styleUrls: ['./certificate-modal.component.scss'],
+  template: '<iframe [src]="link | urls" width="400" height="550" style="border: none;"></iframe>',
 })
 export class CertificateModalComponent implements OnInit {
   public link: string;
+
   constructor(
     public dialogRef: MatDialogRef<CertificateModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string

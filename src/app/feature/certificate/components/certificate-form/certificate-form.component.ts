@@ -21,13 +21,14 @@ export class CertificateFormComponent implements OnInit {
 
   public ICONS = Constants.ICONS;
   public TOWNSHIPS = Constants.TOWNSHIPS;
+  public DEPARTMENT = Constants.DEPARTMENT;
   public LABELS = Constants.LABELS.CERTIFICATE.FORM;
 
   private certificateNumber: number;
   private attachmentFormData: FormData;
 
-  public types = Constants.CERTIFICATES_TYPES_MAPPER;
-  public states = ['IDLE', 'ASSIGNED', 'GUARDED', 'STRAY', 'ANNULLED', 'WITH_INCONGRUENCES'];
+  public TYPES = Constants.CERTIFICATES_TYPES_MAPPER;
+  public STATES = Constants.CERTIFICATES_STATES_MAPPER;
 
   constructor(
     private router: Router,
@@ -58,6 +59,7 @@ export class CertificateFormComponent implements OnInit {
           this.form.patchValue(resp);
         });
       } else {
+        this.showUploadAttachment = false;
         this.buildFormFile();
       }
     });
@@ -66,7 +68,7 @@ export class CertificateFormComponent implements OnInit {
   private buildForm() {
     this.form = this.builder.group({
       attendant: ['', [Validators.required]],
-      department: ['NORTE DE SANTANDER', [Validators.required]],
+      department: [this.DEPARTMENT, [Validators.required]],
       institution: ['', [Validators.required]],
       number: ['', [Validators.required]],
       state: [CertificateState.IDLE, [Validators.required]],

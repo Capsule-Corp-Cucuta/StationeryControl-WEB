@@ -25,6 +25,10 @@ export class CertificateService {
     return this.http.get<Certificate>(this.endPoint + '/' + id);
   }
 
+  public findByAttendant(attendant: string, page: number): Observable<Certificate[]> {
+    return this.http.get<Certificate[]>(this.endPoint + '/attendant/' + attendant + '/' + page);
+  }
+
   public update(id: number, certificate: Certificate): Observable<Certificate> {
     return this.http.put<Certificate>(this.endPoint + '/' + id, certificate);
   }

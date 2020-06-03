@@ -98,6 +98,7 @@ export class Constants {
         DELETE_BUTTON: 'Eliminar',
       },
       LIST: {
+        COLUMNS: ['identificationCard', 'name', 'email', 'phone', 'userType', 'actions'],
         CELLS: {
           ID: 'Cédula:',
           NAME: 'Nombre completo:',
@@ -132,21 +133,72 @@ export class Constants {
           BUTTON: 'Registrar',
         },
       },
-      LIST: '',
-      MODAL: '',
+      LIST: {
+        COLUMNS: ['number', 'type', 'state', 'stateDate', 'department', 'township', 'institution', 'actions'],
+        CELLS: {
+          NUMBER: 'Número:',
+          TYPE: 'Tipo de Certificado:',
+          STATE: 'Estado del Certificado:',
+          DATE: 'Última fecha de modificación:',
+          DEPARTMENT: 'Departamento:',
+          TOWNSHIP: 'Municipio:',
+          INSTITUTION: 'Institución:',
+        },
+        TOOLTIP: {
+          CREATE: 'Registrar certificado',
+          SHOW: 'Ver archivo',
+        },
+      },
     },
-    DELIVERY: '',
+    DELIVERY: {
+      FORM: {
+        TITLE: 'Entregas y Devoluciones',
+        PLACEHOLDER: {
+          NUMBER: 'Número de Oficio:',
+          INITIAL: 'Número de Certificado Inicial sin Código de Verificación:',
+          FINAL: 'Número de Certificado Final sin Código de Verificación:',
+          SENDER: 'Cédula del Remitente:',
+          RECEIVER: 'Cédula del Receptor:',
+          TYPE: 'Tipo (Entrega/Devolución):',
+        },
+        BUTTON: 'Registrar',
+      },
+      LIST: {
+        COLUMNS: [
+          'tradeNumber',
+          'deliveryType',
+          'firstCertificate',
+          'lastCertificate',
+          'sender',
+          'receiver',
+          'actions',
+        ],
+        CELLS: {
+          NUMBER: 'Número de Oficio:',
+          INITIAL: 'Número de Certificado Inicial sin Código de Verificación:',
+          FINAL: 'Número de Certificado Final sin Código de Verificación:',
+          SENDER: 'Cédula del Remitente:',
+          RECEIVER: 'Cédula del Receptor:',
+          TYPE: 'Tipo (Entrega/Devolución):',
+        },
+        TOOLTIP: 'Asginar Certificados',
+      },
+    },
   };
 
   public static ICONS = {
+    ADD: 'add',
     MENU: 'menu',
     SAVE: 'save',
     LOCK: 'lock',
     EVENT: 'event',
+    CREATE: 'create',
     PERSON: 'person',
     VPN_KEY: 'vpn_key',
     DASHBOARD: 'dashboard',
+    ASSIGNMENT: 'assignment',
     PEOPLE_ALT: 'people_alt',
+    VISIBILITY: 'visibility',
     ACCOUNT_BOX: 'account_box',
     CLOUD_UPLOAD: 'cloud_upload',
     LIBRARY_BOOKS: 'library_books',
@@ -197,19 +249,24 @@ export class Constants {
     { id: 5, value: 'WITH_INCONGRUENCES' },
   ];
 
-  public static DEPARTMENT = 'Norte de Santander';
+  public static DELIVERIES_TYPES_MAPPER = [
+    { id: 0, value: 'DEPARTURE' },
+    { id: 1, value: 'REGRESS' },
+  ];
+
+  public static DEPARTMENT = 'NORTE DE SANTANDER';
 
   public static TOWNSHIPS = [
     'Abrego',
     'Arboledas',
     'Bochalema',
     'Bucarasica',
-    'Cachira',
+    'CÁCHIRA',
     'Cacota',
     'Chinacota',
     'Chitaga',
     'Convencion',
-    'Cucuta',
+    'CÚCUTA',
     'Cucutilla',
     'Durania',
     'El Carmen',
@@ -229,7 +286,7 @@ export class Constants {
     'Pamplonita',
     'Puerto Santander',
     'Ragonvalia',
-    'Salazar de Las Palmas',
+    'SALAZAR DE LAS PALMAS',
     'San Calixto',
     'San Cayetano',
     'Santiago',

@@ -1,9 +1,9 @@
 export interface User {
-  identificationCard?: string;
+  identificationCard: string;
+  userType: UserType;
   name?: string;
   email?: string;
   phone?: string;
-  userType?: UserType;
 }
 
 export enum UserType {

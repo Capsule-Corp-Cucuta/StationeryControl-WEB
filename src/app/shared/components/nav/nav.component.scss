@@ -3,15 +3,61 @@
 }
 
 .sidenav {
-  width: 200px;
+  background: white;
+  width: 205px;
 }
 
 .sidenav .mat-toolbar {
-  background: inherit;
+  background: white;
 }
 
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
   z-index: 1;
+}
+
+.title {
+  font-size: 2vw;
+}
+
+.toolbar-ids {
+  background: #e74c3c;
+  color: white;
+  width: 100%;
+}
+
+.nav-list-ids {
+  padding-top: 0px;
+}
+
+.active-ids {
+  background: #e4e3e7;
+}
+
+.logo-ids {
+  height: 50px;
+  padding-left: 50px;
+  width: 60px;
+}
+
+.body {
+  background-color: #ececeb;
+}
+
+.icon {
+  padding: 0 14px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.separation {
+  padding-left: 5px;
+  padding-top: 20px;
+}
+
+.card-nav {
+  padding-top: 10px;
 }

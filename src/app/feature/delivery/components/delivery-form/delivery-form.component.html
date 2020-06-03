@@ -1,0 +1,68 @@
+<form [formGroup]="form" class="form-card mat-elevation-z8">
+  <mat-card>
+    <mat-card-header>
+      <mat-icon>{{ ICONS.ASSIGNMENT }}</mat-icon>
+      <h3>{{ LABELS.TITLE }}</h3>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content class="card-content">
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input matInput type="text" placeholder="{{ LABELS.PLACEHOLDER.NUMBER }}" formControlName="tradeNumber" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              type="number"
+              placeholder="{{ LABELS.PLACEHOLDER.INITIAL }}"
+              formControlName="firstCertificate"
+            />
+          </mat-form-field>
+        </div>
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              type="number"
+              placeholder="{{ LABELS.PLACEHOLDER.FINAL }}"
+              formControlName="lastCertificate"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.SENDER }}" formControlName="sender" />
+          </mat-form-field>
+        </div>
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.RECEIVER }}" formControlName="receiver" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="example-full-width">
+            <mat-select formControlName="deliveryType" placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" value="deliveryType">
+              <mat-option *ngFor="let op of TYPES" [value]="op.value"> {{ op.value | deliveryType }} </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button class="button-form" (click)="create($event)">
+        <mat-icon class="separation">{{ ICONS.SAVE }}</mat-icon>
+        {{ LABELS.BUTTON }}
+      </button>
+    </mat-card-actions>
+    <div style="clear: both;"></div>
+  </mat-card>
+</form>

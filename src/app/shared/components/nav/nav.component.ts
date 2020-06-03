@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
+import { Component } from '@angular/core';
 import { map, shareReplay } from 'rxjs/operators';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+
+import { Constants } from '../../constants/global-constants';
 
 @Component({
   selector: 'app-nav',
@@ -13,6 +15,11 @@ export class NavComponent {
     map((result) => result.matches),
     shareReplay()
   );
+
+  public LINKS = Constants.LINKS;
+  public ICONS = Constants.ICONS;
+  public ROUTES = Constants.ROUTES;
+  public LABELS = Constants.LABELS.PRINCIPAL;
 
   constructor(private breakpointObserver: BreakpointObserver) {}
 }

@@ -1,0 +1,85 @@
+<form [formGroup]="form" class="form-card mat-elevation-z8">
+  <mat-card>
+    <mat-card-header class="form__card--header">
+      <mat-icon>{{ ICONS.ACCOUNT_BOX }}</mat-icon>
+      <h3>{{ LABELS.TITLE }}</h3>
+    </mat-card-header>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-content class="card-content">
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              type="text"
+              placeholder="{{ LABELS.PLACEHOLDER.ID }}"
+              formControlName="identificationCard"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="full-width">
+            <input matInput type="text" placeholder="{{ LABELS.PLACEHOLDER.NAME }}" formControlName="name" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="full-width">
+            <input matInput type="email" placeholder="{{ LABELS.PLACEHOLDER.EMAIL }}" formControlName="email" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="full-width">
+            <input matInput type="tel" placeholder="{{ LABELS.PLACEHOLDER.PHONE }}" formControlName="phone" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs">
+          <mat-form-field class="full-width">
+            <mat-label>{{ LABELS.USER_TYPE }}</mat-label>
+            <mat-select formControlName="userType" placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" value="userType">
+              <mat-option *ngFor="let type of USER_TYPES" [value]="type.value">
+                {{ type.value | userType }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button *ngIf="isCreate" mat-raised-button class="button-form-r" (click)="create($event)">
+        <mat-icon class="separation">{{ ICONS.SAVE }}</mat-icon>
+        <span>{{ LABELS.REGISTER_BUTTON }}</span>
+      </button>
+
+      <div class="row">
+        <div class="col-xs">
+          <button *ngIf="!isCreate" mat-raised-button color="accent" class="button-form" (click)="update($event)">
+            {{ LABELS.UPDATE_BUTTON }}
+          </button>
+        </div>
+
+        <div class="col-xs">
+          <button *ngIf="!isCreate" mat-raised-button color="warn" class="button-form" (click)="delete($event)">
+            {{ LABELS.DELETE_BUTTON }}
+          </button>
+        </div>
+      </div>
+    </mat-card-actions>
+
+    <div style="clear: both;"></div>
+  </mat-card>
+</form>

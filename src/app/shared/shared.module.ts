@@ -10,9 +10,12 @@ import { NavComponent } from './components/nav/nav.component';
 import { DeliveryTypePipe } from './pipes/delivery-type.pipe';
 import { CertificateTypePipe } from './pipes/certificate-type.pipe';
 import { CertificateStatePipe } from './pipes/certificate-state.pipe';
+import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
+import { LayoutComponent } from './components/layout/layout.component';
 
 @NgModule({
-  declarations: [UserTypePipe, NavComponent, CertificateTypePipe, CertificateStatePipe, UrlsPipe, DeliveryTypePipe],
+  declarations: [UserTypePipe, NavComponent, CertificateTypePipe, CertificateStatePipe, UrlsPipe, DeliveryTypePipe, FooterComponent, HeaderComponent, LayoutComponent],
   imports: [CommonModule, RouterModule, MaterialModule, ReactiveFormsModule],
   exports: [UserTypePipe, CertificateTypePipe, CertificateStatePipe, UrlsPipe, DeliveryTypePipe],
 })

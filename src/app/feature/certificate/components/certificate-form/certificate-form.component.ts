@@ -142,4 +142,8 @@ export class CertificateFormComponent implements OnInit {
       this.attachmentFormData.append('reportProgress', 'true');
     }
   }
+
+  public fileChangeExcel(event) {}
+
+  public uploadFileExcel() {}
 }

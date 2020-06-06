@@ -22,6 +22,10 @@ export class Constants {
       CHANGE_PASS: 'Cambiar Contraseña',
       SIGN_OUT: 'Salir',
     },
+    FOOTER: {
+      OPCION1: '© Copyright 2020, Todos los derechos reservados | IDS',
+      OPCION2: 'Atención al publico (57) 7 - 5784988',
+    },
     LOGIN: {
       TITLE: 'Inicio de Sesión',
       SUBTITLE: 'Instituto Departamental de Salud',
@@ -37,6 +41,7 @@ export class Constants {
       PLACEHOLDER: {
         OLD_PASS: 'Antigua contraseña:',
         NEW_PASS: 'Nueva contraseña:',
+        REPEAT_PASS: 'Repetir contraseña',
       },
       BUTTON: 'Cambiar',
     },

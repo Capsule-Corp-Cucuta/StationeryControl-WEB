@@ -4,11 +4,12 @@ import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { Constants } from './shared/constants/global-constants';
 import { NavComponent } from './shared/components/nav/nav.component';
 import { DashboardComponent } from './feature/dashboard/component/dashboard.component';
+import { LayoutComponent } from './shared/components/layout/layout.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: NavComponent,
+    component: LayoutComponent,
     children: [
       {
         path: '',

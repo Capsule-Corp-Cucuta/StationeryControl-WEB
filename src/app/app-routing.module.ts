@@ -5,6 +5,8 @@ import { Constants } from './shared/constants/global-constants';
 import { NavComponent } from './shared/components/nav/nav.component';
 import { DashboardComponent } from './feature/dashboard/component/dashboard.component';
 import { LayoutComponent } from './shared/components/layout/layout.component';
+import { NotFoundComponent } from './shared/components/not-found/not-found.component';
+import { ServerErrorComponent } from './shared/components/server-error/server-error.component';
 
 const routes: Routes = [
   {
@@ -35,6 +37,14 @@ const routes: Routes = [
       {
         path: Constants.ROUTES.SECURITY,
         loadChildren: () => import('./feature/auth/auth.module').then((m) => m.AuthModule),
+      },
+      {
+        path: Constants.ROUTES.NOTFOUND,
+        component: NotFoundComponent,
+      },
+      {
+        path: Constants.ROUTES.SERVER_ERROR,
+        component: ServerErrorComponent,
       },
     ],
   },

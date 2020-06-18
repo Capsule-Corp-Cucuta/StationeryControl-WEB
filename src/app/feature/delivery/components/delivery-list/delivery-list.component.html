@@ -1,3 +1,21 @@
+<mat-card class="deliverys-filtro">
+  <div class="row">
+    <div class="col-xs col-md-9">
+      <app-deliverys-filter [filter]="filter" (filterEvent)="receiveEvent($event)"></app-deliverys-filter>
+    </div>
+    <div class="col-xs col-md-3">
+      <mat-form-field class="full-width">
+        <mat-label> {{ SELECT }} </mat-label>
+        <mat-select (selectionChange)="updateFilter($event.value)">
+          <div *ngFor="let op of FILTERS">
+            <mat-option *ngIf="authority === op.authority" [value]="op.value"> {{ op.value }} </mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-card>
+
 <table mat-table [dataSource]="deliverys" class="certificates-table">
   <ng-container matColumnDef="tradeNumber">
     <th mat-header-cell *matHeaderCellDef>{{ CELLS.NUMBER }}</th>

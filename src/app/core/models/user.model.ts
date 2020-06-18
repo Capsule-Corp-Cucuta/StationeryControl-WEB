@@ -1,6 +1,6 @@
 export interface User {
-  identificationCard: string;
-  userType: UserType;
+  identificationCard?: string;
+  userType?: UserType;
   name?: string;
   email?: string;
   phone?: string;

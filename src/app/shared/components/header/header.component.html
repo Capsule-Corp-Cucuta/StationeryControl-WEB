@@ -7,10 +7,6 @@
     </div>
 
     <div class="row between-xs middle-xs header-row">
-      <!--<a id="logo-header" href="#">
-        <span class="site-name">Control de papeleria</span>
-        <span class="site-desc">Instituto departametal de salud</span>
-      </a>-->
       <nav>
         <a mat-button routerLink="/{{ ROUTES.PRINCIPAL }}" routerLinkActive="active">{{ LABELS.PRINCIPAL }}</a>
         <a mat-button routerLink="/{{ ROUTES.USER }}/{{ ROUTES.LIST }}" routerLinkActive="active"
@@ -22,23 +18,13 @@
         <a mat-button routerLink="/{{ ROUTES.DELIVERY }}/{{ ROUTES.LIST }}" routerLinkActive="active">{{
           LABELS.DELIVERIES
         }}</a>
-        <!--<nav>
-          <ul>
-            <li><a href="#">Estadisticas</a></li>
-            <li><a href="#">Usuarios</a></li>
-            <li><a href="#">Certificados</a></li>
-            <li><a href="#">Entregas y devoluciones</a></li>
-          </ul>
-        </nav>-->
-        <!-- / nav -->
       </nav>
       <span class="spacer"></span>
       <button mat-button [matMenuTriggerFor]="menu">
         <mat-icon class="icon" aria-hidden="true">
           {{ ICONS.ACCOUNT_CIRCLE }}
         </mat-icon>
-        -- Nro. Cédula --
-        <!--TODO-->
+        {{ identificationCard }}
       </button>
     </div>
 
@@ -48,7 +34,7 @@
         {{ LABELS.CHANGE_PASS }}
       </button>
 
-      <button mat-menu-item>
+      <button mat-menu-item (click)="logOut()">
         <mat-icon>{{ ICONS.POWER_SETTINGS_NEW }}</mat-icon>
         {{ LABELS.SIGN_OUT }}
       </button>

@@ -6,6 +6,7 @@ import { CertificateService } from '../../../../core/services/certificate.servic
 import { CertificateModalComponent } from '../certificate-modal/certificate-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-certificate-list',
@@ -22,7 +23,7 @@ export class CertificateListComponent implements OnInit {
   public COLUMNS = Constants.LABELS.CERTIFICATE.LIST.COLUMNS;
 
   public FILTERS = Constants.FILTERSCERTIFICATES;
-  public authority = 'ADMIN';
+  public authority: string;
   public TYPES = Constants.CERTIFICATES_TYPES_MAPPER;
   public STATES = Constants.CERTIFICATES_STATES_MAPPER;
   public SELECT = Constants.LABELS.CERTIFICATE.FILTER.SELECT;
@@ -31,19 +32,21 @@ export class CertificateListComponent implements OnInit {
     private certificateService: CertificateService,
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private sessionService: TokenService
   ) {}
 
   ngOnInit(): void {
     this.loadCerticates();
     this.updateFilter('default');
+    this.authority = this.sessionService.getAuthorities()[0];
   }
 
   public loadCerticates() {
-    if (true) {
+    if (this.authority === 'ADMIN') {
       this.findCertificatesAdmin();
     } else {
-      this.findCertificatesByUser('1090');
+      this.findCertificatesByUser(this.sessionService.getUser());
     }
   }
 

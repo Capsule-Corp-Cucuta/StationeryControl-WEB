@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Constants } from '../../constants/global-constants';
+import { TokenService } from 'src/app/core/services/token.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +13,17 @@ export class HeaderComponent implements OnInit {
   public ICONS = Constants.ICONS;
   public ROUTES = Constants.ROUTES;
   public LABELS = Constants.LABELS.PRINCIPAL;
-  constructor() {}
 
-  ngOnInit(): void {}
+  public identificationCard: string;
+
+  constructor(private sesionService: TokenService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.identificationCard = this.sesionService.getUser();
+  }
+
+  public logOut(): void {
+    this.sesionService.logOut();
+    this.router.navigate([this.ROUTES.SECURITY]);
+  }
 }

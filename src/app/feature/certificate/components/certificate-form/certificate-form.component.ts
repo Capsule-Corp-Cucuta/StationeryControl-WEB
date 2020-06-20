@@ -6,6 +6,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Constants } from '../../../../shared/constants/global-constants';
 import { CertificateService } from '../../../../core/services/certificate.service';
 import { CertificateState, CertificateType } from '../../../../core/models/certificate.model';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-certificate-form',
@@ -18,29 +19,31 @@ export class CertificateFormComponent implements OnInit {
   public isCreate = true;
   public showUploadAttachment = true;
   public fileName: string;
+  public user: string;
 
   public ICONS = Constants.ICONS;
   public TOWNSHIPS = Constants.TOWNSHIPS;
   public DEPARTMENT = Constants.DEPARTMENT;
   public LABELS = Constants.LABELS.CERTIFICATE.FORM;
+  public TYPES = Constants.CERTIFICATES_TYPES_MAPPER;
+  public STATES = Constants.CERTIFICATES_STATES_MAPPER;
 
   private certificateNumber: number;
   private attachmentFormData: FormData;
-
-  public TYPES = Constants.CERTIFICATES_TYPES_MAPPER;
-  public STATES = Constants.CERTIFICATES_STATES_MAPPER;
 
   constructor(
     private router: Router,
     private builder: FormBuilder,
     private _snackBar: MatSnackBar,
     private activateRoute: ActivatedRoute,
-    private certificadoService: CertificateService
+    private certificadoService: CertificateService,
+    private sessionService: TokenService
   ) {}
 
   ngOnInit(): void {
     this.buildForm();
     this.validateExistentCertificate();
+    this.user = this.sessionService.getUser();
   }
 
   private validateExistentCertificate(): void {
@@ -68,7 +71,7 @@ export class CertificateFormComponent implements OnInit {
 
   private buildForm() {
     this.form = this.builder.group({
-      attendant: ['', [Validators.required]],
+      attendant: [this.user, [Validators.required]],
       department: [this.DEPARTMENT, [Validators.required]],
       institution: ['', [Validators.required]],
       number: ['', [Validators.required]],

@@ -36,7 +36,6 @@ export class CertificateListComponent implements OnInit {
   private findCertificatesAdmin() {
     this.certicadoService.findAll(0).subscribe(
       (resp) => {
-        console.log(resp);
         this.certificates = resp;
       },
       (err) => {
@@ -49,7 +48,6 @@ export class CertificateListComponent implements OnInit {
   private findCertificatesByUser(user: string) {
     this.certicadoService.findByAttendant(user, 0).subscribe(
       (resp) => {
-        console.log(resp);
         this.certificates = resp;
       },
       (err) => {

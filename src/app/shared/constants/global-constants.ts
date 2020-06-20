@@ -10,6 +10,8 @@ export class Constants {
     LIST: 'lista',
     CREATE: 'registrar',
     UPDATE: 'editar',
+    NOTFOUND: 'not-found',
+    SERVER_ERROR: 'server-error',
   };
 
   public static LABELS = {
@@ -21,6 +23,10 @@ export class Constants {
       DELIVERIES: 'Entregas y Devoluciones',
       CHANGE_PASS: 'Cambiar Contraseña',
       SIGN_OUT: 'Salir',
+    },
+    FOOTER: {
+      OPCION1: '© Copyright 2020, Todos los derechos reservados | IDS',
+      OPCION2: 'Atención al publico (57) 7 - 5784988',
     },
     LOGIN: {
       TITLE: 'Inicio de Sesión',
@@ -37,6 +43,7 @@ export class Constants {
       PLACEHOLDER: {
         OLD_PASS: 'Antigua contraseña:',
         NEW_PASS: 'Nueva contraseña:',
+        REPEAT_PASS: 'Repetir contraseña',
       },
       BUTTON: 'Cambiar',
     },
@@ -149,6 +156,30 @@ export class Constants {
           SHOW: 'Ver archivo',
         },
       },
+      FILTER: {
+        LABELS: {
+          NUMBER: 'Numero de Certificado ',
+          FIRTSNUMBER: 'Ingrese Numero de Certificado Inicial',
+          LASTNUMBER: 'Ingrese Numero de Certificado Final',
+          TYPECERTIFICATE: 'Tipo de Certificado',
+          INSTITUTION: 'Institucion',
+          STATE: 'Estado del Certificado',
+          ATTENDANT: 'Usuario',
+          TWONSHIP: 'Municpio',
+        },
+        PLACEHOLDER: {
+          NUMBER: 'Numero de Certificado sin Código de Verificación',
+          FIRTSNUMBER: 'Ingrese Numero de Certificado Inicial sin Código de Verificación',
+          LASTNUMBER: 'Ingrese Numero de Certificado Final sin Código de Verificación',
+          TYPECERTIFICATE: 'Seleccione un Tipo de Certificado',
+          INSTITUTION: 'Ingrese una Institucion',
+          STATE: 'Seleccione un Estado de Certificado',
+          ATTENDANT: 'Ingrese un Usuario',
+          TWONSHIP: 'Ingrese un Municipio',
+        },
+        BUTTON: 'Buscar',
+        SELECT: 'Seleccione Filtro',
+      },
     },
     DELIVERY: {
       FORM: {
@@ -183,6 +214,26 @@ export class Constants {
         },
         TOOLTIP: 'Asginar Certificados',
       },
+      FILTER: {
+        LABELS: {
+          TRADENUMBER: 'Numero de oficio',
+          DATE: 'Fecha',
+          FIRSTDATE: 'Fecha Inicial',
+          LASTDATE: 'Fecha Final',
+          TYPEDELIVERY: 'Tipo (Entrega/Devolucion)',
+          USER: 'Usuario',
+        },
+        PLACEHOLDER: {
+          TRADENUMBER: 'Numero de oficio',
+          DATE: 'Seleccione una Fecha',
+          FIRSTDATE: 'Seleccione Fecha Inicial',
+          LASTDATE: 'Seleccione Fecha Final',
+          TYPEDELIVERY: 'Seleccione un Tipo ',
+          USER: 'Ingrese un Usuario',
+        },
+        BUTTON: 'Buscar',
+        SELECT: 'Seleccione Filtro',
+      },
     },
   };
 
@@ -192,6 +243,7 @@ export class Constants {
     SAVE: 'save',
     LOCK: 'lock',
     EVENT: 'event',
+    SEARCH: 'search',
     CREATE: 'create',
     PERSON: 'person',
     VPN_KEY: 'vpn_key',
@@ -211,6 +263,8 @@ export class Constants {
   public static LINKS = {
     AVATAR: 'https://svgsilh.com/svg/1633250.svg',
     LOGO_IDS: 'https://ids.gov.co/web/wp-content/uploads/2018/01/images_favicons_favicon114.png',
+    ERROR:
+      'https://weakwifisolutions.com/wp-content/uploads/2019/08/error-red-cross-7.png?ezimgfmt=rs:372x372/rscb2/ng:webp/ngcb2',
   };
 
   public static CHARTS = {
@@ -256,6 +310,29 @@ export class Constants {
 
   public static DEPARTMENT = 'NORTE DE SANTANDER';
 
+  public static FILTERSCERTIFICATES = [
+    { authority: 'ADMIN', value: 'Por numero:' },
+    { authority: 'ADMIN', value: 'Entre dos numeros' },
+    { authority: 'ADMIN', value: 'Tipo de Certificado' },
+    { authority: 'USER', value: 'Tipo/Cedula' },
+    { authority: 'ADMIN', value: 'Tipo/Institucion' },
+    { authority: 'ADMIN', value: 'Estado de Certificado' },
+    { authority: 'USER', value: 'Estado/Cedula' },
+    { authority: 'ADMIN', value: 'Estado/Institucion' },
+    { authority: 'ADMIN', value: 'Cedula' },
+    { authority: 'ADMIN', value: 'Municipio' },
+    { authority: 'ADMIN', value: 'Institucion' },
+  ];
+
+  public static FILTERSDELIVERYS = [
+    { authority: 'ADMIN', value: 'Por numero  de oficio:' },
+    { authority: 'ADMIN', value: 'Por fecha:' },
+    { authority: 'ADMIN', value: 'Entre dos fechas:' },
+    { authority: 'ADMIN', value: 'Por tipo:' },
+    { authority: 'ADMIN', value: 'Tipo/Usuario:' },
+    { authority: 'ADMIN', value: 'Por usuario:' },
+  ];
+
   public static TOWNSHIPS = [
     'Abrego',
     'Arboledas',
@@ -266,7 +343,7 @@ export class Constants {
     'Chinacota',
     'Chitaga',
     'Convencion',
-    'CÚCUTA',
+    'CUCUTA',
     'Cucutilla',
     'Durania',
     'El Carmen',

@@ -55,8 +55,23 @@ export class DeliveryFormComponent implements OnInit {
           this.router.navigate(['./entrega/lista']);
         },
         (err) => {
-          // TODO
-          alert(err.error.message);
+          if (err.status === 400) {
+            this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
+              duration: 3000,
+            });
+          } else if (err.status === 401) {
+            this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
+              duration: 3000,
+            });
+          } else if (err.status === 403) {
+            this._snackBar.open('Peticion Prohibida', 'ERROR', {
+              duration: 3000,
+            });
+          } else if (err.status === 404) {
+            this._snackBar.open('Error al asignar los certificados', 'ERROR', {
+              duration: 2000,
+            });
+          }
         }
       );
     }

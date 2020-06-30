@@ -20,6 +20,8 @@ export class CertificateFormComponent implements OnInit {
   public showUploadAttachment = true;
   public fileName: string;
   public user: string;
+  public authority: string;
+  public userSesiom = false;
 
   public ICONS = Constants.ICONS;
   public TOWNSHIPS = Constants.TOWNSHIPS;
@@ -44,6 +46,10 @@ export class CertificateFormComponent implements OnInit {
     this.buildForm();
     this.validateExistentCertificate();
     this.user = this.sessionService.getUser();
+    this.authority = this.sessionService.getAuthorities()[0];
+    if (this.authority === 'USER') {
+      this.userSesiom = true;
+    }
   }
 
   private validateExistentCertificate(): void {
@@ -71,8 +77,8 @@ export class CertificateFormComponent implements OnInit {
 
   private buildForm() {
     this.form = this.builder.group({
-      attendant: [this.user, [Validators.required]],
-      department: [this.DEPARTMENT, [Validators.required]],
+      attendant: [''],
+      department: [this.DEPARTMENT],
       institution: ['', [Validators.required]],
       number: ['', [Validators.required]],
       state: [CertificateState.IDLE, [Validators.required]],
@@ -89,10 +95,14 @@ export class CertificateFormComponent implements OnInit {
   }
 
   public create(e: Event) {
+    console.log(e);
+
     e.preventDefault();
 
     if (this.form.valid) {
+      console.log(this.form.value);
       const certificate = this.form.value;
+      certificate.attendant = this.user;
       this.certificadoService.create(certificate).subscribe(
         (resp) => {
           this._snackBar.open('Registro Exitoso', 'OK', {
@@ -101,23 +111,7 @@ export class CertificateFormComponent implements OnInit {
           this.router.navigate(['./certificado/lista']);
         },
         (err) => {
-          if (err.status === 400) {
-            this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 401) {
-            this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 403) {
-            this._snackBar.open('Peticion Prohibida', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 404) {
-            this._snackBar.open('Error al registrar el certificado', 'ERROR', {
-              duration: 2000,
-            });
-          }
+          this.handlerError(err);
         }
       );
     }
@@ -128,6 +122,8 @@ export class CertificateFormComponent implements OnInit {
 
     if (this.form.valid) {
       const certificate = this.form.value;
+      console.log(certificate);
+
       this.certificadoService.update(certificate.number, certificate).subscribe(
         (resp) => {
           this._snackBar.open('Certificado Actualizado', 'OK', {
@@ -136,23 +132,7 @@ export class CertificateFormComponent implements OnInit {
           this.router.navigate(['./certificado/lista']);
         },
         (err) => {
-          if (err.status === 400) {
-            this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 401) {
-            this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 403) {
-            this._snackBar.open('Peticion Prohibida', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 404) {
-            this._snackBar.open('El certificado no existe', 'ERROR', {
-              duration: 2000,
-            });
-          }
+          this.handlerError(err);
         }
       );
     }
@@ -177,6 +157,25 @@ export class CertificateFormComponent implements OnInit {
     }
   }
 
+  public handlerError(err): void {
+    if (err.status === 400) {
+      this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
+        duration: 3000,
+      });
+    } else if (err.status === 401) {
+      this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
+        duration: 3000,
+      });
+    } else if (err.status === 403) {
+      this._snackBar.open('Peticion Prohibida', 'ERROR', {
+        duration: 3000,
+      });
+    } else if (err.status === 404) {
+      this._snackBar.open('Error al procesar la solicitud', 'ERROR', {
+        duration: 2000,
+      });
+    }
+  }
   public fileChangeExcel(event) {}
 
   public uploadFileExcel() {}

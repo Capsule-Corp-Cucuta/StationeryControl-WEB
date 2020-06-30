@@ -13,13 +13,16 @@ export class HeaderComponent implements OnInit {
   public ICONS = Constants.ICONS;
   public ROUTES = Constants.ROUTES;
   public LABELS = Constants.LABELS.PRINCIPAL;
-
+  public authority: string;
   public identificationCard: string;
 
   constructor(private sesionService: TokenService, private router: Router) {}
 
   ngOnInit(): void {
     this.identificationCard = this.sesionService.getUser();
+    console.log(this.identificationCard);
+
+    this.authority = this.sesionService.getAuthorities()[0];
   }
 
   public logOut(): void {

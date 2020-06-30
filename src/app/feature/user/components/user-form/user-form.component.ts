@@ -71,22 +71,12 @@ export class UserFormComponent implements OnInit {
           this.router.navigate(['./usuario/lista']);
         },
         (err) => {
-          if (err.status === 400) {
-            this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 401) {
-            this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 403) {
-            this._snackBar.open('Peticion Prohibida', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 404) {
+          if (err.status === 404) {
             this._snackBar.open('Usuario ya existe', 'ERROR', {
               duration: 2000,
             });
+          } else {
+            this.handlerError(err);
           }
         }
       );
@@ -105,22 +95,12 @@ export class UserFormComponent implements OnInit {
           this.router.navigate(['./usuario/lista']);
         },
         (err) => {
-          if (err.status === 400) {
-            this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 401) {
-            this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 403) {
-            this._snackBar.open('Peticion Prohibida', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 404) {
+          if (err.status === 404) {
             this._snackBar.open('Usuario no encontrado', 'ERROR', {
               duration: 2000,
             });
+          } else {
+            this.handlerError(err);
           }
         }
       );
@@ -136,25 +116,31 @@ export class UserFormComponent implements OnInit {
           this.router.navigate(['./usuario/lista']);
         },
         (err) => {
-          if (err.status === 400) {
-            this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 401) {
-            this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 403) {
-            this._snackBar.open('Peticion Prohibida', 'ERROR', {
-              duration: 3000,
-            });
-          } else if (err.status === 404) {
-            this._snackBar.open('Usuario no existe', 'ERROR', {
+          if (err.status === 404) {
+            this._snackBar.open('El usuario no existe', 'OK', {
               duration: 2000,
             });
+          } else {
+            this.handlerError(err);
           }
         }
       );
+    }
+  }
+
+  public handlerError(err): void {
+    if (err.status === 400) {
+      this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
+        duration: 3000,
+      });
+    } else if (err.status === 401) {
+      this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
+        duration: 3000,
+      });
+    } else if (err.status === 403) {
+      this._snackBar.open('Peticion Prohibida', 'ERROR', {
+        duration: 3000,
+      });
     }
   }
 }

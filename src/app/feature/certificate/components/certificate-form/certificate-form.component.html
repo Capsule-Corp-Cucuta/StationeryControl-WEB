@@ -9,10 +9,18 @@
       <mat-divider></mat-divider>
 
       <mat-card-content class="card-content">
-        <div class="row">
+        <div class="row" *ngIf="isCreate">
           <div class="col-xs">
             <mat-form-field class="full-width">
               <input matInput disabled value="Asignado a: {{ user }}" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="!isCreate">
+          <div class="col-xs">
+            <mat-form-field class="full-width">
+              <input matInput disabled formControlName="attendant" />
             </mat-form-field>
           </div>
         </div>

@@ -9,7 +9,11 @@
     <div class="row between-xs middle-xs header-row">
       <nav>
         <a mat-button routerLink="/{{ ROUTES.PRINCIPAL }}" routerLinkActive="active">{{ LABELS.PRINCIPAL }}</a>
-        <a mat-button routerLink="/{{ ROUTES.USER }}/{{ ROUTES.LIST }}" routerLinkActive="active"
+        <a
+          mat-button
+          routerLink="/{{ ROUTES.USER }}/{{ ROUTES.LIST }}"
+          *ngIf="authority === 'ADMIN'"
+          routerLinkActive="active"
           >{{ LABELS.USERS }}
         </a>
         <a mat-button routerLink="/{{ ROUTES.CERTIFICATE }}/{{ ROUTES.LIST }}" routerLinkActive="active">{{

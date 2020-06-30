@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Constants } from '../../../../shared/constants/global-constants';
 import { DeliveryService } from '../../../../core/services/delivery.service';
 import { Router } from '@angular/router';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-delivery-list',
@@ -12,7 +13,9 @@ import { Router } from '@angular/router';
 export class DeliveryListComponent implements OnInit {
   public deliverys = [];
   public filter: string;
-  public msn: string;
+
+  public isWithFilter: boolean = false;
+  public eventValue: any = null;
   public ICONS = Constants.ICONS;
   public ROUTES = Constants.ROUTES;
   public CELLS = Constants.LABELS.DELIVERY.LIST.CELLS;
@@ -21,77 +24,52 @@ export class DeliveryListComponent implements OnInit {
 
   public FILTERS = Constants.FILTERSDELIVERYS;
   public SELECT = Constants.LABELS.DELIVERY.FILTER.SELECT;
-  public authority = 'ADMIN';
+  public authority: string;
+  public page = 0;
 
-  constructor(private deliveryService: DeliveryService, private router: Router, private _snackBar: MatSnackBar) {}
+  constructor(
+    private deliveryService: DeliveryService,
+    private router: Router,
+    private _snackBar: MatSnackBar,
+    private sessionService: TokenService
+  ) {}
 
   ngOnInit(): void {
-    this.loadDeliverys();
+    this.authority = this.sessionService.getAuthorities()[0];
+    this.loadDeliverys(0);
     this.updateFilter('default');
   }
 
-  public loadDeliverys() {
-    if (true) {
-      this.findDeliverysAdmin();
+  public loadDeliverys(page: number) {
+    if (!this.isWithFilter) {
+      if (this.authority === 'ADMIN') {
+        this.findDeliverysAdmin(page);
+      } else {
+        this.findDeliverysByUser(this.sessionService.getUser(), page);
+      }
     } else {
-      this.findDeliverysByUser('1090');
+      this.findByFilter(this.eventValue, page);
     }
   }
 
-  public findDeliverysAdmin() {
+  public findDeliverysAdmin(page: number) {
     this.deliveryService.findAll(0).subscribe(
       (resp) => {
         this.deliverys = resp;
       },
       (err) => {
-        if (err.status === 400) {
-          this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 401) {
-          this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 403) {
-          this._snackBar.open('Peticion Prohibida', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 404) {
-          this._snackBar.open('No hay entregas y devoluciones registradas', 'OK', {
-            duration: 3000,
-          });
-        } else if (err.status === 500) {
-          this.router.navigate(['/server-error']);
-        }
+        this.handlerError(err);
       }
     );
   }
 
-  public findDeliverysByUser(user: string) {
+  public findDeliverysByUser(user: string, page: number) {
     this.deliveryService.findByAttendant(user, 0).subscribe(
       (resp) => {
         this.deliverys = resp;
       },
       (err) => {
-        if (err.status === 400) {
-          this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 401) {
-          this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 403) {
-          this._snackBar.open('Peticion Prohibida', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 404) {
-          this._snackBar.open('No hay registros asignados para este usuario', 'OK', {
-            duration: 3000,
-          });
-        } else if (err.status === 500) {
-          this.router.navigate(['/server-error']);
-        }
+        this.handlerError(err);
       }
     );
   }
@@ -117,16 +95,23 @@ export class DeliveryListComponent implements OnInit {
         this.filter = 'byUser';
         break;
       default:
-        this.filter = 'byTradeNumber';
+        if (this.authority === 'ADMIN') {
+          this.filter = 'byTradeNumber';
+        } else {
+          this.filter = 'byTypeUser';
+        }
+
         break;
     }
   }
 
   public receiveEvent(e: any): void {
-    this.findByFilter(e);
+    this.eventValue = e;
+    this.isWithFilter = true;
+    this.loadDeliverys(0);
   }
 
-  private findByFilter(e: any): void {
+  private findByFilter(e: any, page: number): void {
     switch (this.filter) {
       case 'byTradeNumber':
         this.deliveryService.findByTradeNumber(e.firstInput).subscribe(
@@ -135,156 +120,95 @@ export class DeliveryListComponent implements OnInit {
             this.deliverys.push(response);
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay registros con ese Numero de Oficio', 'ERROR', {
-                duration: 2000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
       case 'byDate':
-        this.deliveryService.findByDate(e.firstInput, 0).subscribe(
+        this.deliveryService.findByDate(e.firstInput, page).subscribe(
           (response) => {
             this.deliverys = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay registros con esa Fecha', 'ERROR', {
-                duration: 2000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
       case 'betweenDates':
-        this.deliveryService.findByBetweenDate(e.firstInput, e.secondInput, 0).subscribe(
+        this.deliveryService.findByBetweenDate(e.firstInput, e.secondInput, page).subscribe(
           (response) => {
             this.deliverys = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay registros entre las fechas ingresadas', 'ERROR', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
       case 'byType':
-        this.deliveryService.findByType(e.firstInput, 0).subscribe(
+        this.deliveryService.findByType(e.firstInput, page).subscribe(
           (response) => {
             this.deliverys = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay registros con el tipo seleccionado', 'ERROR', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
       case 'byTypeUser':
-        this.deliveryService.findByTypeUser(e.firstInputm, e.secondInput, 0).subscribe(
+        this.deliveryService.findByTypeUser(e.firstInputm, e.secondInput, page).subscribe(
           (response) => {
             this.deliverys = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay registros, seleccione otras opciones', 'ERROR', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
       case 'byUser':
-        this.deliveryService.findByUser(e.firstInputm, 0).subscribe(
+        this.deliveryService.findByUser(e.firstInputm, page).subscribe(
           (response) => {
             this.deliverys = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay registros con ese usuario', 'ERROR', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
+    }
+  }
+
+  public handlerError(err): void {
+    if (err.status === 400) {
+      this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
+        duration: 3000,
+      });
+    } else if (err.status === 401) {
+      this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
+        duration: 3000,
+      });
+    } else if (err.status === 403) {
+      this._snackBar.open('Peticion Prohibida', 'ERROR', {
+        duration: 3000,
+      });
+    } else if (err.status === 404) {
+      this._snackBar.open('No hay registros', 'OK', {
+        duration: 3000,
+      });
+    } else if (err.status === 500) {
+      this.router.navigate(['/server-error']);
+    }
+  }
+
+  public paginator(page: string) {
+    console.log(this.filter);
+    if (page === 'next') {
+      this.page++;
+      console.log(this.page);
+      this.loadDeliverys(this.page);
+    } else {
+      this.page--;
+      console.log(this.page);
+      this.loadDeliverys(this.page);
     }
   }
 }

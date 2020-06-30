@@ -16,6 +16,10 @@ import { TokenService } from 'src/app/core/services/token.service';
 export class CertificateListComponent implements OnInit {
   public certificates = [];
   public filter: string;
+
+  public isWithFilter: boolean = false;
+  public eventValue: any = null;
+
   public ICONS = Constants.ICONS;
   public ROUTES = Constants.ROUTES;
   public CELLS = Constants.LABELS.CERTIFICATE.LIST.CELLS;
@@ -27,6 +31,9 @@ export class CertificateListComponent implements OnInit {
   public TYPES = Constants.CERTIFICATES_TYPES_MAPPER;
   public STATES = Constants.CERTIFICATES_STATES_MAPPER;
   public SELECT = Constants.LABELS.CERTIFICATE.FILTER.SELECT;
+  public userSesiom = true;
+
+  public page = 0;
 
   constructor(
     private certificateService: CertificateService,
@@ -37,73 +44,44 @@ export class CertificateListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadCerticates();
-    this.updateFilter('default');
     this.authority = this.sessionService.getAuthorities()[0];
-  }
-
-  public loadCerticates() {
-    if (this.authority === 'ADMIN') {
-      this.findCertificatesAdmin();
-    } else {
-      this.findCertificatesByUser(this.sessionService.getUser());
+    this.loadCerticates(0);
+    this.updateFilter('default');
+    if (this.authority === 'USER') {
+      this.userSesiom = false;
     }
   }
 
-  private findCertificatesAdmin() {
-    this.certificateService.findAll(0).subscribe(
+  public loadCerticates(page: number) {
+    if (!this.isWithFilter) {
+      if (this.authority === 'ADMIN') {
+        this.findCertificatesAdmin(page);
+      } else {
+        this.findCertificatesByUser(this.sessionService.getUser(), page);
+      }
+    } else {
+      this.findByFilter(this.eventValue, page);
+    }
+  }
+
+  private findCertificatesAdmin(page: number) {
+    this.certificateService.findAll(page).subscribe(
       (resp) => {
         this.certificates = resp;
       },
       (err) => {
-        if (err.status === 400) {
-          this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 401) {
-          this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 403) {
-          this._snackBar.open('Peticion Prohibida', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 404) {
-          this._snackBar.open('No hay Certificados registrados', 'OK', {
-            duration: 3000,
-          });
-        } else if (err.status === 500) {
-          this.router.navigate(['/server-error']);
-        }
+        this.handlerError(err);
       }
     );
   }
 
-  private findCertificatesByUser(user: string) {
-    this.certificateService.findByAttendant(user, 0).subscribe(
+  private findCertificatesByUser(user: string, page: number) {
+    this.certificateService.findByAttendant(user, page).subscribe(
       (resp) => {
         this.certificates = resp;
       },
       (err) => {
-        if (err.status === 400) {
-          this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 401) {
-          this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 403) {
-          this._snackBar.open('Peticion Prohibida', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 404) {
-          this._snackBar.open('No hay Certificados registrados para este Usuario', 'OK', {
-            duration: 3000,
-          });
-        } else if (err.status === 500) {
-          this.router.navigate(['/server-error']);
-        }
+        this.handlerError(err);
       }
     );
   }
@@ -158,18 +136,22 @@ export class CertificateListComponent implements OnInit {
         this.filter = 'byInstitution';
         break;
       default:
-        this.filter = 'byNumber';
+        if (this.authority === 'ADMIN') {
+          this.filter = 'byNumber';
+        } else {
+          this.filter = 'byTypeAttendant';
+        }
         break;
     }
   }
 
   public receiveEvent(e: any): void {
-    console.log(e);
-
-    this.findByFilter(e);
+    this.eventValue = e;
+    this.isWithFilter = true;
+    this.loadCerticates(0);
   }
 
-  private findByFilter(e: any): void {
+  private findByFilter(e: any, page: number): void {
     switch (this.filter) {
       case 'byNumber':
         this.certificateService.findByNumber(e.firstInput).subscribe(
@@ -178,23 +160,7 @@ export class CertificateListComponent implements OnInit {
             this.certificates.push(response);
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay certificados registrados con ese numero', 'OK', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
@@ -204,260 +170,135 @@ export class CertificateListComponent implements OnInit {
             this.certificates = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay Certificados registrados entre el rango de numeros seleccionado', 'OK', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
       case 'byType':
-        this.certificateService.findByType(e.firstInput, 0).subscribe(
+        this.certificateService.findByType(e.firstInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay Certificados registrados para  el tipo seleccionado', 'OK', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
       case 'byTypeAttendant':
-        this.certificateService.findByTypeAttendant(e.firstInput, e.secondInput, 0).subscribe(
+        this.certificateService.findByTypeAttendant(e.firstInput, e.secondInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay Certificados registrados para ese numero de Cedula', 'OK', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
       case 'byTypeInstitution':
-        this.certificateService.findByTypeInstitution(e.firstInput, e.secondInput, 0).subscribe(
+        this.certificateService.findByTypeInstitution(e.firstInput, e.secondInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay Certificados registrados para las opciones seleccionadas', 'OK', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
       case 'byState':
-        this.certificateService.findByState(e.firstInput, 0).subscribe(
+        this.certificateService.findByState(e.firstInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay Certificados registrados con ese estado', 'OK', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
       case 'byStateAttendant':
-        this.certificateService.findByStateAttendant(e.firstInput, e.secondInput, 0).subscribe(
+        this.certificateService.findByStateAttendant(e.firstInput, e.secondInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay Certificados registrados para las opciones seleccionadas', 'OK', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
       case 'byStateInstitution':
-        this.certificateService.findByStateInstitution(e.firstInput, e.secondInput, 0).subscribe(
+        this.certificateService.findByStateInstitution(e.firstInput, e.secondInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay Certificados registrados para las opciones seleccionadas', 'OK', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
       case 'byAttendant':
-        this.certificateService.findByAttendant(e.firstInput, 0).subscribe(
+        this.certificateService.findByAttendant(e.firstInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay Certificados registrados para ese numero de Cedula', 'OK', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
       case 'byTownship':
-        this.certificateService.findByTwonship(e.firstInput, 0).subscribe(
+        this.certificateService.findByTwonship(e.firstInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay Certificados registrados para ese Municipio', 'OK', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
       case 'byInstitution':
-        this.certificateService.findByInstitution(e.firstInput, 0).subscribe(
+        this.certificateService.findByInstitution(e.firstInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
           (err) => {
-            if (err.status === 400) {
-              this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 401) {
-              this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 403) {
-              this._snackBar.open('Peticion Prohibida', 'ERROR', {
-                duration: 3000,
-              });
-            } else if (err.status === 404) {
-              this._snackBar.open('No hay Certificados registrados para esa Institucion', 'OK', {
-                duration: 3000,
-              });
-            }
+            this.handlerError(err);
           }
         );
         break;
+    }
+  }
+
+  public handlerError(err): void {
+    if (err.status === 400) {
+      this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
+        duration: 3000,
+      });
+    } else if (err.status === 401) {
+      this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
+        duration: 3000,
+      });
+    } else if (err.status === 403) {
+      this._snackBar.open('Peticion Prohibida', 'ERROR', {
+        duration: 3000,
+      });
+    } else if (err.status === 404) {
+      this._snackBar.open('No hay Certificados registrados', 'OK', {
+        duration: 3000,
+      });
+    } else if (err.status === 500) {
+      this.router.navigate(['/server-error']);
+    }
+  }
+
+  public paginator(page: string) {
+    console.log(this.filter);
+    if (page === 'next') {
+      this.page++;
+      console.log(this.page);
+      this.loadCerticates(this.page);
+    } else {
+      this.page--;
+      console.log(this.page);
+      this.loadCerticates(this.page);
     }
   }
 }

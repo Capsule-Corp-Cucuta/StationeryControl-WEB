@@ -65,3 +65,13 @@
   <tr mat-header-row *matHeaderRowDef="COLUMNS"></tr>
   <tr mat-row *matRowDef="let row; columns: COLUMNS"></tr>
 </table>
+<mat-card class="paginator-card">
+  <div class="row paginator-ids">
+    <div>
+      <button mat-button color="primary" (click)="paginator('previous')" *ngIf="page != 0">Anterior</button>
+      <button mat-button color="primary" (click)="paginator('next')">Siguiente</button>
+    </div>
+  </div>
+</mat-card>
+
+<div style="clear: both;"></div>

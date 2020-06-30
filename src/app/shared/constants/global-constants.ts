@@ -329,7 +329,7 @@ export class Constants {
     { authority: 'ADMIN', value: 'Por fecha:' },
     { authority: 'ADMIN', value: 'Entre dos fechas:' },
     { authority: 'ADMIN', value: 'Por tipo:' },
-    { authority: 'ADMIN', value: 'Tipo/Usuario:' },
+    { authority: 'USER', value: 'Tipo/Usuario:' },
     { authority: 'ADMIN', value: 'Por usuario:' },
   ];
 

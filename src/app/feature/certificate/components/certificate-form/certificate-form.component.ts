@@ -6,6 +6,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Constants } from '../../../../shared/constants/global-constants';
 import { CertificateService } from '../../../../core/services/certificate.service';
 import { CertificateState, CertificateType } from '../../../../core/models/certificate.model';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-certificate-form',
@@ -18,29 +19,37 @@ export class CertificateFormComponent implements OnInit {
   public isCreate = true;
   public showUploadAttachment = true;
   public fileName: string;
+  public user: string;
+  public authority: string;
+  public userSesiom = false;
 
   public ICONS = Constants.ICONS;
   public TOWNSHIPS = Constants.TOWNSHIPS;
   public DEPARTMENT = Constants.DEPARTMENT;
   public LABELS = Constants.LABELS.CERTIFICATE.FORM;
+  public TYPES = Constants.CERTIFICATES_TYPES_MAPPER;
+  public STATES = Constants.CERTIFICATES_STATES_MAPPER;
 
   private certificateNumber: number;
   private attachmentFormData: FormData;
-
-  public TYPES = Constants.CERTIFICATES_TYPES_MAPPER;
-  public STATES = Constants.CERTIFICATES_STATES_MAPPER;
 
   constructor(
     private router: Router,
     private builder: FormBuilder,
     private _snackBar: MatSnackBar,
     private activateRoute: ActivatedRoute,
-    private certificadoService: CertificateService
+    private certificadoService: CertificateService,
+    private sessionService: TokenService
   ) {}
 
   ngOnInit(): void {
     this.buildForm();
     this.validateExistentCertificate();
+    this.user = this.sessionService.getUser();
+    this.authority = this.sessionService.getAuthorities()[0];
+    if (this.authority === 'USER') {
+      this.userSesiom = true;
+    }
   }
 
   private validateExistentCertificate(): void {
@@ -56,6 +65,7 @@ export class CertificateFormComponent implements OnInit {
           ) {
             this.showUploadAttachment = false;
           }
+
           this.form.patchValue(resp);
         });
       } else {
@@ -67,8 +77,8 @@ export class CertificateFormComponent implements OnInit {
 
   private buildForm() {
     this.form = this.builder.group({
-      attendant: ['', [Validators.required]],
-      department: [this.DEPARTMENT, [Validators.required]],
+      attendant: [''],
+      department: [this.DEPARTMENT],
       institution: ['', [Validators.required]],
       number: ['', [Validators.required]],
       state: [CertificateState.IDLE, [Validators.required]],
@@ -85,10 +95,14 @@ export class CertificateFormComponent implements OnInit {
   }
 
   public create(e: Event) {
+    console.log(e);
+
     e.preventDefault();
 
     if (this.form.valid) {
+      console.log(this.form.value);
       const certificate = this.form.value;
+      certificate.attendant = this.user;
       this.certificadoService.create(certificate).subscribe(
         (resp) => {
           this._snackBar.open('Registro Exitoso', 'OK', {
@@ -97,8 +111,7 @@ export class CertificateFormComponent implements OnInit {
           this.router.navigate(['./certificado/lista']);
         },
         (err) => {
-          // TODO
-          alert(err.error.message);
+          this.handlerError(err);
         }
       );
     }
@@ -109,6 +122,8 @@ export class CertificateFormComponent implements OnInit {
 
     if (this.form.valid) {
       const certificate = this.form.value;
+      console.log(certificate);
+
       this.certificadoService.update(certificate.number, certificate).subscribe(
         (resp) => {
           this._snackBar.open('Certificado Actualizado', 'OK', {
@@ -117,8 +132,7 @@ export class CertificateFormComponent implements OnInit {
           this.router.navigate(['./certificado/lista']);
         },
         (err) => {
-          // TODO
-          alert(err.error.message);
+          this.handlerError(err);
         }
       );
     }
@@ -142,4 +156,27 @@ export class CertificateFormComponent implements OnInit {
       this.attachmentFormData.append('reportProgress', 'true');
     }
   }
+
+  public handlerError(err): void {
+    if (err.status === 400) {
+      this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
+        duration: 3000,
+      });
+    } else if (err.status === 401) {
+      this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
+        duration: 3000,
+      });
+    } else if (err.status === 403) {
+      this._snackBar.open('Peticion Prohibida', 'ERROR', {
+        duration: 3000,
+      });
+    } else if (err.status === 404) {
+      this._snackBar.open('Error al procesar la solicitud', 'ERROR', {
+        duration: 2000,
+      });
+    }
+  }
+  public fileChangeExcel(event) {}
+
+  public uploadFileExcel() {}
 }

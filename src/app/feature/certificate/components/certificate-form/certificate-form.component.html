@@ -9,15 +9,18 @@
       <mat-divider></mat-divider>
 
       <mat-card-content class="card-content">
-        <div class="row">
+        <div class="row" *ngIf="isCreate">
           <div class="col-xs">
             <mat-form-field class="full-width">
-              <input
-                matInput
-                type="text"
-                placeholder="{{ LABELS.PLACEHOLDER.ATTENDANT }}"
-                formControlName="attendant"
-              />
+              <input matInput disabled value="Asignado a: {{ user }}" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="!isCreate">
+          <div class="col-xs">
+            <mat-form-field class="full-width">
+              <input matInput disabled formControlName="attendant" />
             </mat-form-field>
           </div>
         </div>
@@ -64,12 +67,7 @@
         <div class="row">
           <div class="col-xs">
             <mat-form-field class="full-width">
-              <input
-                matInput
-                type="text"
-                placeholder="{{ LABELS.PLACEHOLDER.DEPARTMENT }}"
-                formControlName="department"
-              />
+              <input matInput disabled value="{{ DEPARTMENT }}" />
             </mat-form-field>
           </div>
 
@@ -132,14 +130,12 @@
     </mat-card>
   </form>
 </section>
-
-<!--
 <section *ngIf="isCreate">
-  <form [formGroup]="form2" class="form-card" enctype="multipart/form-data">
+  <form [formGroup]="formFile" class="form-card" enctype="multipart/form-data">
     <mat-card>
       <mat-card-header>
         <mat-icon>{{ ICONS.LIBRARY_BOOKS }}</mat-icon>
-        <h3>{{ LABELS.MULTIPLE.TITTLE }}</h3>
+        <h3>{{ LABELS.MULTIPLE.TITLE }}</h3>
       </mat-card-header>
 
       <mat-divider></mat-divider>
@@ -164,7 +160,7 @@
       </mat-card-content>
 
       <mat-card-actions>
-        <button mat-raised-button color="primary" class="button-form" (click)="adjuntarArchivoExcel()">
+        <button mat-raised-button color="primary" class="button-form" (click)="uploadFileExcel()">
           <mat-icon class="separation">{{ ICONS.CLOUD_UPLOAD }}</mat-icon>
           {{ LABELS.MULTIPLE.BUTTON }}
         </button>
@@ -174,4 +170,3 @@
     </mat-card>
   </form>
 </section>
--->

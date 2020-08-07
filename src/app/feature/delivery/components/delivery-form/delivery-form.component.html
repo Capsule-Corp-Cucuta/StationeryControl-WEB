@@ -41,9 +41,25 @@
             <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.SENDER }}" formControlName="sender" />
           </mat-form-field>
         </div>
+      </div>
+
+      <div class="row">
         <div class="col-xs">
           <mat-form-field class="example-full-width">
-            <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.RECEIVER }}" formControlName="receiver" />
+            <input
+              type="text"
+              placeholder=" {{ LABELS.PLACEHOLDER.RECEIVER }}"
+              matInput
+              (keypress)="findUserByName($event.target.value)"
+              [matAutocomplete]="auto"
+            />
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+              <div *ngFor="let user of users">
+                <mat-option [value]="user">
+                  {{ user.name }}
+                </mat-option>
+              </div>
+            </mat-autocomplete>
           </mat-form-field>
         </div>
       </div>

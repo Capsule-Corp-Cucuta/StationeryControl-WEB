@@ -200,14 +200,11 @@ export class DeliveryListComponent implements OnInit {
   }
 
   public paginator(page: string) {
-    console.log(this.filter);
     if (page === 'next') {
       this.page++;
-      console.log(this.page);
       this.loadDeliverys(this.page);
     } else {
       this.page--;
-      console.log(this.page);
       this.loadDeliverys(this.page);
     }
   }

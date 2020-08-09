@@ -95,12 +95,8 @@ export class CertificateFormComponent implements OnInit {
   }
 
   public create(e: Event) {
-    console.log(e);
-
     e.preventDefault();
-
     if (this.form.valid) {
-      console.log(this.form.value);
       const certificate = this.form.value;
       certificate.attendant = this.user;
       this.certificadoService.create(certificate).subscribe(
@@ -122,8 +118,6 @@ export class CertificateFormComponent implements OnInit {
 
     if (this.form.valid) {
       const certificate = this.form.value;
-      console.log(certificate);
-
       this.certificadoService.update(certificate.number, certificate).subscribe(
         (resp) => {
           this._snackBar.open('Certificado Actualizado', 'OK', {

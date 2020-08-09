@@ -51,10 +51,8 @@ export class DeliveryFormComponent implements OnInit {
 
   public create(e: Event) {
     e.preventDefault();
-    console.log(this.form);
     this.form.value.receiver = this.receiver;
     if (this.form.valid) {
-      console.log(this.form.value);
       const delivery = this.form.value;
       this.deliveryService.create(delivery).subscribe(
         (resp) => {
@@ -99,8 +97,7 @@ export class DeliveryFormComponent implements OnInit {
   }
 
   public findUserByName(e) {
-    console.log(e);
-    if (e != '') {
+    if (e !== '') {
       this.userService.findByUserName(e, 0).subscribe((resp) => {
         this.users = resp as any[];
       });

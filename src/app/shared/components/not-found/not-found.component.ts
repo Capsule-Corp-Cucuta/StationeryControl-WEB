@@ -12,7 +12,6 @@ export class NotFoundComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((params: Params) => {
-      console.log(params.message);
       this.message = params.message;
     });
   }

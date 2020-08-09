@@ -43,8 +43,6 @@ export class CertificatesFilterComponent implements OnInit {
   };
 
   private setIdentificationCard(user: User) {
-    console.log(this.filter);
-
     if (user && user.identificationCard) {
       this.values.firstInput = user.identificationCard;
     }
@@ -62,8 +60,7 @@ export class CertificatesFilterComponent implements OnInit {
   }
 
   public findUserByName(e) {
-    console.log(e);
-    if (e != '') {
+    if (e !== '') {
       this.userService.findByUserName(e, 0).subscribe((resp) => {
         this.users = resp as any[];
       });

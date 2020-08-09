@@ -102,7 +102,6 @@ export class DashboardComponent implements OnInit {
       }
     } else {
       // TODO
-      console.log('Se debe ingresar un usuario');
     }
   }
 
@@ -128,7 +127,6 @@ export class DashboardComponent implements OnInit {
       }
     } else {
       // TODO
-      console.log('Se debe ingresar una institución');
     }
   }
 
@@ -154,7 +152,6 @@ export class DashboardComponent implements OnInit {
       }
     } else {
       // TODO
-      console.log('Se debe ingresar un usuario');
     }
   }
 
@@ -182,7 +179,6 @@ export class DashboardComponent implements OnInit {
       }
     } else {
       // TODO
-      console.log('Se debe ingresar un usuario');
     }
   }
 

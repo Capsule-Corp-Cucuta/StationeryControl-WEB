@@ -290,14 +290,11 @@ export class CertificateListComponent implements OnInit {
   }
 
   public paginator(page: string) {
-    console.log(this.filter);
     if (page === 'next') {
       this.page++;
-      console.log(this.page);
       this.loadCerticates(this.page);
     } else {
       this.page--;
-      console.log(this.page);
       this.loadCerticates(this.page);
     }
   }

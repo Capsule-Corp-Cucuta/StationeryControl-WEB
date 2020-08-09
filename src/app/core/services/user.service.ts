@@ -36,4 +36,12 @@ export class UserService {
   public delete(id: string): Observable<Response> {
     return this.http.delete<Response>(this.endPoint + '/' + id);
   }
+
+  public changePassword(id: string, oldPass: string, newPass: string): Observable<Response> {
+    return this.http.post<Response>(`${this.endPoint}/${id}/change-password?oldPass=${oldPass}&newPass=${newPass}`, {});
+  }
+
+  public recoverPassword(id: string): Observable<Response> {
+    return this.http.put<Response>(`${this.endPoint}/${id}/recover-password`, {});
+  }
 }

@@ -18,6 +18,10 @@ export class CertificateService {
     return this.http.post<Certificate>(this.endPoint, certificate);
   }
 
+  public createMultiple(certificates: Certificate[]): Observable<Response> {
+    return this.http.post<Response>(`${this.endPoint}/multiple`, certificates);
+  }
+
   public findAll(page: number): Observable<Certificate[]> {
     return this.http.get<Certificate[]>(this.endPoint + '/all/' + page);
   }

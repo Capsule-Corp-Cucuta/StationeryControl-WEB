@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import * as XLSX from 'xlsx';
 
 import { Constants } from '../../../../shared/constants/global-constants';
 import { CertificateService } from '../../../../core/services/certificate.service';
 import { CertificateState, CertificateType } from '../../../../core/models/certificate.model';
 import { TokenService } from 'src/app/core/services/token.service';
+import { Certificate } from '../../../../core/models/certificate.model';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-certificate-form',
@@ -170,7 +173,53 @@ export class CertificateFormComponent implements OnInit {
       });
     }
   }
-  public fileChangeExcel(event) {}
 
-  public uploadFileExcel() {}
+  private arrayBufferExcel: any;
+  private fileExcel: File;
+
+  public fileChangeExcel(event) {
+    this.fileExcel = event.target.files[0];
+  }
+
+  public uploadFileExcel() {
+    const certificatesToRegister: Certificate[] = [];
+    const fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      this.arrayBufferExcel = fileReader.result;
+      const data = new Uint8Array(this.arrayBufferExcel);
+      const arr = new Array();
+      for (let i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+      const bstr = arr.join('');
+      const workbook = XLSX.read(bstr, { type: 'binary' });
+      const firstSheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheetName];
+      XLSX.utils.sheet_to_json(worksheet, { raw: true }).map((raw) => {
+        console.log(raw);
+        const certificateNumber: string = raw['NO_CERTIFICADO'].toString();
+        const certificate: Certificate = {
+          number: Number(certificateNumber.substr(0, certificateNumber.length - 1)),
+          verificationCode: Number(certificateNumber.substr(-1, 1)),
+          type: CertificateType.CA_NV,
+          state: CertificateState.GUARDED,
+          attendant: this.sessionService.getUser(),
+          department: raw['DEPARTAMENTO'] ? raw['DEPARTAMENTO'] : null,
+          township: raw['MUNICIPIO'] ? raw['MUNICIPIO'] : null,
+          institution: raw['NOMBRE INSTITUCIÓN'] ? raw['NOMBRE INSTITUCIÓN'] : null,
+        };
+        certificatesToRegister.push(certificate);
+      });
+      console.log(certificatesToRegister);
+      this.certificadoService
+        .createMultiple(certificatesToRegister)
+        .pipe(
+          finalize(() => {
+            this.router.navigate(['/']);
+          })
+        )
+        .subscribe((response) => {
+          console.log(response);
+        });
+    };
+    fileReader.readAsArrayBuffer(this.fileExcel);
+  }
 }

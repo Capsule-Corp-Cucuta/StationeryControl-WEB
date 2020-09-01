@@ -7,6 +7,7 @@ export class Constants {
     USER: 'usuario',
     CERTIFICATE: 'certificado',
     DELIVERY: 'entrega-devolucion',
+    INSTITUTION: 'institucion',
     LIST: 'lista',
     CREATE: 'registrar',
     UPDATE: 'editar',
@@ -21,6 +22,7 @@ export class Constants {
       USERS: 'Usuarios',
       CERTIFICATES: 'Certificados',
       DELIVERIES: 'Entregas y Devoluciones',
+      INSTITUTIONS: 'Instituciones',
       CHANGE_PASS: 'Cambiar Contraseña',
       SIGN_OUT: 'Salir',
     },
@@ -124,6 +126,7 @@ export class Constants {
           ATTENDANT: 'Cédula:',
           TYPE: 'Tipo del Certificado:',
           STATE: 'Estado del Certificado:',
+          STATERUAF: 'Estado RUAF',
           DEPARTMENT: 'Departamento:',
           TOWNSHIP: 'Municipio:',
           INSTITUTION: 'Institución:',
@@ -141,12 +144,25 @@ export class Constants {
         },
       },
       LIST: {
-        COLUMNS: ['number', 'type', 'state', 'stateDate', 'department', 'township', 'institution', 'actions'],
+        COLUMNS: [
+          'number',
+          'type',
+          'state',
+          'stateRuaf',
+          'stateDate',
+          'registrationDate',
+          'department',
+          'township',
+          'institution',
+          'actions',
+        ],
         CELLS: {
           NUMBER: 'Número:',
           TYPE: 'Tipo de Certificado:',
           STATE: 'Estado del Certificado:',
+          STATERUAF: 'Estado Ruaf',
           DATE: 'Última fecha de modificación:',
+          REGISTRATION: 'Fecha de registro',
           DEPARTMENT: 'Departamento:',
           TOWNSHIP: 'Municipio:',
           INSTITUTION: 'Institución:',
@@ -235,6 +251,43 @@ export class Constants {
         SELECT: 'Seleccione Filtro',
       },
     },
+    INSTITUTION: {
+      FORM: {
+        TITLE: 'Registrar Institución',
+        PLACEHOLDER: {
+          NAME: 'Ingrese nombre de la Institución',
+        },
+        BUTTON: 'Registrar',
+        ATTACH_FILE: {
+          TITLE: 'Adjuntar un archivo:',
+          TEXT: 'Selecciona el archivo',
+          NAME_OF_FILE: 'Nombre del arhivo: ',
+        },
+        MULTIPLE: {
+          TITLE: 'Registrar múltiples instituciones',
+          BUTTON: 'Registrar',
+        },
+      },
+      LIST: {
+        COLUMNS: ['name', 'actions'],
+        CELLS: {
+          NAME: 'Nombre de la Institución:',
+          ACTIONS: 'Opciones',
+        },
+        TOOLTIP: {
+          DELETE: 'Eliminar institution',
+        },
+      },
+      FILTER: {
+        LABELS: {
+          NAMEINSTITUTION: 'Nombre de la institucion',
+        },
+        PLACEHOLDER: {
+          NAMEINSTITUTION: 'Ingrese el nombre de la institucion',
+        },
+        BUTTON: 'Buscar',
+      },
+    },
   };
 
   public static ICONS = {
@@ -244,6 +297,7 @@ export class Constants {
     LOCK: 'lock',
     EVENT: 'event',
     SEARCH: 'search',
+    DELETE: 'delete',
     CREATE: 'create',
     PERSON: 'person',
     VPN_KEY: 'vpn_key',

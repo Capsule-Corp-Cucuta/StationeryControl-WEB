@@ -39,6 +39,11 @@ const routes: Routes = [
         canActivate: [guard],
       },
       {
+        path: Constants.ROUTES.INSTITUTION,
+        loadChildren: () => import('./feature/institution/institution.module').then((m) => m.InstitutionModule),
+        canActivate: [guard],
+      },
+      {
         path: Constants.ROUTES.NOTFOUND,
         component: NotFoundComponent,
       },

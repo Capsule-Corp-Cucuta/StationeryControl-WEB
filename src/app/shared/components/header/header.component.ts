@@ -22,6 +22,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.identificationCard = this.sesionService.getUser();
     this.authority = this.sesionService.getAuthorities()[0];
+    console.log(this.authority);
   }
 
   public logOut(): void {

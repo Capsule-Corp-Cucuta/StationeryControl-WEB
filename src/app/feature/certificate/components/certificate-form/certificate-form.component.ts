@@ -85,6 +85,7 @@ export class CertificateFormComponent implements OnInit {
       institution: ['', [Validators.required]],
       number: ['', [Validators.required]],
       state: [CertificateState.IDLE, [Validators.required]],
+      stateRuaf: [CertificateState.IDLE, [Validators.required]],
       township: ['', [Validators.required]],
       type: [CertificateType.CA_NV, [Validators.required]],
     });

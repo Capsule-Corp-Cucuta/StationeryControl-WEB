@@ -1,79 +1,16 @@
-.toolbar-ids {
-  background: white;
-  color: black;
-  width: 100%;
-  left: 0; /* Posicionamos la cabecera al lado izquierdo */
-  top: 0; /* Posicionamos la cabecera pegada arriba */
-  right: 0;
-  position: fixed;
-  z-index: 100;
+.header {
   border-bottom: 4px solid #e74c3c;
 }
-.logo-ids {
-  height: 50px;
-  padding-left: 10px;
-  padding-right: 10px;
-  width: 60px;
+
+.icon-ids {
+  height: 5rem;
+  margin-left: 2px;
+  margin-right: 4px;
+  padding-top: 0.7px;
 }
-.header-row {
+
+.nav {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
-}
-.icon {
-  padding: 0 14px;
-}
-
-.spacer {
-  flex: 1 1 auto;
-}
-
-#logo-header {
-  float: left;
-  padding: 15px 0 0 20px;
-  text-decoration: none;
-  padding-bottom: 5px;
-  color: black;
-}
-#logo-header:hover {
-  color: #e74c3c;
-}
-
-#logo-header .site-name {
-  display: block;
-  font-weight: 700;
-  font-size: 1.2em;
-}
-
-#logo-header .site-desc {
-  display: block;
-  font-weight: 300;
-  font-size: 0.8em;
-  color: black;
-}
-nav {
-  float: center;
-  padding-left: 10px;
-}
-nav ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  padding-right: 20px;
-}
-
-nav ul li {
-  display: inline-block;
-  line-height: 80px;
-}
-
-nav ul li a {
-  display: block;
-  padding: 0 10px;
-  text-decoration: none;
-  color: black;
-  font-size: 0.8em;
-}
-
-nav ul li a:hover {
-  background: #e74c3c;
-  color: white;
 }

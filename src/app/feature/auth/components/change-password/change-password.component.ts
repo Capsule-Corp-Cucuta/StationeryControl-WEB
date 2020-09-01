@@ -14,6 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ChangePasswordComponent implements OnInit {
   public form: FormGroup;
+  public ROUTES = Constants.ROUTES;
   public ICONS = Constants.ICONS;
   public LABELS = Constants.LABELS.CHANGE_PASSWORD;
 
@@ -51,6 +52,10 @@ export class ChangePasswordComponent implements OnInit {
         duration: 2000,
       });
     }
+  }
+
+  public goToDashboard() {
+    this.router.navigate([this.ROUTES.PRINCIPAL]);
   }
 
   private buildForm(): void {

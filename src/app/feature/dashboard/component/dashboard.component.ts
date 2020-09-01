@@ -5,6 +5,7 @@ import { Constants } from '../../../shared/constants/global-constants';
 import { StatisticsService } from '../../../core/services/statistics.service';
 
 import { CertificateStatePipe } from '../../../shared/pipes/certificate-state.pipe';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -175,6 +176,8 @@ export class DashboardComponent implements OnInit {
                 this.COLORS.STATES
               );
             }
+
+            console.log(this.chartStateAndInstitution);
           });
       }
     } else {

@@ -45,15 +45,17 @@ export class Constants {
         NEW_PASS: 'Nueva contraseña:',
         REPEAT_PASS: 'Repetir contraseña',
       },
-      BUTTON: 'Cambiar',
+      BUTTON_CHANGE: 'Cambiar contraseña',
+      BUTTON_GO_BACK: 'Volver al inicio',
     },
     RECOVER_PASSWORD: {
+      TITLE: '¿Olvidaste tu contraseña? Te ayudatemos.',
       TEXT: 'Escribe aquí tu cédula para buscar tu usuario y enviarte un correo de recuperación de contraseña:',
       PLACEHOLDER: {
         ID: 'Cédula:',
       },
       BUTTON: 'Enviar correo de recuperación',
-      LINK: 'Iniciar Sesión',
+      LINK: 'Volver a Inicio de Sesión',
     },
     DASHBOARD: {
       CHART_TYPES: {

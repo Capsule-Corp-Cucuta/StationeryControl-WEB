@@ -7,7 +7,6 @@ import { UrlsPipe } from './pipes/urls.pipe';
 import { UserNamePipe } from './pipes/user-name.pipe';
 import { UserTypePipe } from './pipes/user-type.pipe';
 import { MaterialModule } from './material/material.module';
-import { NavComponent } from './components/nav/nav.component';
 import { DeliveryTypePipe } from './pipes/delivery-type.pipe';
 import { CertificateTypePipe } from './pipes/certificate-type.pipe';
 import { CertificateStatePipe } from './pipes/certificate-state.pipe';
@@ -23,7 +22,6 @@ import { CertificatesFilterComponent } from './components/certificates-filter/ce
   declarations: [
     UrlsPipe,
     UserTypePipe,
-    NavComponent,
     UserNamePipe,
     FooterComponent,
     HeaderComponent,
@@ -40,7 +38,6 @@ import { CertificatesFilterComponent } from './components/certificates-filter/ce
   exports: [
     UrlsPipe,
     UserTypePipe,
-    NavComponent,
     UserNamePipe,
     FooterComponent,
     HeaderComponent,

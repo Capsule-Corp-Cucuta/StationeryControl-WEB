@@ -87,7 +87,6 @@ export class CertificateFormComponent implements OnInit {
       state: [CertificateState.IDLE, [Validators.required]],
       township: ['', [Validators.required]],
       type: [CertificateType.CA_NV, [Validators.required]],
-      verificationCode: ['', [Validators.required]],
     });
   }
 
@@ -194,13 +193,10 @@ export class CertificateFormComponent implements OnInit {
       const firstSheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[firstSheetName];
       XLSX.utils.sheet_to_json(worksheet, { raw: true }).map((raw) => {
-        console.log(raw);
-        const certificateNumber: string = raw['NO_CERTIFICADO'].toString();
         const certificate: Certificate = {
-          number: Number(certificateNumber.substr(0, certificateNumber.length - 1)),
-          verificationCode: Number(certificateNumber.substr(-1, 1)),
-          type: CertificateType.CA_NV,
-          state: CertificateState.GUARDED,
+          number: Number(raw['NO_CERTIFICADO'].toString()),
+          type: raw['TIPO'] ? raw['TIPO'] : CertificateType.CA_NV,
+          state: raw['STADO'] ? raw['ESTADO'] : CertificateState.GUARDED,
           attendant: this.sessionService.getUser(),
           department: raw['DEPARTAMENTO'] ? raw['DEPARTAMENTO'] : null,
           township: raw['MUNICIPIO'] ? raw['MUNICIPIO'] : null,

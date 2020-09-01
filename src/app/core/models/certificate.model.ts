@@ -1,6 +1,5 @@
 export interface Certificate {
   number: number;
-  verificationCode: number;
   type: CertificateType;
   state: CertificateState;
   attendant?: string;

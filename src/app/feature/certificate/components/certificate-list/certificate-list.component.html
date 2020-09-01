@@ -19,7 +19,7 @@
 <table mat-table [dataSource]="certificates" class="certificates-table">
   <ng-container matColumnDef="number">
     <th mat-header-cell *matHeaderCellDef>{{ CELLS.NUMBER }}</th>
-    <td mat-cell *matCellDef="let certificate">{{ certificate.number }}-{{ certificate.verificationCode }}</td>
+    <td mat-cell *matCellDef="let certificate">{{ certificate.number }}</td>
   </ng-container>
 
   <ng-container matColumnDef="type">

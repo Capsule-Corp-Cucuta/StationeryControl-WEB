@@ -1,14 +1,16 @@
-<mat-toolbar class="toolbar-ids mat-elevation-z4">
+<mat-toolbar class="header mat-elevation-z4">
   <mat-toolbar-row>
-    <div align="center">
+    <div>
       <a mat-list-item routerLink="/{{ ROUTES.PRINCIPAL }}">
-        <img src="{{ LINKS.LOGO_IDS }}" alt="Logo IDS" class="logo-ids" />
+        <img src="{{ LINKS.LOGO_IDS }}" alt="Logo IDS" class="icon-ids" />
       </a>
     </div>
 
-    <div class="row between-xs middle-xs header-row">
+    <div class="nav">
       <nav>
-        <a mat-button routerLink="/{{ ROUTES.PRINCIPAL }}" routerLinkActive="active">{{ LABELS.PRINCIPAL }}</a>
+        <a mat-button routerLink="/{{ ROUTES.PRINCIPAL }}" *ngIf="authority === 'ADMIN'" routerLinkActive="active">{{
+          LABELS.PRINCIPAL
+        }}</a>
         <a
           mat-button
           routerLink="/{{ ROUTES.USER }}/{{ ROUTES.LIST }}"
@@ -22,10 +24,17 @@
         <a mat-button routerLink="/{{ ROUTES.DELIVERY }}/{{ ROUTES.LIST }}" routerLinkActive="active">{{
           LABELS.DELIVERIES
         }}</a>
+        <a
+          mat-button
+          routerLink="/{{ ROUTES.INSTITUTION }}/{{ ROUTES.LIST }}"
+          *ngIf="authority === 'ADMIN'"
+          routerLinkActive="active"
+          >{{ LABELS.INSTITUTIONS }}</a
+        >
       </nav>
-      <span class="spacer"></span>
+
       <button mat-button [matMenuTriggerFor]="menu">
-        <mat-icon class="icon" aria-hidden="true">
+        <mat-icon aria-hidden="true">
           {{ ICONS.ACCOUNT_CIRCLE }}
         </mat-icon>
         {{ identificationCard }}

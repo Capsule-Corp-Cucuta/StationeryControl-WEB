@@ -1,7 +1,8 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+
 import { Constants } from '../../constants/global-constants';
 import { TokenService } from 'src/app/core/services/token.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -20,9 +21,8 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.identificationCard = this.sesionService.getUser();
-    console.log(this.identificationCard);
-
     this.authority = this.sesionService.getAuthorities()[0];
+    console.log(this.authority);
   }
 
   public logOut(): void {

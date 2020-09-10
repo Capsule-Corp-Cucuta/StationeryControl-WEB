@@ -2,13 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
 import { Constants } from './shared/constants/global-constants';
-import { NavComponent } from './shared/components/nav/nav.component';
-import { DashboardComponent } from './feature/dashboard/component/dashboard.component';
+import { GuardService as guard } from './shared/services/guard.service';
 import { LayoutComponent } from './shared/components/layout/layout.component';
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
+import { DashboardComponent } from './feature/dashboard/component/dashboard.component';
 import { ServerErrorComponent } from './shared/components/server-error/server-error.component';
-
-import { GuardService as guard } from './shared/services/guard.service';
 
 const routes: Routes = [
   {
@@ -41,8 +39,9 @@ const routes: Routes = [
         canActivate: [guard],
       },
       {
-        path: Constants.ROUTES.SECURITY,
-        loadChildren: () => import('./feature/auth/auth.module').then((m) => m.AuthModule),
+        path: Constants.ROUTES.INSTITUTION,
+        loadChildren: () => import('./feature/institution/institution.module').then((m) => m.InstitutionModule),
+        canActivate: [guard],
       },
       {
         path: Constants.ROUTES.NOTFOUND,
@@ -53,6 +52,10 @@ const routes: Routes = [
         component: ServerErrorComponent,
       },
     ],
+  },
+  {
+    path: Constants.ROUTES.SECURITY,
+    loadChildren: () => import('./feature/auth/auth.module').then((m) => m.AuthModule),
   },
 ];
 

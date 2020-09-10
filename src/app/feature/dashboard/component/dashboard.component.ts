@@ -1,9 +1,9 @@
 import { Chart } from 'chart.js';
-import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Constants } from '../../../shared/constants/global-constants';
 import { StatisticsService } from '../../../core/services/statistics.service';
-
 import { CertificateStatePipe } from '../../../shared/pipes/certificate-state.pipe';
 
 @Component({
@@ -11,20 +11,11 @@ import { CertificateStatePipe } from '../../../shared/pipes/certificate-state.pi
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
   public chartTypes = [];
   public chartStates = [];
-  public chartTypeAndAttendant = [];
-  public chartTypeAndInstitution = [];
-  public chartStateAndAttendant = [];
-  public chartStateAndInstitution = [];
-  public townshipSelected: string;
-  public typeAndAttendant: string;
-  public typeAndInstitution: string;
-  public stateAndAttendant: string;
-  public stateAndInstitution: string;
 
-  public TOWNSHIPS = Constants.TOWNSHIPS;
   public COLORS = Constants.CHARTS.COLORS;
   public LABELS = Constants.LABELS.DASHBOARD;
   public CHART_TYPES = Constants.CHARTS.TYPES;
@@ -38,152 +29,58 @@ export class DashboardComponent implements OnInit {
     this.printCertificatesByStates();
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }
+
   private printCertificatesByType(): void {
     this.chartTypes = [];
     const data: number[] = [];
+    const types: string[] = [];
 
-    for (const type of this.TYPES) {
-      this.statisticsService.countByType(type.value).subscribe((response) => {
+    this.TYPES.map((item) => {
+      const subscription = this.statisticsService.countByType(item.value).subscribe((response) => {
         data.push(response);
+        types.push(item.value);
 
         if (data.length === this.TYPES.length) {
           this.chartTypes = this.printChart(
             this.LABELS.CHART_TYPES.ID,
             this.CHART_TYPES.BAR,
-            this.TYPES.map((item) => item.value),
+            types,
             data,
             this.COLORS.TYPES
           );
         }
       });
-    }
+      this.subscriptions.push(subscription);
+      return subscription;
+    });
   }
 
   private printCertificatesByStates() {
     this.chartStates = [];
     const data: number[] = [];
+    const states: string[] = [];
 
-    for (const type of this.STATES) {
-      this.statisticsService.countByState(type.value).subscribe((response) => {
+    this.STATES.map((item) => {
+      const subscription = this.statisticsService.countByState(item.value).subscribe((response) => {
         data.push(response);
+        states.push(this.certificateStatePipe.transform(item.value).toString());
 
         if (data.length === this.STATES.length) {
           this.chartStates = this.printChart(
             this.LABELS.CHART_STATES.ID,
             this.CHART_TYPES.BAR,
-            this.STATES.map((item) => this.certificateStatePipe.transform(item.value)),
+            states,
             data,
             this.COLORS.STATES
           );
         }
       });
-    }
-  }
-
-  public printCertificatesByTypeAndAttendant() {
-    this.chartTypeAndAttendant = [];
-    if (this.typeAndAttendant) {
-      const data: number[] = [];
-
-      for (const type of this.TYPES) {
-        this.statisticsService.countByTypeAndAttendant(type.value, this.typeAndAttendant).subscribe((response) => {
-          data.push(response);
-
-          if (data.length === this.TYPES.length) {
-            this.chartTypeAndAttendant = this.printChart(
-              this.LABELS.CHART_TYPES_AND_ATTENDANT.ID,
-              this.CHART_TYPES.DOUGHNUT,
-              this.TYPES.map((item) => item.value),
-              data,
-              this.COLORS.TYPES
-            );
-          }
-        });
-      }
-    } else {
-      // TODO
-      console.log('Se debe ingresar un usuario');
-    }
-  }
-
-  public printCertificatesByTypeAndInstitution() {
-    this.chartTypeAndInstitution = [];
-    if (this.typeAndInstitution) {
-      const data: number[] = [];
-
-      for (const type of this.TYPES) {
-        this.statisticsService.countByTypeAndInstitution(type.value, this.typeAndInstitution).subscribe((response) => {
-          data.push(response);
-
-          if (data.length === this.TYPES.length) {
-            this.chartTypeAndInstitution = this.printChart(
-              this.LABELS.CHART_TYPES_AND_INSTITUTION.ID,
-              this.CHART_TYPES.DOUGHNUT,
-              this.TYPES.map((item) => item.value),
-              data,
-              this.COLORS.TYPES
-            );
-          }
-        });
-      }
-    } else {
-      // TODO
-      console.log('Se debe ingresar una institución');
-    }
-  }
-
-  public printCertificatesByStateAttendant() {
-    this.chartStateAndAttendant = [];
-    if (this.stateAndAttendant) {
-      const data: number[] = [];
-
-      for (const type of this.STATES) {
-        this.statisticsService.countByStateAndAttendant(type.value, this.stateAndAttendant).subscribe((response) => {
-          data.push(response);
-
-          if (data.length === this.STATES.length) {
-            this.chartStateAndAttendant = this.printChart(
-              this.LABELS.CHART_STATES_AND_ATTENDANT.ID,
-              this.CHART_TYPES.DOUGHNUT,
-              this.STATES.map((item) => this.certificateStatePipe.transform(item.value)),
-              data,
-              this.COLORS.STATES
-            );
-          }
-        });
-      }
-    } else {
-      // TODO
-      console.log('Se debe ingresar un usuario');
-    }
-  }
-
-  public printCertificatesByStateInstitution() {
-    this.chartStateAndInstitution = [];
-    if (this.stateAndInstitution) {
-      const data: number[] = [];
-
-      for (const type of this.STATES) {
-        this.statisticsService
-          .countByStateAndInstitution(type.value, this.stateAndInstitution)
-          .subscribe((response) => {
-            data.push(response);
-
-            if (data.length === this.STATES.length) {
-              this.chartStateAndInstitution = this.printChart(
-                this.LABELS.CHART_STATES_AND_INSTITUTION.ID,
-                this.CHART_TYPES.DOUGHNUT,
-                this.STATES.map((item) => this.certificateStatePipe.transform(item.value)),
-                data,
-                this.COLORS.STATES
-              );
-            }
-          });
-      }
-    } else {
-      // TODO
-      console.log('Se debe ingresar un usuario');
-    }
+      this.subscriptions.push(subscription);
+      return subscription;
+    });
   }
 
   private printChart(id: string, type: string, labels: any[], data: number[], backgroundColor: any[]): any {

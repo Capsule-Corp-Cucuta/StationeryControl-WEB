@@ -40,8 +40,6 @@ export class DeliverysFilterComponent implements OnInit {
   };
 
   private setIdentificationCard(user: User) {
-    console.log(this.filter);
-
     if (user && user.identificationCard) {
       this.values.firstInput = user.identificationCard;
     }
@@ -59,12 +57,9 @@ export class DeliverysFilterComponent implements OnInit {
   }
 
   public findUserByName(e) {
-    console.log(e);
-    if (e != '') {
+    if (e !== '') {
       this.userService.findByUserName(e, 0).subscribe((resp) => {
-        console.log(resp);
         this.users = resp as any[];
-        console.log(this.users);
       });
     }
   }

@@ -1,5 +1,13 @@
-.users-table {
+.page {
+  display: flex;
+  justify-content: center;
+}
+
+.table {
   border-top: 4px solid #3c8dbc;
-  margin: 1%;
   width: 98%;
+
+  &--content {
+    width: 100%;
+  }
 }

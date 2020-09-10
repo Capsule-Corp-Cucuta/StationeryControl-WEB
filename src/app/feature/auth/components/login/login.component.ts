@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
 
   public form: FormGroup;
   public user: UserLogin;
+  public error = false;
   public isLogged = false;
   public isLoginFail = false;
   public roles: string[] = [];
@@ -42,6 +43,7 @@ export class LoginComponent implements OnInit {
   }
 
   public onLogin(): void {
+    this.error = false;
     this.user = new UserLogin(this.form.controls['user'].value, this.form.controls['password'].value);
 
     this.authService.login(this.user).subscribe(
@@ -58,7 +60,7 @@ export class LoginComponent implements OnInit {
       (err) => {
         this.isLogged = false;
         this.isLoginFail = true;
-        alert('Error al intentar logearse');
+        this.error = true;
       }
     );
   }

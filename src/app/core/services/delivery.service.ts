@@ -26,7 +26,7 @@ export class DeliveryService {
   }
 
   public findByAttendant(attendant: string, page: number): Observable<Delivery[]> {
-    return this.http.get<Delivery[]>(this.endPoint + '/attendant/' + attendant + '/' + page);
+    return this.http.get<Delivery[]>(this.endPoint + '/user/' + attendant + '/' + page);
   }
 
   public findByTradeNumber(tradeNumber: number): Observable<Delivery> {

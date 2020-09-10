@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -24,8 +23,7 @@ export class UserFormComponent implements OnInit {
     private router: Router,
     private builder: FormBuilder,
     private service: UserService,
-    private activeRoute: ActivatedRoute,
-    private _snackBar: MatSnackBar
+    private activeRoute: ActivatedRoute
   ) {
     this.buildForm();
   }
@@ -65,16 +63,12 @@ export class UserFormComponent implements OnInit {
       const user = this.form.value;
       this.service.create(user).subscribe(
         (resp) => {
-          this._snackBar.open('Registro Exitoso', 'OK', {
-            duration: 2000,
-          });
+          // TODO Message
           this.router.navigate(['./usuario/lista']);
         },
         (err) => {
           if (err.status === 404) {
-            this._snackBar.open('Usuario ya existe', 'ERROR', {
-              duration: 2000,
-            });
+            // TODO Message
           } else {
             this.handlerError(err);
           }
@@ -89,16 +83,13 @@ export class UserFormComponent implements OnInit {
       const user = this.form.value;
       this.service.update(user.identificationCard, user).subscribe(
         (resp) => {
-          this._snackBar.open('Usuario Actualizado', 'OK', {
-            duration: 2000,
-          });
+          // TODO Message
           this.router.navigate(['./usuario/lista']);
         },
         (err) => {
+          // TODO Message
           if (err.status === 404) {
-            this._snackBar.open('Usuario no encontrado', 'ERROR', {
-              duration: 2000,
-            });
+            // TODO Message
           } else {
             this.handlerError(err);
           }
@@ -113,13 +104,12 @@ export class UserFormComponent implements OnInit {
       const user = this.form.value;
       this.service.delete(user.identificationCard).subscribe(
         (resp) => {
+          // TODO Message
           this.router.navigate(['./usuario/lista']);
         },
         (err) => {
           if (err.status === 404) {
-            this._snackBar.open('El usuario no existe', 'OK', {
-              duration: 2000,
-            });
+            // TODO Message
           } else {
             this.handlerError(err);
           }
@@ -130,17 +120,11 @@ export class UserFormComponent implements OnInit {
 
   public handlerError(err): void {
     if (err.status === 400) {
-      this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-        duration: 3000,
-      });
+      // TODO Message
     } else if (err.status === 401) {
-      this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-        duration: 3000,
-      });
+      // TODO Message
     } else if (err.status === 403) {
-      this._snackBar.open('Peticion Prohibida', 'ERROR', {
-        duration: 3000,
-      });
+      // TODO Message
     }
   }
 }

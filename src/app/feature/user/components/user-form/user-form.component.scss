@@ -1,38 +1,38 @@
-.form__card {
-  display: grid;
+.page {
+  align-items: center;
+  display: flex;
   justify-content: center;
-  margin: 1%;
+  height: 78.5rem;
 }
 
-.full-width {
-  width: 100%;
-}
-
-.form-card {
+.card {
   border-top: 4px solid #3c8dbc;
-  margin: 1%;
-  width: 98%;
+  width: 60rem;
 }
 
-.button-form {
-  width: 100%;
+.header {
+  &__title {
+    display: flex;
+    width: 45rem;
+
+    &--icon {
+      margin-right: 2rem;
+    }
+
+    &--text {
+      margin: 0;
+    }
+  }
 }
 
-.button-form-r {
-  background-color: #3c8dbc;
-  border-color: #367fa9;
-  color: white;
-  float: right;
-  font-size: 16px;
-  text-align: center;
-  width: 38%;
-}
+.form {
+  &__content {
+    display: grid;
+    padding-top: 1rem;
+  }
 
-.separation {
-  padding-bottom: 6px;
-  margin-right: 5px;
-}
-
-.card-content {
-  padding-top: 10px;
+  &__actions {
+    display: flex;
+    justify-content: space-around;
+  }
 }

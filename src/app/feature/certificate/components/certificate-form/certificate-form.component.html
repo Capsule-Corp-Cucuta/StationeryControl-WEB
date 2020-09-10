@@ -31,17 +31,6 @@
               <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.ID }}" formControlName="number" />
             </mat-form-field>
           </div>
-
-          <div class="col-xs">
-            <mat-form-field class="full-width">
-              <input
-                matInput
-                type="number"
-                placeholder="{{ LABELS.PLACEHOLDER.CODE }}"
-                formControlName="verificationCode"
-              />
-            </mat-form-field>
-          </div>
         </div>
 
         <div class="row">
@@ -56,6 +45,19 @@
           <div class="col-xs">
             <mat-form-field class="full-width">
               <mat-select formControlName="state" placeholder="{{ LABELS.PLACEHOLDER.STATE }}" value="state">
+                <mat-option *ngFor="let op of STATES" [value]="op.value">
+                  {{ op.value | certificateState }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-xs">
+            <mat-form-field class="full-width">
+              <mat-select
+                formControlName="stateRuaf"
+                placeholder="{{ LABELS.PLACEHOLDER.STATERUAF }}"
+                value="stateRuaf"
+              >
                 <mat-option *ngFor="let op of STATES" [value]="op.value">
                   {{ op.value | certificateState }}
                 </mat-option>
@@ -149,7 +151,7 @@
 
         <div class="row" class="card-content">
           <div class="col-xs">
-            <input type="file" id="file" (change)="fileChangeExcel($event)" placeholder="Upload file" accept=".pdf" />
+            <input type="file" id="file" (change)="fileChangeExcel($event)" placeholder="Upload file" accept=".xlsx" />
             <label for="file" class="btn-1">{{ LABELS.ATTACH_FILE.TEXT }}</label>
             <span class="span-file">
               <b>{{ LABELS.ATTACH_FILE.NAME_OF_FILE }}</b>

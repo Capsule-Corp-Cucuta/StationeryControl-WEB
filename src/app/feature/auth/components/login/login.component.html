@@ -1,64 +1,49 @@
-<section class="container">
-  <div class="row">
-    <div class="col-md-4"></div>
+<section class="page">
+  <mat-card class="mat-elevation-z8 card">
+    <mat-card-header mat-card-avatar class="header">
+      <div mat-card-avatar class="header--image"></div>
 
-    <div class="col-xs col-md-4">
-      <form [formGroup]="form">
-        <mat-card class="mat-elevation-z8 conf-card">
-          <mat-card-header mat-card-avatar>
-            <div mat-card-avatar class="header-image"></div>
+      <mat-card-title class="header--title">{{ LABELS.TITLE }}</mat-card-title>
 
-            <mat-card-title>{{ LABELS.TITLE }}</mat-card-title>
+      <mat-card-subtitle>{{ LABELS.SUBTITLE }}</mat-card-subtitle>
+    </mat-card-header>
 
-            <mat-card-subtitle>{{ LABELS.SUBTITLE }}</mat-card-subtitle>
-          </mat-card-header>
+    <mat-divider></mat-divider>
 
-          <mat-divider class="conf-content-divider"></mat-divider>
+    <form [formGroup]="form" class="form">
+      <mat-card-content class="form__content">
+        <div class="form__content--avatar">
+          <img src="{{ LINKS.AVATAR }}" alt="AVATAR" class="form__content--avatar-img" />
+        </div>
 
-          <mat-card-content class="conf-content">
-            <div align="center">
-              <img class="avatar" src="{{ LINKS.AVATAR }}" alt="" />
-            </div>
+        <mat-form-field>
+          <mat-icon matSuffix>{{ ICONS.PERSON }}</mat-icon>
+          <input placeholder="{{ LABELS.PLACEHOLDER.USER }}" formControlName="user" matInput type="text" />
+        </mat-form-field>
 
-            <div class="row">
-              <div class="col-xs">
-                <mat-form-field class="full-width">
-                  <mat-icon matSuffix>{{ ICONS.PERSON }}</mat-icon>
-                  <input placeholder="{{ LABELS.PLACEHOLDER.USER }}" formControlName="user" matInput type="text" />
-                </mat-form-field>
-              </div>
-            </div>
+        <mat-form-field>
+          <mat-icon matSuffix>{{ ICONS.VPN_KEY }}</mat-icon>
+          <input placeholder="{{ LABELS.PLACEHOLDER.PASS }}" formControlName="password" matInput type="password" />
+        </mat-form-field>
 
-            <div class="row">
-              <div class="col-xs">
-                <mat-form-field class="full-width">
-                  <mat-icon matSuffix>{{ ICONS.VPN_KEY }}</mat-icon>
-                  <input
-                    placeholder="{{ LABELS.PLACEHOLDER.PASS }}"
-                    formControlName="password"
-                    matInput
-                    type="password"
-                  />
-                </mat-form-field>
-              </div>
-            </div>
-          </mat-card-content>
+        <div *ngIf="error" class="error">
+          <p>
+            {{ LABELS.ERROR }}
+          </p>
+        </div>
+      </mat-card-content>
 
-          <mat-card-actions>
-            <button mat-raised-button (click)="onLogin()" color="warn" class="full-width">
-              {{ LABELS.BUTTON }}
-            </button>
-          </mat-card-actions>
+      <mat-card-actions class="form__actions">
+        <button mat-raised-button (click)="onLogin()" color="warn" class="form__actions--button">
+          {{ LABELS.BUTTON }}
+        </button>
+      </mat-card-actions>
+    </form>
 
-          <mat-card-footer>
-            <p align="center">
-              <a routerLink="{{ URIS.RECOVER_PASS }}">{{ LABELS.LINK }}</a>
-            </p>
-          </mat-card-footer>
-        </mat-card>
-      </form>
-    </div>
-
-    <div class="col-md-4"></div>
-  </div>
+    <mat-card-footer class="card--footer">
+      <p>
+        <a routerLink="{{ URIS.RECOVER_PASS }}">{{ LABELS.LINK }}</a>
+      </p>
+    </mat-card-footer>
+  </mat-card>
 </section>

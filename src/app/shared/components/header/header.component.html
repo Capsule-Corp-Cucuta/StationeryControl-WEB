@@ -8,7 +8,9 @@
 
     <div class="nav">
       <nav>
-        <a mat-button routerLink="/{{ ROUTES.PRINCIPAL }}" routerLinkActive="active">{{ LABELS.PRINCIPAL }}</a>
+        <a mat-button routerLink="/{{ ROUTES.PRINCIPAL }}" *ngIf="authority === 'ADMIN'" routerLinkActive="active">{{
+          LABELS.PRINCIPAL
+        }}</a>
         <a
           mat-button
           routerLink="/{{ ROUTES.USER }}/{{ ROUTES.LIST }}"

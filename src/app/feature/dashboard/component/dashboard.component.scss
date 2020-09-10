@@ -1,14 +1,10 @@
+.page {
+  align-items: center;
+  display: flex;
+  height: 78.5rem;
+  justify-content: space-around;
+}
+
 .card {
-  margin: 1rem;
-
-  &__header {
-    display: block;
-    padding-bottom: 1rem;
-
-    &--form {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-    }
-  }
+  width: 70rem;
 }

@@ -1,56 +1,57 @@
-import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
+import { User } from '../../../../core/models/user.model';
 import { UserService } from '../../../../core/services/user.service';
 import { Constants } from '../../../../shared/constants/global-constants';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss'],
 })
-export class UserListComponent implements OnInit {
-  public users = [];
+export class UserListComponent implements OnInit, OnDestroy {
+  public pages: number;
+  public users: User[] = [];
 
-  public ICONS = Constants.ICONS;
-  public ROUTES = Constants.ROUTES;
-  public CELLS = Constants.LABELS.USER.LIST.CELLS;
-  public COLUMNS = Constants.LABELS.USER.LIST.COLUMNS;
+  public readonly ICONS = Constants.ICONS;
+  public readonly ROUTES = Constants.ROUTES;
+  public readonly CELLS = Constants.LABELS.USER.LIST.CELLS;
+  public readonly COLUMNS = Constants.LABELS.USER.LIST.COLUMNS;
 
-  constructor(private service: UserService, private _snackBar: MatSnackBar, private router: Router) {}
+  private subscriptions: Subscription[] = [];
 
-  ngOnInit() {
-    this.loadUsers();
+  constructor(private service: UserService) {}
+
+  ngOnInit(): void {
+    this.loadData();
   }
 
-  public loadUsers() {
-    this.service.findAll(0).subscribe(
-      (resp) => {
-        this.users = resp;
-      },
-      (err) => {
-        
-        if (err.status === 400) {
-          this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 401) {
-          this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 403) {
-          this._snackBar.open('Peticion Prohibida', 'ERROR', {
-            duration: 3000,
-          });
-        } else if (err.status === 404) {
-          this._snackBar.open('No hay Usuarios registrados', 'OK', {
-            duration: 3000,
-          });
-        } else if (err.status === 500) {
-          this.router.navigate(['/server-error']);
-        }
-      }
-    );
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    });
+  }
+
+  private loadData() {
+    const subscription = this.service
+      .countUsers()
+      .pipe(
+        finalize(() => {
+          this.getUsers('0');
+        })
+      )
+      .subscribe((resp) => {
+        this.pages = Math.ceil(Number(resp) / 25);
+      });
+    this.subscriptions.push(subscription);
+  }
+
+  public getUsers(page: string) {
+    const subscription = this.service.findAll(Number(page)).subscribe((resp) => {
+      this.users = resp;
+    });
+    this.subscriptions.push(subscription);
   }
 }

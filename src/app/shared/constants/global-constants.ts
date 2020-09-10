@@ -37,6 +37,7 @@ export class Constants {
         USER: 'Cédula:',
         PASS: 'Contraseña:',
       },
+      ERROR: '¡Ups! parece que las credenciales no son correctas.',
       BUTTON: 'Iniciar Sesión',
       LINK: '¿Has olvidado tu Contraseña?',
     },
@@ -51,7 +52,7 @@ export class Constants {
       BUTTON_GO_BACK: 'Volver al inicio',
     },
     RECOVER_PASSWORD: {
-      TITLE: '¿Olvidaste tu contraseña? Te ayudatemos.',
+      TITLE: '¿Olvidaste tu contraseña? Te ayudaremos.',
       TEXT: 'Escribe aquí tu cédula para buscar tu usuario y enviarte un correo de recuperación de contraseña:',
       PLACEHOLDER: {
         ID: 'Cédula:',

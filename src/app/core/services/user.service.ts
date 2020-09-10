@@ -44,4 +44,8 @@ export class UserService {
   public recoverPassword(id: string): Observable<Response> {
     return this.http.put<Response>(`${this.endPoint}/${id}/recover-password`, {});
   }
+
+  public countUsers(): Observable<Response> {
+    return this.http.get<Response>(`${this.endPoint}/count`);
+  }
 }

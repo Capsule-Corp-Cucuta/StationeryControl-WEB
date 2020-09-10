@@ -25,6 +25,12 @@
           <mat-icon matSuffix>{{ ICONS.VPN_KEY }}</mat-icon>
           <input placeholder="{{ LABELS.PLACEHOLDER.PASS }}" formControlName="password" matInput type="password" />
         </mat-form-field>
+
+        <div *ngIf="error" class="error">
+          <p>
+            {{ LABELS.ERROR }}
+          </p>
+        </div>
       </mat-card-content>
 
       <mat-card-actions class="form__actions">

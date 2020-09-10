@@ -2,6 +2,7 @@ export interface Certificate {
   number: number;
   type: CertificateType;
   state: CertificateState;
+  stateRuaf?: CertificateState;
   attendant?: string;
   department?: string;
   township?: string;

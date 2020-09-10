@@ -17,6 +17,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ServerErrorComponent } from './components/server-error/server-error.component';
 import { DeliverysFilterComponent } from './components/deliverys-filter/deliverys-filter.component';
 import { CertificatesFilterComponent } from './components/certificates-filter/certificates-filter.component';
+import { StatisticsCardComponent } from './components/statistics-card/statistics-card.component';
+import { PaginatorComponent } from './components/paginator/paginator.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { CertificatesFilterComponent } from './components/certificates-filter/ce
     CertificateStatePipe,
     DeliverysFilterComponent,
     CertificatesFilterComponent,
+    StatisticsCardComponent,
+    PaginatorComponent,
   ],
   imports: [CommonModule, RouterModule, MaterialModule, ReactiveFormsModule, FormsModule],
   exports: [
@@ -49,6 +53,8 @@ import { CertificatesFilterComponent } from './components/certificates-filter/ce
     CertificateStatePipe,
     DeliverysFilterComponent,
     CertificatesFilterComponent,
+    StatisticsCardComponent,
+    PaginatorComponent,
   ],
 })
 export class SharedModule {}

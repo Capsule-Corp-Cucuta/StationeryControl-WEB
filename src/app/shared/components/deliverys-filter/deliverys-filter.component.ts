@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Constants } from '../../constants/global-constants';
 import { FormControl } from '@angular/forms';
-import { UserService } from 'src/app/core/services/user.service';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
 import { User } from 'src/app/core/models/user.model';
+import { Constants } from '../../constants/global-constants';
+import { FacadeService } from 'src/app/core/services/facade.service';
 
 @Component({
   selector: 'app-deliverys-filter',
@@ -10,18 +11,20 @@ import { User } from 'src/app/core/models/user.model';
   styleUrls: ['./deliverys-filter.component.scss'],
 })
 export class DeliverysFilterComponent implements OnInit {
+  public values: any;
+  public users: any[];
+  public myControl = new FormControl();
+
+  public readonly ICON = Constants.ICONS;
+  public readonly TYPES = Constants.DELIVERIES_TYPES_MAPPER;
+  public readonly LABELS = Constants.LABELS.DELIVERY.FILTER.LABELS;
+  public readonly BUTTON = Constants.LABELS.DELIVERY.FILTER.BUTTON;
+  public readonly PLACEHOLDER = Constants.LABELS.DELIVERY.FILTER.PLACEHOLDER;
+
   @Input() filter: string;
   @Output() filterEvent = new EventEmitter();
-  public values;
-  public TYPES = Constants.DELIVERIES_TYPES_MAPPER;
-  public LABELS = Constants.LABELS.DELIVERY.FILTER.LABELS;
-  public PLACEHOLDER = Constants.LABELS.DELIVERY.FILTER.PLACEHOLDER;
-  public BUTTON = Constants.LABELS.DELIVERY.FILTER.BUTTON;
-  public ICON = Constants.ICONS;
-  public users: any[];
-  myControl = new FormControl();
 
-  constructor(private userService: UserService) {
+  constructor(private servce: FacadeService) {
     this.values = {
       firstInput: '',
       secondInput: '',
@@ -58,7 +61,7 @@ export class DeliverysFilterComponent implements OnInit {
 
   public findUserByName(e) {
     if (e !== '') {
-      this.userService.findByUserName(e, 0).subscribe((resp) => {
+      this.servce.findByUserName(e, 0).subscribe((resp) => {
         this.users = resp as any[];
       });
     }

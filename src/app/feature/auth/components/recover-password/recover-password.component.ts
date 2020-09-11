@@ -1,9 +1,8 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-import { UserService } from '../../../../core/services/user.service';
+import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
 
 @Component({
@@ -13,16 +12,12 @@ import { Constants } from '../../../../shared/constants/global-constants';
 })
 export class RecoverPasswordComponent implements OnInit {
   public form: FormGroup;
-  public ICONS = Constants.ICONS;
-  public ROUTES = Constants.ROUTES;
-  public LABELS = Constants.LABELS.RECOVER_PASSWORD;
 
-  constructor(
-    private router: Router,
-    private formBuilder: FormBuilder,
-    private userService: UserService,
-    private _snackBar: MatSnackBar
-  ) {
+  public readonly ICONS = Constants.ICONS;
+  public readonly ROUTES = Constants.ROUTES;
+  public readonly LABELS = Constants.LABELS.RECOVER_PASSWORD;
+
+  constructor(private router: Router, private formBuilder: FormBuilder, private service: FacadeService) {
     this.buildForm();
   }
 
@@ -36,7 +31,7 @@ export class RecoverPasswordComponent implements OnInit {
 
   public request(): void {
     if (this.form.controls['user'].value) {
-      this.userService.recoverPassword(this.form.controls['user'].value).subscribe(
+      this.service.recoverPassword(this.form.controls['user'].value).subscribe(
         (response) => {
           this.redirect();
         },
@@ -45,20 +40,12 @@ export class RecoverPasswordComponent implements OnInit {
         }
       );
     } else {
-      this._snackBar.open('Los campos deben estar diligenciados', 'OK', {
-        duration: 5000,
-      });
+      // TODO Message
     }
   }
 
   private redirect(): void {
-    this._snackBar.open(
-      'Se envió un correo electrónico con una contraseña temporal para que pueda ingresar al sistema.',
-      'OK',
-      {
-        duration: 5000,
-      }
-    );
+    // TODO Message
     this.router.navigate(['/']);
   }
 }

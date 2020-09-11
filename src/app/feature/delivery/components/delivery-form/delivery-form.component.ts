@@ -1,14 +1,12 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+import { User } from '../../../../core/models/user.model';
 import { DeliveryType } from '../../../../core/models/delivery.model';
+import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
 import { DeliveryService } from '../../../../core/services/delivery.service';
-import { TokenService } from 'src/app/core/services/token.service';
-import { User } from 'src/app/core/models/user.model';
-import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-delivery-form',
@@ -16,25 +14,24 @@ import { UserService } from 'src/app/core/services/user.service';
   styleUrls: ['./delivery-form.component.scss'],
 })
 export class DeliveryFormComponent implements OnInit {
-  public form: FormGroup;
   public user: string;
   public receiver: string;
-  public ICONS = Constants.ICONS;
-  public LABELS = Constants.LABELS.DELIVERY.FORM;
-  public TYPES = Constants.DELIVERIES_TYPES_MAPPER;
   public users: any[];
+  public form: FormGroup;
+
+  public readonly ICONS = Constants.ICONS;
+  public readonly LABELS = Constants.LABELS.DELIVERY.FORM;
+  public readonly TYPES = Constants.DELIVERIES_TYPES_MAPPER;
 
   constructor(
     private formBuilder: FormBuilder,
     private deliveryService: DeliveryService,
     private router: Router,
-    private _snackBar: MatSnackBar,
-    private sessionService: TokenService,
-    private userService: UserService
+    private service: FacadeService
   ) {}
 
   ngOnInit(): void {
-    this.user = this.sessionService.getUser();
+    this.user = this.service.getUser();
     this.buildForm();
   }
 
@@ -56,29 +53,18 @@ export class DeliveryFormComponent implements OnInit {
       const delivery = this.form.value;
       this.deliveryService.create(delivery).subscribe(
         (resp) => {
-          // TODO
-          this._snackBar.open('Registros asignados', 'OK', {
-            duration: 2000,
-          });
+          // TODO Message
           this.router.navigate(['./entrega-devolucion/lista']);
         },
         (err) => {
           if (err.status === 400) {
-            this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-              duration: 3000,
-            });
+            // TODO Message
           } else if (err.status === 401) {
-            this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-              duration: 3000,
-            });
+            // TODO Message
           } else if (err.status === 403) {
-            this._snackBar.open('Peticion Prohibida', 'ERROR', {
-              duration: 3000,
-            });
+            // TODO Message
           } else if (err.status === 404) {
-            this._snackBar.open('Error al asignar los certificados', 'ERROR', {
-              duration: 2000,
-            });
+            // TODO Message
           }
         }
       );
@@ -98,7 +84,7 @@ export class DeliveryFormComponent implements OnInit {
 
   public findUserByName(e) {
     if (e !== '') {
-      this.userService.findByUserName(e, 0).subscribe((resp) => {
+      this.service.findByUserName(e, 0).subscribe((resp) => {
         this.users = resp as any[];
       });
     }

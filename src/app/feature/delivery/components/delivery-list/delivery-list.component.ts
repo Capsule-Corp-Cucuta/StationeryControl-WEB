@@ -1,9 +1,9 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
 import { DeliveryService } from '../../../../core/services/delivery.service';
-import { Router } from '@angular/router';
-import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-delivery-list',
@@ -11,31 +11,25 @@ import { TokenService } from 'src/app/core/services/token.service';
   styleUrls: ['./delivery-list.component.scss'],
 })
 export class DeliveryListComponent implements OnInit {
+  public page = 0;
   public deliverys = [];
   public filter: string;
-
-  public isWithFilter: boolean = false;
-  public eventValue: any = null;
-  public ICONS = Constants.ICONS;
-  public ROUTES = Constants.ROUTES;
-  public CELLS = Constants.LABELS.DELIVERY.LIST.CELLS;
-  public TOOLTIP = Constants.LABELS.DELIVERY.LIST.TOOLTIP;
-  public COLUMNS = Constants.LABELS.DELIVERY.LIST.COLUMNS;
-
-  public FILTERS = Constants.FILTERSDELIVERYS;
-  public SELECT = Constants.LABELS.DELIVERY.FILTER.SELECT;
   public authority: string;
-  public page = 0;
+  public isWithFilter = false;
+  public eventValue: any = null;
 
-  constructor(
-    private deliveryService: DeliveryService,
-    private router: Router,
-    private _snackBar: MatSnackBar,
-    private sessionService: TokenService
-  ) {}
+  public readonly ICONS = Constants.ICONS;
+  public readonly ROUTES = Constants.ROUTES;
+  public readonly FILTERS = Constants.FILTERSDELIVERYS;
+  public readonly CELLS = Constants.LABELS.DELIVERY.LIST.CELLS;
+  public readonly TOOLTIP = Constants.LABELS.DELIVERY.LIST.TOOLTIP;
+  public readonly COLUMNS = Constants.LABELS.DELIVERY.LIST.COLUMNS;
+  public readonly SELECT = Constants.LABELS.DELIVERY.FILTER.SELECT;
+
+  constructor(private deliveryService: DeliveryService, private router: Router, private service: FacadeService) {}
 
   ngOnInit(): void {
-    this.authority = this.sessionService.getAuthorities()[0];
+    this.authority = this.service.getAuthorities()[0];
     this.loadDeliverys(0);
     this.updateFilter('default');
   }
@@ -45,7 +39,7 @@ export class DeliveryListComponent implements OnInit {
       if (this.authority === 'ADMIN') {
         this.findDeliverysAdmin(page);
       } else {
-        this.findDeliverysByUser(this.sessionService.getUser(), page);
+        this.findDeliverysByUser(this.service.getUser(), page);
       }
     } else {
       this.findByFilter(this.eventValue, page);
@@ -179,21 +173,13 @@ export class DeliveryListComponent implements OnInit {
 
   public handlerError(err): void {
     if (err.status === 400) {
-      this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-        duration: 3000,
-      });
+      // TODO Message
     } else if (err.status === 401) {
-      this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-        duration: 3000,
-      });
+      // TODO Message
     } else if (err.status === 403) {
-      this._snackBar.open('Peticion Prohibida', 'ERROR', {
-        duration: 3000,
-      });
+      // TODO Message
     } else if (err.status === 404) {
-      this._snackBar.open('No hay registros', 'OK', {
-        duration: 3000,
-      });
+      // TODO Message
     } else if (err.status === 500) {
       this.router.navigate(['/server-error']);
     }

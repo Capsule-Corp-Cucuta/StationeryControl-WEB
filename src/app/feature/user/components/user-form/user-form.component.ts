@@ -3,8 +3,8 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { UserType } from '../../../../core/models/user.model';
-import { UserService } from '../../../../core/services/user.service';
 import { Constants } from '../../../../shared/constants/global-constants';
+import { FacadeService } from 'src/app/core/services/facade.service';
 
 @Component({
   selector: 'app-user-form',
@@ -15,14 +15,14 @@ export class UserFormComponent implements OnInit {
   public form: FormGroup;
   public isCreate: boolean;
 
-  public ICONS = Constants.ICONS;
-  public LABELS = Constants.LABELS.USER.FORM;
-  public USER_TYPES = Constants.USER_TYPES_MAPPER;
+  public readonly ICONS = Constants.ICONS;
+  public readonly LABELS = Constants.LABELS.USER.FORM;
+  public readonly USER_TYPES = Constants.USER_TYPES_MAPPER;
 
   constructor(
     private router: Router,
     private builder: FormBuilder,
-    private service: UserService,
+    private service: FacadeService,
     private activeRoute: ActivatedRoute
   ) {
     this.buildForm();

@@ -3,7 +3,7 @@ import { finalize } from 'rxjs/operators';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { User } from '../../../../core/models/user.model';
-import { UserService } from '../../../../core/services/user.service';
+import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
 
 @Component({
@@ -22,7 +22,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private service: UserService) {}
+  constructor(private service: FacadeService) {}
 
   ngOnInit(): void {
     this.loadData();

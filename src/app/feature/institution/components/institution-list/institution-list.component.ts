@@ -29,7 +29,6 @@ export class InstitutionListComponent implements OnInit {
   constructor(
     private router: Router,
     private builder: FormBuilder,
-    private _snackBar: MatSnackBar,
     private activateRoute: ActivatedRoute,
     private institutionService: InstitutionService
   ) {
@@ -61,16 +60,12 @@ export class InstitutionListComponent implements OnInit {
       const institution = this.form.value;
       this.institutionService.create(institution).subscribe(
         (resp) => {
-          this._snackBar.open('Se ha registrado correctamente la institucion', 'OK', {
-            duration: 2000,
-          });
+          // TODO Message
           this.router.navigate(['./institucion/lista']);
         },
         (err) => {
           if (err.status === 404) {
-            this._snackBar.open('Institucion ya existe', 'ERROR', {
-              duration: 2000,
-            });
+            // TODO Message
           } else {
             this.handlerError(err);
           }
@@ -86,9 +81,7 @@ export class InstitutionListComponent implements OnInit {
       },
       (err) => {
         if (err.status === 404) {
-          this._snackBar.open('La institucion no existe', 'OK', {
-            duration: 2000,
-          });
+          // TODO Message
         } else {
           this.handlerError(err);
         }
@@ -120,21 +113,13 @@ export class InstitutionListComponent implements OnInit {
 
   public handlerError(err): void {
     if (err.status === 400) {
-      this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-        duration: 3000,
-      });
+      // TODO Message
     } else if (err.status === 401) {
-      this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-        duration: 3000,
-      });
+      // TODO Message
     } else if (err.status === 403) {
-      this._snackBar.open('Peticion Prohibida', 'ERROR', {
-        duration: 3000,
-      });
+      // TODO Message
     } else if (err.status === 404) {
-      this._snackBar.open('No hay instituciones registrados', 'OK', {
-        duration: 3000,
-      });
+      // TODO Message
     } else if (err.status === 500) {
       this.router.navigate(['/server-error']);
     }

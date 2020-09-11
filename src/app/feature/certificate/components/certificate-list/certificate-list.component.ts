@@ -1,12 +1,11 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
+import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
 import { CertificateService } from '../../../../core/services/certificate.service';
 import { CertificateModalComponent } from '../certificate-modal/certificate-modal.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
-import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-certificate-list',
@@ -14,37 +13,33 @@ import { TokenService } from 'src/app/core/services/token.service';
   styleUrls: ['./certificate-list.component.scss'],
 })
 export class CertificateListComponent implements OnInit {
+  public page = 0;
   public certificates = [];
   public filter: string;
-
-  public isWithFilter: boolean = false;
+  public authority: string;
+  public userSesiom = true;
+  public isWithFilter = false;
   public eventValue: any = null;
 
-  public ICONS = Constants.ICONS;
-  public ROUTES = Constants.ROUTES;
-  public CELLS = Constants.LABELS.CERTIFICATE.LIST.CELLS;
-  public TOOLTIP = Constants.LABELS.CERTIFICATE.LIST.TOOLTIP;
-  public COLUMNS = Constants.LABELS.CERTIFICATE.LIST.COLUMNS;
-
-  public FILTERS = Constants.FILTERSCERTIFICATES;
-  public authority: string;
-  public TYPES = Constants.CERTIFICATES_TYPES_MAPPER;
-  public STATES = Constants.CERTIFICATES_STATES_MAPPER;
-  public SELECT = Constants.LABELS.CERTIFICATE.FILTER.SELECT;
-  public userSesiom = true;
-
-  public page = 0;
+  public readonly ICONS = Constants.ICONS;
+  public readonly ROUTES = Constants.ROUTES;
+  public readonly FILTERS = Constants.FILTERSCERTIFICATES;
+  public readonly TYPES = Constants.CERTIFICATES_TYPES_MAPPER;
+  public readonly STATES = Constants.CERTIFICATES_STATES_MAPPER;
+  public readonly CELLS = Constants.LABELS.CERTIFICATE.LIST.CELLS;
+  public readonly TOOLTIP = Constants.LABELS.CERTIFICATE.LIST.TOOLTIP;
+  public readonly COLUMNS = Constants.LABELS.CERTIFICATE.LIST.COLUMNS;
+  public readonly SELECT = Constants.LABELS.CERTIFICATE.FILTER.SELECT;
 
   constructor(
     private certificateService: CertificateService,
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar,
     private router: Router,
-    private sessionService: TokenService
+    private service: FacadeService
   ) {}
 
   ngOnInit(): void {
-    this.authority = this.sessionService.getAuthorities()[0];
+    this.authority = this.service.getAuthorities()[0];
     this.loadCerticates(0);
     this.updateFilter('default');
     if (this.authority === 'USER') {
@@ -57,7 +52,7 @@ export class CertificateListComponent implements OnInit {
       if (this.authority === 'ADMIN') {
         this.findCertificatesAdmin(page);
       } else {
-        this.findCertificatesByUser(this.sessionService.getUser(), page);
+        this.findCertificatesByUser(this.service.getUser(), page);
       }
     } else {
       this.findByFilter(this.eventValue, page);
@@ -86,9 +81,9 @@ export class CertificateListComponent implements OnInit {
     );
   }
 
-  public openDialog(number: string): void {
-    const certificateNumber = Number(number);
-    if (number) {
+  public openDialog(certificate: string): void {
+    const certificateNumber = Number(certificate);
+    if (certificate) {
       this.certificateService.findFileById(certificateNumber).subscribe((resp) => {
         const file = new Blob([resp], { type: 'application/pdf' });
         const fileURL = URL.createObjectURL(file);
@@ -269,21 +264,13 @@ export class CertificateListComponent implements OnInit {
 
   public handlerError(err): void {
     if (err.status === 400) {
-      this._snackBar.open('Peticion erronea, Por favor modificarla', 'ERROR', {
-        duration: 3000,
-      });
+      // TODO Message
     } else if (err.status === 401) {
-      this._snackBar.open('Peticion carece de credenciales válidas de autenticación', 'ERROR', {
-        duration: 3000,
-      });
+      // TODO Message
     } else if (err.status === 403) {
-      this._snackBar.open('Peticion Prohibida', 'ERROR', {
-        duration: 3000,
-      });
+      // TODO Message
     } else if (err.status === 404) {
-      this._snackBar.open('No hay Certificados registrados', 'OK', {
-        duration: 3000,
-      });
+      // TODO Message
     } else if (err.status === 500) {
       this.router.navigate(['/server-error']);
     }

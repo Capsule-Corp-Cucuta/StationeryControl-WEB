@@ -2,10 +2,8 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
-import { UserService } from '../../../../core/services/user.service';
-import { TokenService } from '../../../../core/services/token.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-change-password',
@@ -14,17 +12,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class ChangePasswordComponent implements OnInit {
   public form: FormGroup;
-  public ROUTES = Constants.ROUTES;
-  public ICONS = Constants.ICONS;
-  public LABELS = Constants.LABELS.CHANGE_PASSWORD;
 
-  constructor(
-    private router: Router,
-    private formBuilder: FormBuilder,
-    private userService: UserService,
-    private sesionService: TokenService,
-    private _snackBar: MatSnackBar
-  ) {
+  public readonly ICONS = Constants.ICONS;
+  public readonly ROUTES = Constants.ROUTES;
+  public readonly LABELS = Constants.LABELS.CHANGE_PASSWORD;
+
+  constructor(private router: Router, private formBuilder: FormBuilder, private service: FacadeService) {
     this.buildForm();
   }
 
@@ -32,25 +25,19 @@ export class ChangePasswordComponent implements OnInit {
 
   public changePassword(): void {
     if (this.validatePassword()) {
-      this.userService
+      this.service
         .changePassword(this.getId(), this.getFormValue('oldPassword'), this.getFormValue('newPassword'))
         .subscribe(
           (response) => {
-            this._snackBar.open('La clave fue cambiada exitosamente', 'OK', {
-              duration: 2000,
-            });
+            // TODO Message
             this.router.navigate(['/']);
           },
           (error) => {
-            this._snackBar.open('Las claves no coinciden', 'OK', {
-              duration: 2000,
-            });
+            // TODO Message
           }
         );
     } else {
-      this._snackBar.open('Las claves no coinciden', 'OK', {
-        duration: 2000,
-      });
+      // TODO Message
     }
   }
 
@@ -78,16 +65,14 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   private getId(): string {
-    return this.sesionService.getUser();
+    return this.service.getUser();
   }
 
   private getFormValue(control: string): string {
     if (this.form.controls[control].value) {
       return this.form.controls[control].value;
     } else {
-      this._snackBar.open('Todos los campos deben estar diligenciados', 'OK', {
-        duration: 5000,
-      });
+      // TODO Message
       return undefined;
     }
   }

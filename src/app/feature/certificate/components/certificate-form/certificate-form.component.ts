@@ -9,32 +9,33 @@ import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
 import { CertificateService } from '../../../../core/services/certificate.service';
 import { CertificateState, CertificateType } from '../../../../core/models/certificate.model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-certificate-form',
   templateUrl: './certificate-form.component.html',
-  styleUrls: ['./certificate-form.component.scss'],
+  styleUrls: ['../../../../shared/styles/form.component.scss'],
 })
 export class CertificateFormComponent implements OnInit {
-  public readonly ICONS = Constants.ICONS;
-  public readonly TOWNSHIPS = Constants.TOWNSHIPS;
-  public readonly DEPARTMENT = Constants.DEPARTMENT;
-  public readonly LABELS = Constants.LABELS.CERTIFICATE.FORM;
-  public readonly TYPES = Constants.CERTIFICATES_TYPES_MAPPER;
-  public readonly STATES = Constants.CERTIFICATES_STATES_MAPPER;
-
-  public fileName: string;
   public user: string;
+  public fileName: string;
   public authority: string;
   public isCreate = true;
   public userSesiom = false;
   public showUploadAttachment = true;
   private certificateNumber: number;
-  private fileExcel: File;
-  private arrayBufferExcel: any;
   public form: FormGroup;
   public formFile: FormGroup;
   private attachmentFormData: FormData;
+  private fileExcel: File;
+  private arrayBufferExcel: any;
+  public TOWNSHIPS: string[];
+
+  public readonly ICONS = Constants.ICONS;
+  public readonly DEPARTMENT = Constants.DEPARTMENT;
+  public readonly LABELS = Constants.LABELS.CERTIFICATE.FORM;
+  public readonly TYPES = Constants.CERTIFICATES_TYPES_MAPPER;
+  public readonly STATES = Constants.CERTIFICATES_STATES_MAPPER;
 
   constructor(
     private router: Router,
@@ -52,6 +53,7 @@ export class CertificateFormComponent implements OnInit {
     if (this.authority === 'USER') {
       this.userSesiom = true;
     }
+    this.listTownships();
   }
 
   private validateExistentCertificate(): void {
@@ -201,5 +203,16 @@ export class CertificateFormComponent implements OnInit {
         });
     };
     fileReader.readAsArrayBuffer(this.fileExcel);
+  }
+
+  private listTownships(): void {
+    this.service.findAllTownships().subscribe(
+      (response) => {
+        this.TOWNSHIPS = response;
+      },
+      (error: HttpErrorResponse) => {
+        // TODO
+      }
+    );
   }
 }

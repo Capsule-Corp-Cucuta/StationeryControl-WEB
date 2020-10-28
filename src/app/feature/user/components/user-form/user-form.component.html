@@ -3,38 +3,73 @@
     <mat-card-header class="header">
       <mat-card-title class="header__title">
         <mat-icon class="header__title--icon">{{ ICONS.ACCOUNT_BOX }}</mat-icon>
-        <p class="header__title--text">{{ LABELS.TITLE }}</p>
+        <p *ngIf="isCreate" class="header__title--text">{{ LABELS.TITLE }}</p>
+        <p *ngIf="!isCreate" class="header__title--text">{{ LABELS.TTITLE_UPDATE }}</p>
       </mat-card-title>
     </mat-card-header>
 
     <mat-divider></mat-divider>
 
-    <form [formGroup]="form" class="form">
+    <div class="form">
       <mat-card-content class="form__content">
         <mat-form-field>
-          <input matInput type="text" placeholder="{{ LABELS.PLACEHOLDER.ID }}" formControlName="identificationCard" />
+          <input matInput type="text" placeholder="{{ LABELS.PLACEHOLDER.ID }}" [value]="user.id" required />
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput type="text" placeholder="{{ LABELS.PLACEHOLDER.NAME }}" formControlName="name" />
+          <input matInput type="text" placeholder="{{ LABELS.PLACEHOLDER.NAME }}" [value]="user.name" required />
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput type="email" placeholder="{{ LABELS.PLACEHOLDER.EMAIL }}" formControlName="email" />
+          <input matInput type="email" placeholder="{{ LABELS.PLACEHOLDER.EMAIL }}" [value]="user.email" required />
         </mat-form-field>
 
         <mat-form-field>
-          <input matInput type="tel" placeholder="{{ LABELS.PLACEHOLDER.PHONE }}" formControlName="phone" />
+          <input matInput type="tel" placeholder="{{ LABELS.PLACEHOLDER.PHONE }}" [value]="user.phone" required />
         </mat-form-field>
 
         <mat-form-field>
           <mat-label>{{ LABELS.USER_TYPE }}</mat-label>
-          <mat-select formControlName="userType" placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" value="userType">
+          <mat-select placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" [value]="user.userType" required>
             <mat-option *ngFor="let type of USER_TYPES" [value]="type.value">
               {{ type.value | userType }}
             </mat-option>
           </mat-select>
         </mat-form-field>
+
+        <mat-form-field>
+          <input
+            matInput
+            disabled
+            type="text"
+            placeholder="{{ LABELS.PLACEHOLDER.DEPARTMENT }}"
+            [value]="user.department"
+          />
+        </mat-form-field>
+
+        <div *ngIf="!isCreate" class="form__content--group">
+          <mat-form-field>
+            <mat-label>{{ LABELS.PLACEHOLDER.TOWNSHIP }}</mat-label>
+            <mat-select
+              placeholder="{{ LABELS.PLACEHOLDER.TOWNSHIP }}"
+              [value]="user.township"
+              (selectionChange)="listInstitutions($event.value)"
+            >
+              <mat-option *ngFor="let township of TOWNSHIPS" [value]="user.township">
+                {{ township }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>{{ LABELS.PLACEHOLDER.INSTITUTION }}</mat-label>
+            <mat-select placeholder="{{ LABELS.PLACEHOLDER.INSTITUTION }}" [value]="user.institution">
+              <mat-option *ngFor="let institution of INSTITUTIONS" [value]="user.institution">
+                {{ institution.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </mat-card-content>
 
       <mat-card-actions class="form__actions">
@@ -51,6 +86,6 @@
           {{ LABELS.DELETE_BUTTON }}
         </button>
       </mat-card-actions>
-    </form>
+    </div>
   </mat-card>
 </section>

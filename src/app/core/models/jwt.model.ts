@@ -1,6 +1,4 @@
 export class JwtModel {
-  token: string;
-  type: string;
-  identificationCard: string;
+  jwt: string;
   authorities: string[];
 }

@@ -8,13 +8,12 @@ import { FacadeService } from 'src/app/core/services/facade.service';
 @Component({
   selector: 'app-certificates-filter',
   templateUrl: './certificates-filter.component.html',
-  styleUrls: ['./certificates-filter.component.scss'],
+  styleUrls: ['../../styles/filter.component.scss'],
 })
 export class CertificatesFilterComponent implements OnInit {
   public values: any;
 
   public readonly ICON = Constants.ICONS;
-  public readonly TOWNSHIPS = Constants.TOWNSHIPS;
   public readonly TYPES = Constants.CERTIFICATES_TYPES_MAPPER;
   public readonly STATES = Constants.CERTIFICATES_STATES_MAPPER;
   public readonly LABELS = Constants.LABELS.CERTIFICATE.FILTER.LABELS;
@@ -22,6 +21,7 @@ export class CertificatesFilterComponent implements OnInit {
   public readonly PLACEHOLDER = Constants.LABELS.CERTIFICATE.FILTER.PLACEHOLDER;
 
   @Input() filter: string;
+  @Input() TOWNSHIPS: string[];
   @Output() filterEvent = new EventEmitter();
 
   public users: any[];
@@ -40,30 +40,30 @@ export class CertificatesFilterComponent implements OnInit {
   }
 
   public displayFn = (user) => {
-    this.setIdentificationCard(user);
+    this.setId(user);
     return user && user.name ? user.name : '';
   };
 
-  private setIdentificationCard(user: User) {
-    if (user && user.identificationCard) {
-      this.values.firstInput = user.identificationCard;
+  private setId(user: User) {
+    if (user && user.id) {
+      this.values.firstInput = user.id;
     }
   }
 
   public displayFnS = (user) => {
-    this.setIdentificationCardS(user);
+    this.setIds(user);
     return user && user.name ? user.name : '';
   };
 
-  private setIdentificationCardS(user: User) {
-    if (user && user.identificationCard) {
-      this.values.secondInput = user.identificationCard;
+  private setIds(user: User) {
+    if (user && user.id) {
+      this.values.secondInput = user.id;
     }
   }
 
   public findUserByName(e) {
     if (e !== '') {
-      this.service.findByUserName(e, 0).subscribe((resp) => {
+      this.service.findUserByUserName(e, 0).subscribe((resp) => {
         this.users = resp as any[];
       });
     }

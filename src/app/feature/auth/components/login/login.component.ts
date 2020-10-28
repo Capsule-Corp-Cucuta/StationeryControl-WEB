@@ -42,9 +42,9 @@ export class LoginComponent implements OnInit {
 
     this.service.login(this.user).subscribe(
       (response) => {
-        this.service.setToken(response.token);
-        this.service.setUser(response.identificationCard);
+        this.service.setToken(response.jwt);
         this.service.setAuthorities(response.authorities);
+        this.service.setUser(this.form.controls['user'].value);
 
         this.isLogged = true;
         this.isLoginFail = false;

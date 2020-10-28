@@ -15,7 +15,7 @@ const routes: Routes = [
     component: UserFormComponent,
   },
   {
-    path: Constants.ROUTES.UPDATE + '/:identificationCard',
+    path: Constants.ROUTES.UPDATE + '/:id',
     component: UserFormComponent,
   },
 ];

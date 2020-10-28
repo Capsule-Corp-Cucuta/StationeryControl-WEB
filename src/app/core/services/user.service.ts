@@ -17,6 +17,14 @@ export class UserService {
     return this.http.post<User>(this.endPoint, user);
   }
 
+  public update(user: User): Observable<User> {
+    return this.http.put<User>(this.endPoint + '/' + user.id, user);
+  }
+
+  public delete(id: string): Observable<Response> {
+    return this.http.delete<Response>(this.endPoint + '/' + id);
+  }
+
   public findByID(id: string): Observable<User> {
     return this.http.get<User>(this.endPoint + '/' + id);
   }
@@ -25,16 +33,8 @@ export class UserService {
     return this.http.get<User[]>(this.endPoint + '/all/' + page);
   }
 
-  public findByUserName(name: string, page: number): Observable<User[]> {
+  public findByName(name: string, page: number): Observable<User[]> {
     return this.http.get<User[]>(this.endPoint + '/name/' + name + '/' + page);
-  }
-
-  public update(id: string, user: User): Observable<User> {
-    return this.http.put<User>(this.endPoint + '/' + id, user);
-  }
-
-  public delete(id: string): Observable<Response> {
-    return this.http.delete<Response>(this.endPoint + '/' + id);
   }
 
   public changePassword(id: string, oldPass: string, newPass: string): Observable<Response> {

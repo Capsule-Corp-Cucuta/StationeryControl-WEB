@@ -1,25 +1,30 @@
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
 import { CertificateService } from '../../../../core/services/certificate.service';
 import { CertificateModalComponent } from '../certificate-modal/certificate-modal.component';
+import { StatisticsService } from 'src/app/core/services/statistics.service';
+import { finalize } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-certificate-list',
   templateUrl: './certificate-list.component.html',
-  styleUrls: ['./certificate-list.component.scss'],
+  styleUrls: ['../../../../shared/styles/list.component.scss'],
 })
-export class CertificateListComponent implements OnInit {
-  public page = 0;
+export class CertificateListComponent implements OnInit, OnDestroy {
+  public pages = 0;
   public certificates = [];
   public filter: string;
   public authority: string;
   public userSesiom = true;
   public isWithFilter = false;
   public eventValue: any = null;
+  public TOWNSHIPS: string[];
 
   public readonly ICONS = Constants.ICONS;
   public readonly ROUTES = Constants.ROUTES;
@@ -31,47 +36,74 @@ export class CertificateListComponent implements OnInit {
   public readonly COLUMNS = Constants.LABELS.CERTIFICATE.LIST.COLUMNS;
   public readonly SELECT = Constants.LABELS.CERTIFICATE.FILTER.SELECT;
 
+  private subscriptions: Subscription[] = [];
+
   constructor(
-    private certificateService: CertificateService,
-    public dialog: MatDialog,
     private router: Router,
-    private service: FacadeService
+    public dialog: MatDialog,
+    private service: FacadeService,
+    private statisticsService: StatisticsService,
+    private certificateService: CertificateService
   ) {}
 
   ngOnInit(): void {
     this.authority = this.service.getAuthorities()[0];
-    this.loadCerticates(0);
+    this.loadCerticates('0');
     this.updateFilter('default');
     if (this.authority === 'USER') {
       this.userSesiom = false;
     }
+    this.listTownships();
   }
 
-  public loadCerticates(page: number) {
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    });
+  }
+
+  public loadCerticates(page: string): void {
     if (!this.isWithFilter) {
       if (this.authority === 'ADMIN') {
-        this.findCertificatesAdmin(page);
+        this.loadAdminData(Number(page));
       } else {
-        this.findCertificatesByUser(this.service.getUser(), page);
+        this.loadDataByUser(this.service.getUser(), Number(page));
       }
     } else {
-      this.findByFilter(this.eventValue, page);
+      this.findByFilter(this.eventValue, Number(page));
     }
   }
 
-  private findCertificatesAdmin(page: number) {
-    this.certificateService.findAll(page).subscribe(
-      (resp) => {
-        this.certificates = resp;
-      },
-      (err) => {
-        this.handlerError(err);
-      }
-    );
+  private loadAdminData(page: number): void {
+    const subscription = this.statisticsService
+      .countAll()
+      .pipe(
+        finalize(() => {
+          this.findCertificatesAdmin(page);
+        })
+      )
+      .subscribe((response) => {
+        this.pages = Math.ceil(Number(response) / 25);
+      });
+    this.subscriptions.push(subscription);
   }
 
-  private findCertificatesByUser(user: string, page: number) {
-    this.certificateService.findByAttendant(user, page).subscribe(
+  private loadDataByUser(user: string, page: number): void {
+    const subscription = this.statisticsService
+      .countByAttendant(user)
+      .pipe(
+        finalize(() => {
+          this.findCertificatesByUser(user, page);
+        })
+      )
+      .subscribe((response) => {
+        this.pages = Math.ceil(Number(response) / 25);
+      });
+    this.subscriptions.push(subscription);
+  }
+
+  private findCertificatesAdmin(page: number): void {
+    const subscription = this.certificateService.findAll(page).subscribe(
       (resp) => {
         this.certificates = resp;
       },
@@ -79,6 +111,19 @@ export class CertificateListComponent implements OnInit {
         this.handlerError(err);
       }
     );
+    this.subscriptions.push(subscription);
+  }
+
+  private findCertificatesByUser(user: string, page: number): void {
+    const subscriprion = this.certificateService.findByAttendant(user, page).subscribe(
+      (resp) => {
+        this.certificates = resp;
+      },
+      (err) => {
+        this.handlerError(err);
+      }
+    );
+    this.subscriptions.push(subscriprion);
   }
 
   public openDialog(certificate: string): void {
@@ -143,7 +188,7 @@ export class CertificateListComponent implements OnInit {
   public receiveEvent(e: any): void {
     this.eventValue = e;
     this.isWithFilter = true;
-    this.loadCerticates(0);
+    this.loadCerticates('0');
   }
 
   private findByFilter(e: any, page: number): void {
@@ -276,13 +321,14 @@ export class CertificateListComponent implements OnInit {
     }
   }
 
-  public paginator(page: string) {
-    if (page === 'next') {
-      this.page++;
-      this.loadCerticates(this.page);
-    } else {
-      this.page--;
-      this.loadCerticates(this.page);
-    }
+  private listTownships(): void {
+    this.service.findAllTownships().subscribe(
+      (response) => {
+        this.TOWNSHIPS = response;
+      },
+      (error: HttpErrorResponse) => {
+        // TODO
+      }
+    );
   }
 }

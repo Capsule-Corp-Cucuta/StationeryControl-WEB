@@ -8,7 +8,7 @@ import { FacadeService } from 'src/app/core/services/facade.service';
 @Component({
   selector: 'app-deliverys-filter',
   templateUrl: './deliverys-filter.component.html',
-  styleUrls: ['./deliverys-filter.component.scss'],
+  styleUrls: ['../../styles/filter.component.scss'],
 })
 export class DeliverysFilterComponent implements OnInit {
   public values: any;
@@ -38,30 +38,30 @@ export class DeliverysFilterComponent implements OnInit {
   }
 
   public displayFn = (user) => {
-    this.setIdentificationCard(user);
+    this.setId(user);
     return user && user.name ? user.name : '';
   };
 
-  private setIdentificationCard(user: User) {
-    if (user && user.identificationCard) {
-      this.values.firstInput = user.identificationCard;
+  private setId(user: User) {
+    if (user && user.id) {
+      this.values.firstInput = user.id;
     }
   }
 
   public displayFnS = (user) => {
-    this.setIdentificationCardS(user);
+    this.setIds(user);
     return user && user.name ? user.name : '';
   };
 
-  private setIdentificationCardS(user: User) {
-    if (user && user.identificationCard) {
-      this.values.secondInput = user.identificationCard;
+  private setIds(user: User) {
+    if (user && user.id) {
+      this.values.secondInput = user.id;
     }
   }
 
   public findUserByName(e) {
     if (e !== '') {
-      this.servce.findByUserName(e, 0).subscribe((resp) => {
+      this.servce.findUserByUserName(e, 0).subscribe((resp) => {
         this.users = resp as any[];
       });
     }

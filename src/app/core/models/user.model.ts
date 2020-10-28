@@ -1,9 +1,12 @@
 export interface User {
-  identificationCard?: string;
+  id: string;
   userType?: UserType;
   name?: string;
   email?: string;
   phone?: string;
+  department?: string;
+  township?: string;
+  institution?: string;
 }
 
 export enum UserType {

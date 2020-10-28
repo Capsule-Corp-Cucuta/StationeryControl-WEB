@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { Constants } from 'src/app/shared/constants/global-constants';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+import { Constants } from 'src/app/shared/constants/global-constants';
 import { InstitutionService } from 'src/app/core/services/institution.service';
+import { Institution } from 'src/app/core/models/institution.model';
 
 @Component({
   selector: 'app-institution-list',
   templateUrl: './institution-list.component.html',
-  styleUrls: ['./institution-list.component.scss'],
+  styleUrls: ['../../../../shared/styles/list.component.scss'],
 })
 export class InstitutionListComponent implements OnInit {
   public form: FormGroup;
@@ -74,8 +75,8 @@ export class InstitutionListComponent implements OnInit {
     }
   }
 
-  public delete(name: string) {
-    this.institutionService.delete(name).subscribe(
+  public delete(institution: Institution) {
+    this.institutionService.delete(institution).subscribe(
       (resp) => {
         this.router.navigate(['./institucion/lista']);
       },
@@ -90,7 +91,7 @@ export class InstitutionListComponent implements OnInit {
   }
 
   public loadInstitutions() {
-    this.institutionService.findAll(0).subscribe(
+    this.institutionService.findAll().subscribe(
       (resp) => {
         this.institutions = resp;
       },
@@ -102,7 +103,7 @@ export class InstitutionListComponent implements OnInit {
 
   public findUserByName() {
     const filter = this.formFilter.value['name'];
-    this.institutionService.findByInstitutionName(filter, 0).subscribe((resp) => {
+    this.institutionService.findByName(filter).subscribe((resp) => {
       this.institutions = resp as any[];
     });
   }

@@ -8,7 +8,7 @@ import { DeliveryService } from '../../../../core/services/delivery.service';
 @Component({
   selector: 'app-delivery-list',
   templateUrl: './delivery-list.component.html',
-  styleUrls: ['./delivery-list.component.scss'],
+  styleUrls: ['../../../../shared/styles/list.component.scss'],
 })
 export class DeliveryListComponent implements OnInit {
   public page = 0;

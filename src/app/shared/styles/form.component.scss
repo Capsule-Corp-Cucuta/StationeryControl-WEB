@@ -29,6 +29,12 @@
   &__content {
     display: grid;
     padding-top: 1rem;
+
+    &--group {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+    }
   }
 
   &__actions {

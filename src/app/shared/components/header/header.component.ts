@@ -11,7 +11,7 @@ import { FacadeService } from '../../../core/services/facade.service';
 })
 export class HeaderComponent implements OnInit {
   public authority: string;
-  public identificationCard: string;
+  public id: string;
 
   public readonly ICONS = Constants.ICONS;
   public readonly LINKS = Constants.LINKS;
@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit {
   constructor(private service: FacadeService, private router: Router) {}
 
   ngOnInit(): void {
-    this.identificationCard = this.service.getUser();
+    this.id = this.service.getUser();
     this.authority = this.service.getAuthorities()[0];
   }
 

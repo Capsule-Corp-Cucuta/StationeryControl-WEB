@@ -1,8 +1,8 @@
 export class UserLogin {
-  identificationCard: string;
+  id: string;
   password: string;
-  constructor(identificationCard: string, password: string) {
-    this.identificationCard = identificationCard;
+  constructor(id: string, password: string) {
+    this.id = id;
     this.password = password;
   }
 }

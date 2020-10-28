@@ -1,143 +1,108 @@
-<!-- FILTERS ADMIN-->
-<div class="row">
-  <div class="col-md-9" *ngIf="filter === 'byNumber'">
-    <div class="col-xs">
-      <mat-form-field class="full-width">
-        <mat-label> {{ LABELS.NUMBER }} </mat-label>
-        <input matInput type="number" placeholder=" {{ PLACEHOLDER.NUMBER }} " [(ngModel)]="values.firstInput" />
-      </mat-form-field>
-    </div>
-  </div>
+<div class="component">
+  <!-- FILTERS ADMIN-->
 
-  <div class="row col-md-9" *ngIf="filter === 'betweenNumbers'">
-    <div class="col-xs">
-      <mat-form-field class="full-width">
+  <div class="component__filters">
+    <mat-form-field *ngIf="filter === 'byNumber'">
+      <mat-label> {{ LABELS.NUMBER }} </mat-label>
+      <input matInput type="number" placeholder=" {{ PLACEHOLDER.NUMBER }} " [(ngModel)]="values.firstInput" />
+    </mat-form-field>
+
+    <div *ngIf="filter === 'betweenNumbers'">
+      <mat-form-field>
         <mat-label> {{ LABELS.FIRTSNUMBER }} </mat-label>
         <input matInput type="number" placeholder=" {{ PLACEHOLDER.FIRTSNUMBER }} " [(ngModel)]="values.firstInput" />
       </mat-form-field>
-    </div>
-    <div class="col-xs">
-      <mat-form-field class="full-width">
+
+      <mat-form-field>
         <mat-label> {{ LABELS.LASTNUMBER }} </mat-label>
         <input matInput type="number" placeholder=" {{ PLACEHOLDER.LASTNUMBER }} " [(ngModel)]="values.secondInput" />
       </mat-form-field>
     </div>
-  </div>
 
-  <div class="row col-md-9" *ngIf="filter === 'byType'">
-    <div class="col-xs">
-      <mat-form-field class="full-width">
-        <mat-label> {{ LABELS.TYPECERTIFICATE }} </mat-label>
-        <mat-select placeholder=" {{ PLACEHOLDER.TYPECERTIFICATE }} " [(ngModel)]="values.firstInput">
-          <mat-option *ngFor="let op of TYPES" [value]="op.value"> {{ op.value | certificateType }} </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
+    <mat-form-field *ngIf="filter === 'byType'">
+      <mat-label> {{ LABELS.TYPECERTIFICATE }} </mat-label>
+      <mat-select placeholder=" {{ PLACEHOLDER.TYPECERTIFICATE }} " [(ngModel)]="values.firstInput">
+        <mat-option *ngFor="let op of TYPES" [value]="op.value"> {{ op.value | certificateType }} </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <div class="row col-md-9" *ngIf="filter === 'byTypeInstitution'">
-    <div class="col-xs">
-      <mat-form-field class="full-width">
+    <div *ngIf="filter === 'byTypeInstitution'">
+      <mat-form-field>
         <mat-label> {{ LABELS.TYPECERTIFICATE }} </mat-label>
         <mat-select placeholder="{{ PLACEHOLDER.TYPECERTIFICATE }} " [(ngModel)]="values.firstInput">
           <mat-option *ngFor="let op of TYPES" [value]="op.value"> {{ op.value | certificateType }} </mat-option>
         </mat-select>
       </mat-form-field>
-    </div>
 
-    <div class="col-xs">
-      <mat-form-field class="full-width">
+      <mat-form-field>
         <mat-label> {{ LABELS.INSTITUTION }} </mat-label>
         <input matInput type="text" placeholder=" {{ LABELS.INSTITUTION }} " [(ngModel)]="values.secondInput" />
       </mat-form-field>
     </div>
-  </div>
 
-  <div class="row col-md-9" *ngIf="filter === 'byState'">
-    <div class="col-xs">
-      <mat-form-field class="full-width">
-        <mat-label> {{ LABELS.STATE }} </mat-label>
-        <mat-select placeholder=" {{ PLACEHOLDER.STATE }} " [(ngModel)]="values.firstInput">
-          <mat-option *ngFor="let op of STATES" [value]="op.value"> {{ op.value | certificateState }} </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
+    <mat-form-field *ngIf="filter === 'byState'">
+      <mat-label> {{ LABELS.STATE }} </mat-label>
+      <mat-select placeholder=" {{ PLACEHOLDER.STATE }} " [(ngModel)]="values.firstInput">
+        <mat-option *ngFor="let op of STATES" [value]="op.value"> {{ op.value | certificateState }} </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <div class="row col-md-9" *ngIf="filter === 'byStateInstitution'">
-    <div class="col-xs">
-      <mat-form-field class="full-width">
+    <div *ngIf="filter === 'byStateInstitution'">
+      <mat-form-field>
         <mat-label> {{ LABELS.STATE }} </mat-label>
         <mat-select placeholder="{{ PLACEHOLDER.STATE }}" [(ngModel)]="values.firstInput">
           <mat-option *ngFor="let op of STATES" [value]="op.value"> {{ op.value | certificateState }} </mat-option>
         </mat-select>
       </mat-form-field>
-    </div>
 
-    <div class="col-xs">
-      <mat-form-field class="full-width">
+      <mat-form-field>
         <mat-label> {{ LABELS.INSTITUTION }} </mat-label>
         <input matInput type="text" placeholder=" {{ PLACEHOLDER.INSTITUTION }} " [(ngModel)]="values.secondInput" />
       </mat-form-field>
     </div>
-  </div>
 
-  <div class="col-md-9" *ngIf="filter === 'byAttendant'">
-    <div class="col-xs">
-      <mat-form-field class="full-width">
-        <mat-label> {{ LABELS.ATTENDANT }} </mat-label>
-        <input
-          type="text"
-          placeholder=" {{ PLACEHOLDER.ATTENDANT }} "
-          matInput
-          (keypress)="findUserByName($event.target.value)"
-          [formControl]="myControl"
-          [matAutocomplete]="auto"
-        />
-        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
-          <div *ngFor="let user of users">
-            <mat-option [value]="user">
-              {{ user.name }}
-            </mat-option>
-          </div>
-        </mat-autocomplete>
-      </mat-form-field>
-    </div>
-  </div>
+    <mat-form-field *ngIf="filter === 'byAttendant'">
+      <mat-label> {{ LABELS.ATTENDANT }} </mat-label>
+      <input
+        type="text"
+        placeholder=" {{ PLACEHOLDER.ATTENDANT }} "
+        matInput
+        (keypress)="findUserByName($event.target.value)"
+        [formControl]="myControl"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+        <div *ngFor="let user of users">
+          <mat-option [value]="user">
+            {{ user.name }}
+          </mat-option>
+        </div>
+      </mat-autocomplete>
+    </mat-form-field>
 
-  <div class="row col-md-9" *ngIf="filter === 'byTownship'">
-    <div class="col-xs">
-      <mat-form-field class="full-width">
-        <mat-label> {{ LABELS.TWONSHIP }} </mat-label>
-        <mat-select placeholder=" PLACEHOLDER.TWONSHIP " [(ngModel)]="values.firstInput">
-          <mat-option *ngFor="let op of TOWNSHIPS" [value]="op"> {{ op }} </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
+    <mat-form-field *ngIf="filter === 'byTownship'">
+      <mat-label> {{ LABELS.TWONSHIP }} </mat-label>
+      <mat-select placeholder=" PLACEHOLDER.TWONSHIP " [(ngModel)]="values.firstInput">
+        <mat-option *ngFor="let op of TOWNSHIPS" [value]="op"> {{ op }} </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <div class="col-md-9" *ngIf="filter === 'byInstitution'">
-    <div class="col-xs">
-      <mat-form-field class="full-width">
-        <mat-label> {{ LABELS.INSTITUTION }} </mat-label>
-        <input matInput type="text" placeholder=" {{ PLACEHOLDER.INSTITUTION }} " [(ngModel)]="values.firstInput" />
-      </mat-form-field>
-    </div>
-  </div>
-  <!-- FILTERS USERS-->
+    <mat-form-field *ngIf="filter === 'byInstitution'">
+      <mat-label> {{ LABELS.INSTITUTION }} </mat-label>
+      <input matInput type="text" placeholder=" {{ PLACEHOLDER.INSTITUTION }} " [(ngModel)]="values.firstInput" />
+    </mat-form-field>
 
-  <div class="row col-md-9" *ngIf="filter === 'byTypeAttendant'">
-    <div class="col-xs">
-      <mat-form-field class="full-width">
+    <!-- FILTERS USERS-->
+
+    <div *ngIf="filter === 'byTypeAttendant'">
+      <mat-form-field>
         <mat-label> {{ LABELS.TYPECERTIFICATE }} </mat-label>
         <mat-select placeholder=" {{ PLACEHOLDER.TYPECERTIFICATE }} " [(ngModel)]="values.firstInput">
           <mat-option *ngFor="let op of TYPES" [value]="op.value"> {{ op.value | certificateType }} </mat-option>
         </mat-select>
       </mat-form-field>
-    </div>
 
-    <div class="col-xs">
-      <mat-form-field class="full-width">
+      <mat-form-field>
         <mat-label> {{ LABELS.ATTENDANT }} </mat-label>
         <input
           type="text"
@@ -156,20 +121,16 @@
         </mat-autocomplete>
       </mat-form-field>
     </div>
-  </div>
 
-  <div class="row col-md-9" *ngIf="filter === 'byStateAttendant'">
-    <div class="col-xs">
-      <mat-form-field class="full-width">
+    <div *ngIf="filter === 'byStateAttendant'">
+      <mat-form-field>
         <mat-label> {{ LABELS.STATE }} </mat-label>
         <mat-select placeholder="{{ PLACEHOLDER.STATE }}" [(ngModel)]="values.firstInput">
           <mat-option *ngFor="let op of STATES" [value]="op.value"> {{ op.value | certificateState }} </mat-option>
         </mat-select>
       </mat-form-field>
-    </div>
 
-    <div class="col-xs">
-      <mat-form-field class="full-width">
+      <mat-form-field>
         <mat-label> {{ LABELS.ATTENDANT }} </mat-label>
         <input
           type="text"
@@ -189,12 +150,9 @@
       </mat-form-field>
     </div>
   </div>
-  <div class="col-md-3">
-    <div class="col-xs" class="button-center">
-      <button mat-stroked-button color="primary" (click)="sendEvent()">
-        <mat-icon class="separation"> {{ ICON.SEARCH }} </mat-icon>
-        <span> {{ BUTTON }} </span>
-      </button>
-    </div>
-  </div>
+
+  <button class="component__button" mat-stroked-button color="primary" (click)="sendEvent()">
+    <mat-icon class="separation"> {{ ICON.SEARCH }} </mat-icon>
+    <span> {{ BUTTON }} </span>
+  </button>
 </div>

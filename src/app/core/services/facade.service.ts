@@ -8,7 +8,9 @@ import { TokenService } from './token.service';
 import { JwtModel } from '../models/JWT.model';
 import { UserLogin } from '../models/login.model';
 import { DeliveryService } from './delivery.service';
+import { TownshipService } from './township.service';
 import { StatisticsService } from './statistics.service';
+import { Institution } from '../models/institution.model';
 import { CertificateService } from './certificate.service';
 import { InstitutionService } from './institution.service';
 
@@ -22,6 +24,7 @@ export class FacadeService {
   private _certificateService: CertificateService; // tslint:disable-line
   private _deliveryService: DeliveryService; // tslint:disable-line
   private _statisticsService: StatisticsService; // tslint:disable-line
+  private _townshipService: TownshipService; // tslint:disable-line
   private _institutionService: InstitutionService; // tslint:disable-line
 
   constructor(private injector: Injector) {}
@@ -68,6 +71,13 @@ export class FacadeService {
     return this._statisticsService;
   }
 
+  public get townshipService(): TownshipService {
+    if (!this._townshipService) {
+      this._townshipService = this.injector.get<TownshipService>(TownshipService);
+    }
+    return this._townshipService;
+  }
+
   public get institutionService(): InstitutionService {
     if (!this._institutionService) {
       this._institutionService = this.injector.get<InstitutionService>(InstitutionService);
@@ -91,8 +101,8 @@ export class FacadeService {
     return this.tokenService.getToken();
   }
 
-  public setUser(identificationCard: string): void {
-    this.tokenService.setUser(identificationCard);
+  public setUser(id: string): void {
+    this.tokenService.setUser(id);
   }
 
   public getUser(): string {
@@ -107,28 +117,28 @@ export class FacadeService {
     return this.tokenService.getAuthorities();
   }
 
-  public create(user: User): Observable<User> {
+  public createUser(user: User): Observable<User> {
     return this.userService.create(user);
   }
 
-  public findByID(id: string): Observable<User> {
+  public updateUser(user: User): Observable<User> {
+    return this.userService.update(user);
+  }
+
+  public deleteUser(id: string): Observable<Response> {
+    return this.userService.delete(id);
+  }
+
+  public findUserByID(id: string): Observable<User> {
     return this.userService.findByID(id);
   }
 
-  public findAll(page: number): Observable<User[]> {
+  public findAllUsers(page: number): Observable<User[]> {
     return this.userService.findAll(page);
   }
 
-  public findByUserName(name: string, page: number): Observable<User[]> {
-    return this.userService.findByUserName(name, page);
-  }
-
-  public update(id: string, user: User): Observable<User> {
-    return this.userService.update(id, user);
-  }
-
-  public delete(id: string): Observable<Response> {
-    return this.userService.delete(id);
+  public findUserByUserName(name: string, page: number): Observable<User[]> {
+    return this.userService.findByName(name, page);
   }
 
   public changePassword(id: string, oldPass: string, newPass: string): Observable<Response> {
@@ -141,5 +151,37 @@ export class FacadeService {
 
   public countUsers(): Observable<Response> {
     return this.userService.countUsers();
+  }
+
+  public findAllTownships(): Observable<string[]> {
+    return this.townshipService.findAll();
+  }
+
+  public findTownshipsByName(name: string): Observable<string[]> {
+    return this.townshipService.findByName(name);
+  }
+
+  public createInstitution(institution: Institution): Observable<Institution> {
+    return this.institutionService.create(institution);
+  }
+
+  public deleteInstitution(institution: Institution): Observable<Institution> {
+    return this.institutionService.delete(institution);
+  }
+
+  public findAllInstitutions(): Observable<Institution[]> {
+    return this.institutionService.findAll();
+  }
+
+  public findInstitutionsByName(name: string): Observable<Institution[]> {
+    return this.institutionService.findByName(name);
+  }
+
+  public findInstitutionsByTownship(township: string): Observable<Institution[]> {
+    return this.institutionService.findByTownship(township);
+  }
+
+  public findInstitutionsByAttendant(attendant: string): Observable<Institution[]> {
+    return this.institutionService.findByAttendant(attendant);
   }
 }

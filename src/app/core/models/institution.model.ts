@@ -1,3 +1,5 @@
 export interface Institution {
-  name?: string;
+  name: string;
+  township: string;
+  attendant: string;
 }

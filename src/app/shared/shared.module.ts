@@ -19,6 +19,7 @@ import { DeliverysFilterComponent } from './components/deliverys-filter/delivery
 import { CertificatesFilterComponent } from './components/certificates-filter/certificates-filter.component';
 import { StatisticsCardComponent } from './components/statistics-card/statistics-card.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
+import { UsersFilterComponent } from './components/users-filter/users-filter.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { PaginatorComponent } from './components/paginator/paginator.component';
     CertificatesFilterComponent,
     StatisticsCardComponent,
     PaginatorComponent,
+    UsersFilterComponent,
   ],
   imports: [CommonModule, RouterModule, MaterialModule, ReactiveFormsModule, FormsModule],
   exports: [

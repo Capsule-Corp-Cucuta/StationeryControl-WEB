@@ -9,7 +9,7 @@ import { Constants } from '../../../../shared/constants/global-constants';
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.scss'],
+  styleUrls: ['../../../../shared/styles/list.component.scss'],
 })
 export class UserListComponent implements OnInit, OnDestroy {
   public pages: number;
@@ -49,7 +49,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   public getUsers(page: string) {
-    const subscription = this.service.findAll(Number(page)).subscribe((resp) => {
+    const subscription = this.service.findAllUsers(Number(page)).subscribe((resp) => {
       this.users = resp;
     });
     this.subscriptions.push(subscription);

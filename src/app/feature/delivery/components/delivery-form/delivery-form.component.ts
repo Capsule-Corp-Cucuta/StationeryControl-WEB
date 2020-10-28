@@ -11,7 +11,7 @@ import { DeliveryService } from '../../../../core/services/delivery.service';
 @Component({
   selector: 'app-delivery-form',
   templateUrl: './delivery-form.component.html',
-  styleUrls: ['./delivery-form.component.scss'],
+  styleUrls: ['../../../../shared/styles/form.component.scss'],
 })
 export class DeliveryFormComponent implements OnInit {
   public user: string;
@@ -72,19 +72,19 @@ export class DeliveryFormComponent implements OnInit {
   }
 
   public displayFn = (user) => {
-    this.setIdentificationCard(user);
+    this.setId(user);
     return user && user.name ? user.name : '';
   };
 
-  private setIdentificationCard(user: User) {
-    if (user && user.identificationCard) {
-      this.receiver = user.identificationCard;
+  private setId(user: User) {
+    if (user && user.id) {
+      this.receiver = user.id;
     }
   }
 
   public findUserByName(e) {
     if (e !== '') {
-      this.service.findByUserName(e, 0).subscribe((resp) => {
+      this.service.findUserByUserName(e, 0).subscribe((resp) => {
         this.users = resp as any[];
       });
     }

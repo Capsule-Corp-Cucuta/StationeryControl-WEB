@@ -1,0 +1,9 @@
+<div class="paginator">
+  <div class="paginator__pages">
+    <p class="paginator__pages--text">Página {{ actualPage + 1 }} de {{ lastPage }}</p>
+  </div>
+  <div class="paginator__buttons">
+    <button mat-stroked-button color="primary" (click)="previousPage()">anterior</button>
+    <button mat-stroked-button color="primary" (click)="nextPage()">siguiente</button>
+  </div>
+</div>

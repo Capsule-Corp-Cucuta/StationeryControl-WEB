@@ -1,0 +1,119 @@
+<section>
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-6">
+        <form [formGroup]="form" class="form-card">
+          <mat-card>
+            <mat-card-header>
+              <mat-icon>{{ ICONS.LIBRARY_BOOKS }}</mat-icon>
+              <h3>{{ LABELS.TITLE }}</h3>
+            </mat-card-header>
+            <mat-divider></mat-divider>
+            <mat-card-content class="card-content">
+              <div class="row">
+                <div class="col-xs">
+                  <mat-form-field class="full-width">
+                    <input
+                      matInput
+                      disabled
+                      formControlName="institution"
+                      placeholder="{{ LABELS.PLACEHOLDER.NAME }}"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-raised-button class="button-form" (click)="create($event)">
+                <mat-icon class="separation">{{ ICONS.SAVE }}</mat-icon>
+                <span>{{ LABELS.BUTTON }}</span>
+              </button>
+            </mat-card-actions>
+            <div style="clear: both;"></div>
+          </mat-card>
+        </form>
+      </div>
+      <div class="col-md-6">
+        <mat-card class="form-card">
+          <mat-card-header>
+            <mat-icon>{{ ICONS.LIBRARY_BOOKS }}</mat-icon>
+            <h3>{{ LABELS.MULTIPLE.TITLE }}</h3>
+          </mat-card-header>
+          <mat-divider></mat-divider>
+          <mat-card-content class="card-content">
+            <div class="row" class="card-content">
+              <div class="col-xs">
+                <input
+                  type="file"
+                  id="file"
+                  (change)="fileChangeExcel($event)"
+                  placeholder="Upload file"
+                  accept=".xlsx"
+                />
+                <label for="file" class="btn-1">{{ LABELS.ATTACH_FILE.TEXT }}</label>
+                <span class="span-file">
+                  <b>{{ LABELS.ATTACH_FILE.NAME_OF_FILE }}</b>
+                  {{ fileName }}
+                </span>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <mat-card-actions>
+              <button mat-raised-button class="button-form" (click)="uploadFileExcel()">
+                <mat-icon class="separation">{{ ICONS.CLOUD_UPLOAD }}</mat-icon>
+                {{ LABELS.MULTIPLE.BUTTON }}
+              </button>
+            </mat-card-actions>
+
+            <div style="clear: both;"></div>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</section>
+<section>
+  <section>
+    <form [formGroup]="formFilter" class="form-card">
+      <mat-card>
+        <div class="row">
+          <div class="col-md-10">
+            <div class="col-xs">
+              <mat-form-field class="full-width">
+                <mat-label>{{ LABELSFILTER.NAMEINSTITUTION }}</mat-label>
+                <input matInput type="text" placeholder="{{ PLACEHOLDER.NAMEINSTITUTION }}" formControlName="name" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="col-xs" class="button-center">
+              <button mat-stroked-button color="primary" (click)="findUserByName()">
+                <mat-icon class="separation"> {{ ICONS.SEARCH }} </mat-icon>
+                <span> {{ BUTTON }} </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </form>
+  </section>
+  <table mat-table [dataSource]="institutions" class="certificates-table">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>{{ CELLS.NAME }}</th>
+      <td mat-cell *matCellDef="let institution"></td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>{{ CELLS.ACTIONS }}</th>
+      <td mat-cell *matCellDef="let institution">
+        <button mat-stroked-button matTooltip="{{ TOOLTIP.DELETE }}" (click)="delete(institution.name)">
+          <mat-icon>{{ ICONS.DELETE }}</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="COLUMNS"></tr>
+    <tr mat-row *matRowDef="let row; columns: COLUMNS"></tr>
+  </table>
+</section>

@@ -1,0 +1,22 @@
+.page {
+  display: flex;
+  justify-content: center;
+
+  &__header {
+    display: flex;
+    justify-content: flex-end;
+
+    &--filter {
+      margin: 0 1rem;
+    }
+  }
+}
+
+.table {
+  border-top: 0.2rem solid #3c8dbc;
+  width: 98%;
+
+  &--content {
+    width: 100%;
+  }
+}

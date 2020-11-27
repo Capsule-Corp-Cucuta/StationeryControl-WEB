@@ -1,0 +1,62 @@
+.page {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+}
+
+.card {
+  border-top: 4px solid #e74c3c;
+  width: 50rem;
+
+  &--footer {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 1rem;
+  }
+}
+
+.header {
+  padding-bottom: 2rem;
+
+  &--image {
+    background-image: url('https://ids.gov.co/web/wp-content/uploads/2018/01/images_favicons_favicon114.png');
+    background-size: cover;
+  }
+
+  &--title {
+    width: 30rem;
+  }
+}
+
+.form {
+  &__content {
+    display: grid;
+    padding-top: 1rem;
+
+    &--avatar {
+      display: flex;
+      justify-content: center;
+      padding-bottom: 1rem;
+    }
+
+    &--avatar-img {
+      width: 10rem;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+
+    &--button {
+      width: 25rem;
+    }
+  }
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+  color: #e74c3c;
+}

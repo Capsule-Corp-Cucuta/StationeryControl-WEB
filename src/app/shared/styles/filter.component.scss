@@ -1,0 +1,12 @@
+.component {
+  display: flex;
+  align-items: center;
+
+  &__filters {
+    margin-right: 1rem;
+  }
+
+  &__button {
+    margin-right: 1rem;
+  }
+}

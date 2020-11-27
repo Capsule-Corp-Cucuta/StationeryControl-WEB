@@ -1,0 +1,56 @@
+<mat-toolbar class="header mat-elevation-z4">
+  <mat-toolbar-row>
+    <div>
+      <a mat-list-item routerLink="/{{ ROUTES.PRINCIPAL }}">
+        <img src="{{ LINKS.LOGO_IDS }}" alt="Logo IDS" class="icon-ids" />
+      </a>
+    </div>
+
+    <div class="nav">
+      <nav>
+        <a mat-button routerLink="/{{ ROUTES.PRINCIPAL }}" *ngIf="authority === 'ADMIN'" routerLinkActive="active">{{
+          LABELS.PRINCIPAL
+        }}</a>
+        <a
+          mat-button
+          routerLink="/{{ ROUTES.USER }}/{{ ROUTES.LIST }}"
+          *ngIf="authority === 'ADMIN'"
+          routerLinkActive="active"
+          >{{ LABELS.USERS }}
+        </a>
+        <a mat-button routerLink="/{{ ROUTES.CERTIFICATE }}/{{ ROUTES.LIST }}" routerLinkActive="active">{{
+          LABELS.CERTIFICATES
+        }}</a>
+        <a mat-button routerLink="/{{ ROUTES.DELIVERY }}/{{ ROUTES.LIST }}" routerLinkActive="active">{{
+          LABELS.DELIVERIES
+        }}</a>
+        <a
+          mat-button
+          routerLink="/{{ ROUTES.INSTITUTION }}/{{ ROUTES.LIST }}"
+          *ngIf="authority === 'ADMIN'"
+          routerLinkActive="active"
+          >{{ LABELS.INSTITUTIONS }}</a
+        >
+      </nav>
+
+      <button mat-button [matMenuTriggerFor]="menu">
+        <mat-icon aria-hidden="true">
+          {{ ICONS.ACCOUNT_CIRCLE }}
+        </mat-icon>
+        {{ id }}
+      </button>
+    </div>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="/{{ ROUTES.SECURITY }}/{{ ROUTES.CHANGE_PASS }}">
+        <mat-icon>{{ ICONS.LOCK }}</mat-icon>
+        {{ LABELS.CHANGE_PASS }}
+      </button>
+
+      <button mat-menu-item (click)="logOut()">
+        <mat-icon>{{ ICONS.POWER_SETTINGS_NEW }}</mat-icon>
+        {{ LABELS.SIGN_OUT }}
+      </button>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>

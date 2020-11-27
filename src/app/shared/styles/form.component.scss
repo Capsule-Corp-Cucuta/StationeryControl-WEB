@@ -1,0 +1,44 @@
+.page {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 78.5rem;
+}
+
+.card {
+  border-top: 4px solid #3c8dbc;
+  width: 60rem;
+}
+
+.header {
+  &__title {
+    display: flex;
+    width: 45rem;
+
+    &--icon {
+      margin-right: 2rem;
+    }
+
+    &--text {
+      margin: 0;
+    }
+  }
+}
+
+.form {
+  &__content {
+    display: grid;
+    padding-top: 1rem;
+
+    &--group {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-around;
+  }
+}

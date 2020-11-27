@@ -42,8 +42,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
     private router: Router,
     public dialog: MatDialog,
     private service: FacadeService,
-    private statisticsService: StatisticsService,
-    private certificateService: CertificateService
+    private statisticsService: StatisticsService
   ) {}
 
   ngOnInit(): void {
@@ -103,7 +102,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
   }
 
   private findCertificatesAdmin(page: number): void {
-    const subscription = this.certificateService.findAll(page).subscribe(
+    const subscription = this.service.findAllCertificates(page).subscribe(
       (resp) => {
         this.certificates = resp;
       },
@@ -115,7 +114,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
   }
 
   private findCertificatesByUser(user: string, page: number): void {
-    const subscriprion = this.certificateService.findByAttendant(user, page).subscribe(
+    const subscriprion = this.service.findCertificatesByAttendant(user, page).subscribe(
       (resp) => {
         this.certificates = resp;
       },
@@ -129,7 +128,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
   public openDialog(certificate: string): void {
     const certificateNumber = Number(certificate);
     if (certificate) {
-      this.certificateService.findFileById(certificateNumber).subscribe((resp) => {
+      this.service.findFileByCertificateId(certificateNumber).subscribe((resp) => {
         const file = new Blob([resp], { type: 'application/pdf' });
         const fileURL = URL.createObjectURL(file);
 
@@ -194,7 +193,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
   private findByFilter(e: any, page: number): void {
     switch (this.filter) {
       case 'byNumber':
-        this.certificateService.findByNumber(e.firstInput).subscribe(
+        this.service.findCertificateByNumber(e.firstInput).subscribe(
           (response) => {
             this.certificates = [];
             this.certificates.push(response);
@@ -205,7 +204,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
         );
         break;
       case 'betweenNumbers':
-        this.certificateService.findBetweenNumbers(e.firstInput, e.secondInput).subscribe(
+        this.service.findCertificatesBetweenNumbers(e.firstInput, e.secondInput).subscribe(
           (response) => {
             this.certificates = response;
           },
@@ -215,7 +214,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
         );
         break;
       case 'byType':
-        this.certificateService.findByType(e.firstInput, page).subscribe(
+        this.service.findCertificatesByType(e.firstInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
@@ -225,7 +224,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
         );
         break;
       case 'byTypeAttendant':
-        this.certificateService.findByTypeAttendant(e.firstInput, e.secondInput, page).subscribe(
+        this.service.findCertificatesByTypeAndAttendant(e.firstInput, e.secondInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
@@ -235,7 +234,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
         );
         break;
       case 'byTypeInstitution':
-        this.certificateService.findByTypeInstitution(e.firstInput, e.secondInput, page).subscribe(
+        this.service.findCertificatesByTypeAndInstitution(e.firstInput, e.secondInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
@@ -245,7 +244,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
         );
         break;
       case 'byState':
-        this.certificateService.findByState(e.firstInput, page).subscribe(
+        this.service.findCertificatesByState(e.firstInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
@@ -255,7 +254,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
         );
         break;
       case 'byStateAttendant':
-        this.certificateService.findByStateAttendant(e.firstInput, e.secondInput, page).subscribe(
+        this.service.findCertificatesByStateAndAttendant(e.firstInput, e.secondInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
@@ -265,7 +264,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
         );
         break;
       case 'byStateInstitution':
-        this.certificateService.findByStateInstitution(e.firstInput, e.secondInput, page).subscribe(
+        this.service.findCertificatesByStateAndInstitution(e.firstInput, e.secondInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
@@ -275,7 +274,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
         );
         break;
       case 'byAttendant':
-        this.certificateService.findByAttendant(e.firstInput, page).subscribe(
+        this.service.findCertificatesByAttendant(e.firstInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
@@ -285,7 +284,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
         );
         break;
       case 'byTownship':
-        this.certificateService.findByTwonship(e.firstInput, page).subscribe(
+        this.service.findCertificatesByTwonship(e.firstInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },
@@ -295,7 +294,7 @@ export class CertificateListComponent implements OnInit, OnDestroy {
         );
         break;
       case 'byInstitution':
-        this.certificateService.findByInstitution(e.firstInput, page).subscribe(
+        this.service.findCertificatesByInstitution(e.firstInput, page).subscribe(
           (response) => {
             this.certificates = response;
           },

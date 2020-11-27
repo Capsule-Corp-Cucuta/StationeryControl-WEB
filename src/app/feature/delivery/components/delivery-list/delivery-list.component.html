@@ -1,10 +1,7 @@
-<mat-card class="deliverys-filtro">
-  <div class="row">
-    <div class="col-xs col-md-9">
-      <app-deliverys-filter [filter]="filter" (filterEvent)="receiveEvent($event)"></app-deliverys-filter>
-    </div>
-    <div class="col-xs col-md-3">
-      <mat-form-field class="full-width">
+<section class="page">
+  <div class="mat-elevation-z1 table">
+    <mat-card class="page__header">
+      <mat-form-field class="page__header--filter">
         <mat-label> {{ SELECT }} </mat-label>
         <mat-select (selectionChange)="updateFilter($event.value)">
           <div *ngFor="let op of FILTERS">
@@ -12,66 +9,60 @@
           </div>
         </mat-select>
       </mat-form-field>
-    </div>
+
+      <app-deliverys-filter [filter]="filter" (filterEvent)="receiveEvent($event)"></app-deliverys-filter>
+    </mat-card>
+
+    <table mat-table [dataSource]="deliverys" class="table--content">
+      <ng-container matColumnDef="tradeNumber">
+        <th mat-header-cell *matHeaderCellDef>{{ CELLS.NUMBER }}</th>
+        <td mat-cell *matCellDef="let delivery">{{ delivery.tradeNumber }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="deliveryType">
+        <th mat-header-cell *matHeaderCellDef>{{ CELLS.TYPE }}</th>
+        <td mat-cell *matCellDef="let delivery">{{ delivery.deliveryType | deliveryType }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="firstCertificate">
+        <th mat-header-cell *matHeaderCellDef>{{ CELLS.INITIAL }}</th>
+        <td mat-cell *matCellDef="let delivery">{{ delivery.firstCertificate }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="lastCertificate">
+        <th mat-header-cell *matHeaderCellDef>{{ CELLS.FINAL }}</th>
+        <td mat-cell *matCellDef="let delivery">{{ delivery.lastCertificate }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="sender">
+        <th mat-header-cell *matHeaderCellDef>{{ CELLS.SENDER }}</th>
+        <td mat-cell *matCellDef="let delivery">{{ delivery.sender }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="receiver">
+        <th mat-header-cell *matHeaderCellDef>{{ CELLS.RECEIVER }}</th>
+        <td mat-cell *matCellDef="let delivery">{{ delivery.receiver }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          <button
+            mat-stroked-button
+            color="primary"
+            matTooltip="{{ TOOLTIP }}"
+            matTooltipClass="tooltip-red"
+            routerLink="../{{ ROUTES.CREATE }}"
+          >
+            <mat-icon>{{ ICONS.ADD }}</mat-icon>
+          </button>
+        </th>
+        <td mat-cell *matCellDef="let delivery"></td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="COLUMNS"></tr>
+      <tr mat-row *matRowDef="let row; columns: COLUMNS"></tr>
+    </table>
+
+    <app-paginator [lastPage]="pages" (changePageEvent)="loadDeliveries($event)"></app-paginator>
   </div>
-</mat-card>
-
-<table mat-table [dataSource]="deliverys" class="certificates-table">
-  <ng-container matColumnDef="tradeNumber">
-    <th mat-header-cell *matHeaderCellDef>{{ CELLS.NUMBER }}</th>
-    <td mat-cell *matCellDef="let delivery">{{ delivery.tradeNumber }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="deliveryType">
-    <th mat-header-cell *matHeaderCellDef>{{ CELLS.TYPE }}</th>
-    <td mat-cell *matCellDef="let delivery">{{ delivery.deliveryType | deliveryType }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="firstCertificate">
-    <th mat-header-cell *matHeaderCellDef>{{ CELLS.INITIAL }}</th>
-    <td mat-cell *matCellDef="let delivery">{{ delivery.firstCertificate }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="lastCertificate">
-    <th mat-header-cell *matHeaderCellDef>{{ CELLS.FINAL }}</th>
-    <td mat-cell *matCellDef="let delivery">{{ delivery.lastCertificate }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="sender">
-    <th mat-header-cell *matHeaderCellDef>{{ CELLS.SENDER }}</th>
-    <td mat-cell *matCellDef="let delivery">{{ delivery.sender }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="receiver">
-    <th mat-header-cell *matHeaderCellDef>{{ CELLS.RECEIVER }}</th>
-    <td mat-cell *matCellDef="let delivery">{{ delivery.receiver }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef>
-      <button
-        mat-stroked-button
-        color="primary"
-        matTooltip="{{ TOOLTIP }}"
-        matTooltipClass="tooltip-red"
-        routerLink="../{{ ROUTES.CREATE }}"
-      >
-        <mat-icon>{{ ICONS.ADD }}</mat-icon>
-      </button>
-    </th>
-    <td mat-cell *matCellDef="let delivery"></td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="COLUMNS"></tr>
-  <tr mat-row *matRowDef="let row; columns: COLUMNS"></tr>
-</table>
-<mat-card class="paginator-card">
-  <div class="row paginator-ids">
-    <div>
-      <button mat-button color="primary" (click)="paginator('previous')" *ngIf="page != 0">Anterior</button>
-      <button mat-button color="primary" (click)="paginator('next')">Siguiente</button>
-    </div>
-  </div>
-</mat-card>
-
-<div style="clear: both;"></div>
+</section>

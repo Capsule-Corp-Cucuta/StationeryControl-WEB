@@ -17,24 +17,20 @@ export class DeliveryService {
     return this.http.post<Delivery>(this.endPoint, delivery);
   }
 
-  public findAll(page: number): Observable<Delivery[]> {
-    return this.http.get<Delivery[]>(this.endPoint + '/all/' + page);
+  public findByTradeNumber(tradeNumber: number): Observable<Delivery> {
+    return this.http.get<Delivery>(this.endPoint + '/' + tradeNumber);
   }
 
-  public findByID(id: string): Observable<Delivery> {
-    return this.http.get<Delivery>(this.endPoint + '/' + id);
+  public findAll(page: number): Observable<Delivery[]> {
+    return this.http.get<Delivery[]>(this.endPoint + '/all/' + page);
   }
 
   public findByAttendant(attendant: string, page: number): Observable<Delivery[]> {
     return this.http.get<Delivery[]>(this.endPoint + '/user/' + attendant + '/' + page);
   }
 
-  public findByTradeNumber(tradeNumber: number): Observable<Delivery> {
-    return this.http.get<Delivery>(this.endPoint + '/' + tradeNumber);
-  }
-
-  public findByDate(dateDelivery: Date, page: number): Observable<Delivery[]> {
-    return this.http.get<Delivery[]>(this.endPoint + '/date/' + page + '?date=' + dateDelivery);
+  public findByDate(date: Date, page: number): Observable<Delivery[]> {
+    return this.http.get<Delivery[]>(this.endPoint + '/date/' + page + '?date=' + date);
   }
   public findByBetweenDate(startDate: Date, endDate: Date, page: number): Observable<Delivery[]> {
     return this.http.get<Delivery[]>(
@@ -46,11 +42,15 @@ export class DeliveryService {
     return this.http.get<Delivery[]>(this.endPoint + '/type/' + type + '/' + page);
   }
 
-  public findByTypeUser(type: string, user: string, page: number): Observable<Delivery[]> {
+  public findByTypeAndUser(type: string, user: string, page: number): Observable<Delivery[]> {
     return this.http.get<Delivery[]>(this.endPoint + '/type/' + type + '/user/' + user + '/' + page);
   }
 
   public findByUser(user: string, page: number): Observable<Delivery[]> {
     return this.http.get<Delivery[]>(this.endPoint + '/user/' + user + '/' + page);
+  }
+
+  public countDeliveries(): Observable<Response> {
+    return this.http.get<Response>(`${this.endPoint}/count`);
   }
 }

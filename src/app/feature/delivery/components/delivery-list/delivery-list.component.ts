@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 
 import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
-import { DeliveryService } from '../../../../core/services/delivery.service';
 
 @Component({
   selector: 'app-delivery-list',
@@ -11,7 +10,7 @@ import { DeliveryService } from '../../../../core/services/delivery.service';
   styleUrls: ['../../../../shared/styles/list.component.scss'],
 })
 export class DeliveryListComponent implements OnInit {
-  public page = 0;
+  public pages = 0;
   public deliverys = [];
   public filter: string;
   public authority: string;
@@ -26,28 +25,28 @@ export class DeliveryListComponent implements OnInit {
   public readonly COLUMNS = Constants.LABELS.DELIVERY.LIST.COLUMNS;
   public readonly SELECT = Constants.LABELS.DELIVERY.FILTER.SELECT;
 
-  constructor(private deliveryService: DeliveryService, private router: Router, private service: FacadeService) {}
+  constructor(private router: Router, private service: FacadeService) {}
 
   ngOnInit(): void {
     this.authority = this.service.getAuthorities()[0];
-    this.loadDeliverys(0);
+    this.loadDeliveries('0');
     this.updateFilter('default');
   }
 
-  public loadDeliverys(page: number) {
+  public loadDeliveries(page: string) {
     if (!this.isWithFilter) {
       if (this.authority === 'ADMIN') {
-        this.findDeliverysAdmin(page);
+        this.findDeliverysAdmin(Number(page));
       } else {
-        this.findDeliverysByUser(this.service.getUser(), page);
+        this.findDeliverysByUser(this.service.getUser(), Number(page));
       }
     } else {
-      this.findByFilter(this.eventValue, page);
+      this.findByFilter(this.eventValue, Number(page));
     }
   }
 
   public findDeliverysAdmin(page: number) {
-    this.deliveryService.findAll(0).subscribe(
+    this.service.findAllDeliveries(0).subscribe(
       (resp) => {
         this.deliverys = resp;
       },
@@ -58,7 +57,7 @@ export class DeliveryListComponent implements OnInit {
   }
 
   public findDeliverysByUser(user: string, page: number) {
-    this.deliveryService.findByAttendant(user, 0).subscribe(
+    this.service.findDeliveriesByAttendant(user, page).subscribe(
       (resp) => {
         this.deliverys = resp;
       },
@@ -102,13 +101,13 @@ export class DeliveryListComponent implements OnInit {
   public receiveEvent(e: any): void {
     this.eventValue = e;
     this.isWithFilter = true;
-    this.loadDeliverys(0);
+    this.loadDeliveries('0');
   }
 
   private findByFilter(e: any, page: number): void {
     switch (this.filter) {
       case 'byTradeNumber':
-        this.deliveryService.findByTradeNumber(e.firstInput).subscribe(
+        this.service.findDeliveryByTradeNumber(e.firstInput).subscribe(
           (response) => {
             this.deliverys = [];
             this.deliverys.push(response);
@@ -119,7 +118,7 @@ export class DeliveryListComponent implements OnInit {
         );
         break;
       case 'byDate':
-        this.deliveryService.findByDate(e.firstInput, page).subscribe(
+        this.service.findDeliveriesByDate(e.firstInput, page).subscribe(
           (response) => {
             this.deliverys = response;
           },
@@ -129,7 +128,7 @@ export class DeliveryListComponent implements OnInit {
         );
         break;
       case 'betweenDates':
-        this.deliveryService.findByBetweenDate(e.firstInput, e.secondInput, page).subscribe(
+        this.service.findDeliveriesByBetweenDate(e.firstInput, e.secondInput, page).subscribe(
           (response) => {
             this.deliverys = response;
           },
@@ -139,7 +138,7 @@ export class DeliveryListComponent implements OnInit {
         );
         break;
       case 'byType':
-        this.deliveryService.findByType(e.firstInput, page).subscribe(
+        this.service.findDeliveriesByType(e.firstInput, page).subscribe(
           (response) => {
             this.deliverys = response;
           },
@@ -149,7 +148,7 @@ export class DeliveryListComponent implements OnInit {
         );
         break;
       case 'byTypeUser':
-        this.deliveryService.findByTypeUser(e.firstInputm, e.secondInput, page).subscribe(
+        this.service.findDeliveriesByTypeAndUser(e.firstInputm, e.secondInput, page).subscribe(
           (response) => {
             this.deliverys = response;
           },
@@ -159,7 +158,7 @@ export class DeliveryListComponent implements OnInit {
         );
         break;
       case 'byUser':
-        this.deliveryService.findByUser(e.firstInputm, page).subscribe(
+        this.service.findDeliveriesByUser(e.firstInputm, page).subscribe(
           (response) => {
             this.deliverys = response;
           },
@@ -182,16 +181,6 @@ export class DeliveryListComponent implements OnInit {
       // TODO Message
     } else if (err.status === 500) {
       this.router.navigate(['/server-error']);
-    }
-  }
-
-  public paginator(page: string) {
-    if (page === 'next') {
-      this.page++;
-      this.loadDeliverys(this.page);
-    } else {
-      this.page--;
-      this.loadDeliverys(this.page);
     }
   }
 }

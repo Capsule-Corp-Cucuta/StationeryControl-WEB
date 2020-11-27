@@ -41,7 +41,6 @@ export class CertificateFormComponent implements OnInit {
     private router: Router,
     private builder: FormBuilder,
     private activateRoute: ActivatedRoute,
-    private certificadoService: CertificateService,
     private service: FacadeService
   ) {}
 
@@ -61,7 +60,7 @@ export class CertificateFormComponent implements OnInit {
       this.certificateNumber = params.number;
       if (this.certificateNumber) {
         this.isCreate = false;
-        this.certificadoService.findByID(this.certificateNumber).subscribe((resp) => {
+        this.service.findCertificateByNumber(this.certificateNumber).subscribe((resp) => {
           if (
             resp.state === CertificateState.IDLE ||
             resp.state === CertificateState.ASSIGNED ||
@@ -103,7 +102,7 @@ export class CertificateFormComponent implements OnInit {
     if (this.form.valid) {
       const certificate = this.form.value;
       certificate.attendant = this.user;
-      this.certificadoService.create(certificate).subscribe(
+      this.service.createCertificate(certificate).subscribe(
         (resp) => {
           // TODO Message
           this.router.navigate(['./certificado/lista']);
@@ -120,7 +119,7 @@ export class CertificateFormComponent implements OnInit {
 
     if (this.form.valid) {
       const certificate = this.form.value;
-      this.certificadoService.update(certificate.number, certificate).subscribe(
+      this.service.updateCertificate(certificate.number, certificate).subscribe(
         (resp) => {
           // TODO Message
           this.router.navigate(['./certificado/lista']);
@@ -133,7 +132,7 @@ export class CertificateFormComponent implements OnInit {
   }
 
   public uploadFile() {
-    this.certificadoService.postFile(this.certificateNumber, this.attachmentFormData).subscribe((resp) => {
+    this.service.postCertificateFile(this.certificateNumber, this.attachmentFormData).subscribe((resp) => {
       // TODO Message
     });
   }
@@ -191,8 +190,8 @@ export class CertificateFormComponent implements OnInit {
         };
         certificatesToRegister.push(certificate);
       });
-      this.certificadoService
-        .createMultiple(certificatesToRegister)
+      this.service
+        .createMultipleCertificates(certificatesToRegister)
         .pipe(
           finalize(() => {
             this.router.navigate(['/']);

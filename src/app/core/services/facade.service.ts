@@ -13,6 +13,8 @@ import { StatisticsService } from './statistics.service';
 import { Institution } from '../models/institution.model';
 import { CertificateService } from './certificate.service';
 import { InstitutionService } from './institution.service';
+import { Certificate } from '../models/certificate.model';
+import { Delivery } from '../models/delivery.model';
 
 @Injectable({
   providedIn: 'root',
@@ -151,6 +153,126 @@ export class FacadeService {
 
   public countUsers(): Observable<Response> {
     return this.userService.countUsers();
+  }
+
+  public createCertificate(certificate: Certificate): Observable<Certificate> {
+    return this.certificateService.create(certificate);
+  }
+
+  public createMultipleCertificates(certificates: Certificate[]): Observable<Response> {
+    return this.certificateService.createMultiple(certificates);
+  }
+
+  public findCertificateByNumber(id: number): Observable<Certificate> {
+    return this.certificateService.findByNumber(id);
+  }
+
+  public findAllCertificates(page: number): Observable<Certificate[]> {
+    return this.certificateService.findAll(page);
+  }
+
+  public findCertificatesByAttendant(attendant: string, page: number): Observable<Certificate[]> {
+    return this.certificateService.findByAttendant(attendant, page);
+  }
+
+  public updateCertificate(id: number, certificate: Certificate): Observable<Certificate> {
+    return this.certificateService.update(id, certificate);
+  }
+
+  public postCertificateFile(id: number, file: FormData): Observable<Response> {
+    return this.certificateService.postFile(id, file);
+  }
+
+  public findFileByCertificateId(id: number): Observable<any> {
+    return this.certificateService.findFileById(id);
+  }
+
+  public findCertificatesBetweenNumbers(firstNumber: number, lastNumber: number): Observable<Certificate[]> {
+    return this.certificateService.findBetweenNumbers(firstNumber, lastNumber);
+  }
+
+  public findCertificatesByType(type: string, page: number): Observable<Certificate[]> {
+    return this.certificateService.findByType(type, page);
+  }
+
+  public findCertificatesByTypeAndAttendant(type: string, attendant: string, page: number): Observable<Certificate[]> {
+    return this.certificateService.findByTypeAndAttendant(type, attendant, page);
+  }
+
+  public findCertificatesByTypeAndInstitution(
+    type: string,
+    institution: string,
+    page: number
+  ): Observable<Certificate[]> {
+    return this.certificateService.findByTypeAndInstitution(type, institution, page);
+  }
+
+  public findCertificatesByState(state: string, page: number): Observable<Certificate[]> {
+    return this.certificateService.findByState(state, page);
+  }
+
+  public findCertificatesByStateAndAttendant(
+    state: string,
+    attendant: string,
+    page: number
+  ): Observable<Certificate[]> {
+    return this.certificateService.findByStateAndAttendant(state, attendant, page);
+  }
+
+  public findCertificatesByStateAndInstitution(
+    state: string,
+    institution: string,
+    page: number
+  ): Observable<Certificate[]> {
+    return this.certificateService.findByStateAndInstitution(state, institution, page);
+  }
+
+  public findCertificatesByTwonship(township: string, page: number): Observable<Certificate[]> {
+    return this.certificateService.findByTwonship(township, page);
+  }
+
+  public findCertificatesByInstitution(institution: string, page: number): Observable<Certificate[]> {
+    return this.certificateService.findByInstitution(institution, page);
+  }
+
+  public createDelivery(delivery: Delivery): Observable<Delivery> {
+    return this.deliveryService.create(delivery);
+  }
+
+  public findDeliveryByTradeNumber(tradeNumber: number): Observable<Delivery> {
+    return this.deliveryService.findByTradeNumber(tradeNumber);
+  }
+
+  public findAllDeliveries(page: number): Observable<Delivery[]> {
+    return this.deliveryService.findAll(page);
+  }
+
+  public findDeliveriesByAttendant(attendant: string, page: number): Observable<Delivery[]> {
+    return this.deliveryService.findByAttendant(attendant, page);
+  }
+
+  public findDeliveriesByDate(date: Date, page: number): Observable<Delivery[]> {
+    return this.deliveryService.findByDate(date, page);
+  }
+
+  public findDeliveriesByBetweenDate(startDate: Date, endDate: Date, page: number): Observable<Delivery[]> {
+    return this.deliveryService.findByBetweenDate(startDate, endDate, page);
+  }
+
+  public findDeliveriesByType(type: string, page: number): Observable<Delivery[]> {
+    return this.deliveryService.findByType(type, page);
+  }
+
+  public findDeliveriesByTypeAndUser(type: string, user: string, page: number): Observable<Delivery[]> {
+    return this.deliveryService.findByTypeAndUser(type, user, page);
+  }
+
+  public findDeliveriesByUser(user: string, page: number): Observable<Delivery[]> {
+    return this.deliveryService.findByUser(user, page);
+  }
+
+  public countDeliveries(): Observable<Response> {
+    return this.deliveryService.countDeliveries();
   }
 
   public findAllTownships(): Observable<string[]> {

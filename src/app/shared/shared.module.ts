@@ -20,6 +20,7 @@ import { CertificatesFilterComponent } from './components/certificates-filter/ce
 import { StatisticsCardComponent } from './components/statistics-card/statistics-card.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
 import { UsersFilterComponent } from './components/users-filter/users-filter.component';
+import { InstitutionFilterComponent } from './components/institution-filter/institution-filter.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { UsersFilterComponent } from './components/users-filter/users-filter.com
     StatisticsCardComponent,
     PaginatorComponent,
     UsersFilterComponent,
+    InstitutionFilterComponent,
   ],
   imports: [CommonModule, RouterModule, MaterialModule, ReactiveFormsModule, FormsModule],
   exports: [
@@ -57,6 +59,8 @@ import { UsersFilterComponent } from './components/users-filter/users-filter.com
     CertificatesFilterComponent,
     StatisticsCardComponent,
     PaginatorComponent,
+    UsersFilterComponent,
+    InstitutionFilterComponent
   ],
 })
 export class SharedModule {}

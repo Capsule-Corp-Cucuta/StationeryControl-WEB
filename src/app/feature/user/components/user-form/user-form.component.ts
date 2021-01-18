@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { User, UserType } from 'src/app/core/models/user.model';
 import { Institution } from 'src/app/core/models/institution.model';
 import { FacadeService } from 'src/app/core/services/facade.service';
 import { Constants } from 'src/app/shared/constants/global-constants';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-form',
@@ -13,6 +15,7 @@ import { Constants } from 'src/app/shared/constants/global-constants';
   styleUrls: ['../../../../shared/styles/form.component.scss'],
 })
 export class UserFormComponent implements OnInit {
+  public form: FormGroup;
   public user: User;
   public isCreate: boolean;
   public TOWNSHIPS: string[];
@@ -23,7 +26,7 @@ export class UserFormComponent implements OnInit {
   public readonly LABELS = Constants.LABELS.USER.FORM;
   public readonly USER_TYPES = Constants.USER_TYPES_MAPPER;
 
-  constructor(private router: Router, private service: FacadeService, private activeRoute: ActivatedRoute) {
+  constructor(private builder: FormBuilder,private router: Router, private service: FacadeService, private activeRoute: ActivatedRoute) {
     this.user = {
       id: null,
       name: null,
@@ -37,6 +40,7 @@ export class UserFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.buildForm();
     this.validateIsCreateForm();
     this.listTownships();
     this.listInstitutions(null);
@@ -47,8 +51,9 @@ export class UserFormComponent implements OnInit {
       const id = params.id;
       if (id) {
         this.isCreate = false;
-        this.service.findUserByID(id).subscribe((response: User) => {
+        this.service.findUserByID(id).subscribe((response) => {
           this.user = response;
+          this.form.patchValue(response);
         });
       } else {
         this.isCreate = true;
@@ -56,23 +61,74 @@ export class UserFormComponent implements OnInit {
     });
   }
 
-  public create(e: Event) {
-    this.user.department = Constants.DEPARTMENT;
-    this.service.createUser(this.user).subscribe(() => {
-      this.router.navigate(['./usuario/lista']);
+  private buildForm() {
+    this.form = this.builder.group({
+      id: ['', [Validators.required]],
+      name: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required]],
+      userType: [UserType.ADMINISTRATOR, [Validators.required]],
+      department: [this.DEPARTMENT],
+      township:[''],
+      institution: ['']
     });
+  }
+
+  public create(e: Event) {
+    e.preventDefault();
+    if (this.form.valid) {
+    const user = this.form.value;
+    this.service.createUser(user).subscribe((rep) => {
+      Swal.fire(
+        'Exito!',
+        'Usuario Registrado.',
+        'success'
+      );
+      this.router.navigate(['./usuario/lista']);
+    },(err)=>{
+     this.handlerError(err);
+    });
+  }
   }
 
   public update(e: Event) {
-    this.user.department = Constants.DEPARTMENT;
-    this.service.updateUser(this.user).subscribe(() => {
+    e.preventDefault();
+    
+    if (this.form.valid) {
+    const user = this.form.value;
+    this.service.updateUser(user).subscribe((resp) => {
+      Swal.fire(
+        'Exito!',
+        'Usuario Actualizado.',
+        'success'
+      );
       this.router.navigate(['./usuario/lista']);
+    },(err)=>{
+      this.handlerError(err);
     });
+    }
   }
 
   public delete(e: Event) {
-    this.service.deleteUser(this.user.id).subscribe(() => {
-      this.router.navigate(['./usuario/lista']);
+    Swal.fire({
+      title: 'Estas Seguro?',
+      text: 'No podrás recuperar este usuario!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.value) {
+        this.service.deleteUser(this.user.id).subscribe(() => {
+          Swal.fire(
+            'Eliminado!',
+            'Usuario Eliminado.',
+            'success'
+          );
+          this.router.navigate(['./usuario/lista']);
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+      }
     });
   }
 
@@ -98,4 +154,27 @@ export class UserFormComponent implements OnInit {
       (error: HttpErrorResponse) => {}
     );
   }
+
+  public handlerError(err): void {
+    if (err.status === 404) {
+        Swal.fire(
+          'Oops...!',
+          'Error al registrar/actualizar usuario.',
+          'error'
+        );
+     } else if (err.status === 500) {
+       Swal.fire(
+         'ERROR 500 !',
+         'INTERNAL, SERVER ERROR.',
+         'error'
+       );
+       //this.router.navigate(['/server-error']);
+     }else {
+       Swal.fire(
+         'Oops...!',
+         'ah ocurrido un error, intenta mas tarde.',
+         'error'
+       );
+     }
+   }
 }

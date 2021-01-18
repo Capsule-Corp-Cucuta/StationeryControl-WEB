@@ -123,6 +123,18 @@ export class Constants {
           TYPE: 'Tipo de Usuario:',
         },
       },
+      FILTER: {
+        LABELS: {
+          ATTENDANT: 'Cedula',
+          NAME: 'Nombre',
+        },
+        PLACEHOLDER: {
+          ATTENDANT: 'Numero de Cedula',
+          NAME: 'Nombre del usuario',
+        },
+        BUTTON: 'Buscar',
+        SELECT: 'Seleccione Filtro',
+      },
     },
     CERTIFICATE: {
       FORM: {
@@ -262,7 +274,9 @@ export class Constants {
       FORM: {
         TITLE: 'Registrar Institución',
         PLACEHOLDER: {
-          NAME: 'Ingrese nombre de la Institución',
+          NAME: 'Nombre de la Institución',
+          T0WNSHIP: 'Seleccione Municipio',
+          ATTENDANT: 'Usuario'
         },
         BUTTON: 'Registrar',
         ATTACH_FILE: {
@@ -276,23 +290,29 @@ export class Constants {
         },
       },
       LIST: {
-        COLUMNS: ['name', 'actions'],
+        COLUMNS: ['name', 'twonship', 'attendant', 'actions'],
         CELLS: {
           NAME: 'Nombre de la Institución:',
+          TOwNSHIP: 'Municipio',
+          ATTENDANT: 'Usuario',
           ACTIONS: 'Opciones',
         },
         TOOLTIP: {
+          CREATE: 'Registrar institucion',
           DELETE: 'Eliminar institution',
         },
       },
       FILTER: {
         LABELS: {
           NAMEINSTITUTION: 'Nombre de la institucion',
+          TOWNSHIP: 'Nombre del municipio',
         },
         PLACEHOLDER: {
           NAMEINSTITUTION: 'Ingrese el nombre de la institucion',
+          TOWNSHIP: 'Ingrese municipio',
         },
         BUTTON: 'Buscar',
+        SELECT: 'Seleccione Filtro',
       },
     },
   };
@@ -370,6 +390,16 @@ export class Constants {
   ];
 
   public static DEPARTMENT = 'NORTE DE SANTANDER';
+
+  public static FILTERSUSERS = [
+    { authority: 'ADMIN', value: 'Por Cedula:' },
+    { authority: 'ADMIN', value: 'Por Nombre' },
+  ];
+
+  public static FILTERSINSTITUTIONS = [
+    { authority: 'ADMIN', value: 'Por Nombre:' },
+    { authority: 'ADMIN', value: 'Por Municipio' },
+  ];
 
   public static FILTERSCERTIFICATES = [
     { authority: 'ADMIN', value: 'Por numero:' },

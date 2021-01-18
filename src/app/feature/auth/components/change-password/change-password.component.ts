@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-change-password',
@@ -29,15 +30,27 @@ export class ChangePasswordComponent implements OnInit {
         .changePassword(this.getId(), this.getFormValue('oldPassword'), this.getFormValue('newPassword'))
         .subscribe(
           (response) => {
-            // TODO Message
+            Swal.fire(
+              'Exito!',
+              'Contraseña cambiada exitosamente.',
+              'success'
+            );
             this.router.navigate(['/']);
           },
           (error) => {
-            // TODO Message
+            Swal.fire(
+              'Oops...!',
+              'Error al cambiar contraseña, intenta mas tarde',
+              'error'
+            );
           }
         );
     } else {
-      // TODO Message
+      Swal.fire(
+        'Oops...!',
+        'Los datos ingresados no son iguales, verifica nuevamente',
+        'error'
+      );
     }
   }
 

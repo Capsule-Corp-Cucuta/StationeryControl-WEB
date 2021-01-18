@@ -42,7 +42,7 @@ export class CertificatesFilterComponent implements OnInit {
   public displayFn = (user) => {
     this.setId(user);
     return user && user.name ? user.name : '';
-  };
+  }
 
   private setId(user: User) {
     if (user && user.id) {

@@ -13,7 +13,7 @@ export class InstitutionService {
   constructor(private http: HttpClient) {}
 
   public create(institution: Institution): Observable<Institution> {
-    return this.http.post<Institution>(this.endPoint, institution);
+    return this.http.post<Institution>(this.endPoint,institution);
   }
 
   public delete(institution: Institution): Observable<any> {
@@ -30,8 +30,12 @@ export class InstitutionService {
     return this.http.get<Institution[]>(this.endPoint + '/all');
   }
 
+  public findAllPage(page: number): Observable<Institution[]> {
+    return this.http.get<Institution[]>(this.endPoint + '/all/' + page);
+  }
+
   public findByName(name: string): Observable<Institution[]> {
-    return this.http.get<Institution[]>(this.endPoint + '/name/' + name);
+    return this.http.get<Institution[]>(this.endPoint + '/' + name);
   }
 
   public findByTownship(township: string): Observable<Institution[]> {
@@ -40,5 +44,9 @@ export class InstitutionService {
 
   public findByAttendant(attendant: string): Observable<Institution[]> {
     return this.http.get<Institution[]>(this.endPoint + '/attendant/' + attendant);
+  }
+
+  public countInstitutions(): Observable<Response> {
+    return this.http.get<Response>(`${this.endPoint}/count`);
   }
 }

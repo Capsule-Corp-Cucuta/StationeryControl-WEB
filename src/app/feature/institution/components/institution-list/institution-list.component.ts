@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-
+import { Subscription } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { Constants } from 'src/app/shared/constants/global-constants';
-import { InstitutionService } from 'src/app/core/services/institution.service';
 import { Institution } from 'src/app/core/models/institution.model';
+import { FacadeService } from 'src/app/core/services/facade.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-institution-list',
@@ -12,86 +14,67 @@ import { Institution } from 'src/app/core/models/institution.model';
   styleUrls: ['../../../../shared/styles/list.component.scss'],
 })
 export class InstitutionListComponent implements OnInit {
-  public form: FormGroup;
-  public formFile: FormGroup;
-  public formFilter: FormGroup;
-  public fileName: string;
+  public pages = 0;
   public values;
-  public institutions = [];
+  public filter: string;
+  public authority: string;
+  public institutions: Institution[] = [];
+  public isWithFilter = false;
+  public eventValue: any = null;
+  public TOWNSHIPS: string[];
+  private subscriptions: Subscription[] = [];
+  public readonly SELECT = Constants.LABELS.INSTITUTION.FILTER.SELECT;
+  public readonly FILTERS = Constants.FILTERSINSTITUTIONS;
+  public readonly ICONS = Constants.ICONS;
+  public readonly  CELLS = Constants.LABELS.INSTITUTION.LIST.CELLS;
+  public readonly  COLUMNS = Constants.LABELS.INSTITUTION.LIST.COLUMNS;
+  public readonly TOOLTIP = Constants.LABELS.INSTITUTION.LIST.TOOLTIP;
+  public readonly ROUTES = Constants.ROUTES;
 
-  public ICONS = Constants.ICONS;
-  public LABELS = Constants.LABELS.INSTITUTION.FORM;
-  public CELLS = Constants.LABELS.INSTITUTION.LIST.CELLS;
-  public COLUMNS = Constants.LABELS.INSTITUTION.LIST.COLUMNS;
-  public TOOLTIP = Constants.LABELS.INSTITUTION.LIST.TOOLTIP;
-  public LABELSFILTER = Constants.LABELS.INSTITUTION.FILTER.LABELS;
-  public PLACEHOLDER = Constants.LABELS.INSTITUTION.FILTER.PLACEHOLDER;
-  public BUTTON = Constants.LABELS.INSTITUTION.FILTER.BUTTON;
   constructor(
     private router: Router,
-    private builder: FormBuilder,
-    private activateRoute: ActivatedRoute,
-    private institutionService: InstitutionService
-  ) {
-    this.values = '';
-  }
+    private service: FacadeService
+  ) {}
 
   ngOnInit(): void {
-    this.buildForm();
-    this.buildFormFilter();
-    this.loadInstitutions();
+    this.authority = this.service.getAuthorities()[0];
+    this.loadData();
+    this.updateFilter('default');
+    this.listTownships();
   }
 
-  private buildForm() {
-    this.form = this.builder.group({
-      institution: ['', [Validators.required]],
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
     });
-  }
-
-  private buildFormFilter() {
-    this.formFilter = this.builder.group({
-      name: ['', [Validators.required]],
-    });
-  }
-
-  public create(e: Event) {
-    e.preventDefault();
-
-    if (this.form.valid) {
-      const institution = this.form.value;
-      this.institutionService.create(institution).subscribe(
-        (resp) => {
-          // TODO Message
-          this.router.navigate(['./institucion/lista']);
-        },
-        (err) => {
-          if (err.status === 404) {
-            // TODO Message
-          } else {
-            this.handlerError(err);
-          }
-        }
-      );
-    }
   }
 
   public delete(institution: Institution) {
-    this.institutionService.delete(institution).subscribe(
-      (resp) => {
-        this.router.navigate(['./institucion/lista']);
-      },
-      (err) => {
-        if (err.status === 404) {
-          // TODO Message
-        } else {
-          this.handlerError(err);
-        }
+    Swal.fire({
+      title: 'Estas Seguro?',
+      text: 'No podrás recuperar esta Institucion!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.value) {
+        this.service.deleteInstitution(institution).subscribe(() => {
+          Swal.fire(
+            'Eliminada!',
+            'Institucion Eliminada.',
+            'success'
+          );
+          //this.router.navigate(['./institucion/lista']);
+          this.loadData();
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
       }
-    );
+    });
   }
 
   public loadInstitutions() {
-    this.institutionService.findAll().subscribe(
+    this.service.findAllInstitutions().subscribe(
       (resp) => {
         this.institutions = resp;
       },
@@ -101,28 +84,114 @@ export class InstitutionListComponent implements OnInit {
     );
   }
 
-  public findUserByName() {
-    const filter = this.formFilter.value['name'];
-    this.institutionService.findByName(filter).subscribe((resp) => {
-      this.institutions = resp as any[];
-    });
-  }
-
-  public fileChangeExcel(event) {}
-
-  public uploadFileExcel() {}
-
-  public handlerError(err): void {
-    if (err.status === 400) {
-      // TODO Message
-    } else if (err.status === 401) {
-      // TODO Message
-    } else if (err.status === 403) {
-      // TODO Message
-    } else if (err.status === 404) {
-      // TODO Message
-    } else if (err.status === 500) {
-      this.router.navigate(['/server-error']);
+  private loadData(): void {
+    if (!this.isWithFilter) {
+     this.loadAdminInstitutions();
+    }else{
+      this.findByFilter(this.eventValue);
     }
   }
+
+  public loadAdminInstitutions(): void {
+    const subscription = this.service
+    .countInstitutions()
+    .pipe(
+      finalize(() => {
+        this.getIntitutions();
+      })
+    )
+    .subscribe((resp) => {
+      this.pages = Math.ceil(Number(resp) / 25);
+    });
+    this.subscriptions.push(subscription);
+  }
+
+  public getIntitutions() {
+    const subscription = this.service.findAllInstitutions().subscribe((resp) => {
+      this.institutions = resp;
+    });
+    this.subscriptions.push(subscription);
+  }
+
+  public updateFilter(filter: string): void {   
+    switch (filter) {
+      case this.FILTERS[0].value:
+        this.filter = 'byName';
+        break;
+      case this.FILTERS[1].value:
+        this.filter = 'byTownship';
+        break;
+      default:
+        this.filter = 'byName';
+        break;
+    } 
+  }
+
+  public receiveEvent(e: any): void {
+    this.eventValue = e;
+    this.isWithFilter = true;
+    this.loadData();
+  }
+
+  private findByFilter(e: any): void {  
+    console.log(this.filter);
+    switch (this.filter) {
+      case 'byTownship':
+        this.service.findInstitutionsByTownship(e.firstInput).subscribe(
+          (response) => {
+            this.institutions = [];
+            this.institutions = response;
+          },
+          (err) => {
+            this.handlerError(err);
+          }
+        );
+        break;
+      case 'byName':
+        this.service.findInstitutionsByName(e.firstInput).subscribe(
+          (response) => {
+            this.institutions = response;
+          },
+          (err) => {
+            this.handlerError(err);
+          }
+        );
+        break;
+    }
+  }
+
+  private listTownships(): void {
+    this.service.findAllTownships().subscribe(
+      (response) => {
+        this.TOWNSHIPS = response; 
+      },
+      (error: HttpErrorResponse) => {
+        // TODO
+      }
+    );
+  }
+
+  public handlerError(err): void {
+    if (err.status === 404) {
+      Swal.fire(
+        'Oops...!',
+        'No hay registro de instituciones',
+        'error'
+      );
+     } else if (err.status === 500) {
+       Swal.fire(
+         'ERROR 500 !',
+         'INTERNAL, SERVER ERROR.',
+         'error'
+       );
+       //this.router.navigate(['/server-error']);
+     }else {
+       Swal.fire(
+         'Oops...!',
+         'ah ocurrido un error, intenta mas tarde.',
+         'error'
+       );
+     }
+   }
+
 }

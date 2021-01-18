@@ -53,4 +53,8 @@ export class DeliveryService {
   public countDeliveries(): Observable<Response> {
     return this.http.get<Response>(`${this.endPoint}/count`);
   }
+
+  public countDeliveriesByAttendant(cedula: string): Observable<number> {
+    return this.http.get<number>(this.endPoint + '/count/user/' + cedula);
+  }
 }

@@ -1,0 +1,20 @@
+<div class="component">
+    <div class="component__filters">
+        <mat-form-field *ngIf="filter === 'byName'">
+            <mat-label> {{ LABELS.NAMEINSTITUTION}} </mat-label>
+            <input matInput type="text" placeholder=" {{ PLACEHOLDER.NAMEINSTITUTION }} " [(ngModel)]="values.firstInput" />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="filter === 'byTownship'">
+            <mat-label> {{ LABELS.TOWNSHIP }} </mat-label>
+            <mat-select placeholder=" PLACEHOLDER.TOWNSHIP " [(ngModel)]="values.firstInput">
+                <mat-option *ngFor="let op of TOWNSHIPS" [value]="op"> {{ op }} </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <button class="component__button" mat-stroked-button color="primary" (click)="sendEvent()">
+        <mat-icon class="separation"> {{ ICON.SEARCH }} </mat-icon>
+        <span> {{ BUTTON }} </span>
+    </button>
+
+</div>

@@ -2,7 +2,11 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 import { FacadeService } from '../../../../core/services/facade.service';
+import { StatisticsService } from 'src/app/core/services/statistics.service';
 import { Constants } from '../../../../shared/constants/global-constants';
+import { Subscription } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-delivery-list',
@@ -16,6 +20,7 @@ export class DeliveryListComponent implements OnInit {
   public authority: string;
   public isWithFilter = false;
   public eventValue: any = null;
+  private subscriptions: Subscription[] = [];
 
   public readonly ICONS = Constants.ICONS;
   public readonly ROUTES = Constants.ROUTES;
@@ -25,7 +30,7 @@ export class DeliveryListComponent implements OnInit {
   public readonly COLUMNS = Constants.LABELS.DELIVERY.LIST.COLUMNS;
   public readonly SELECT = Constants.LABELS.DELIVERY.FILTER.SELECT;
 
-  constructor(private router: Router, private service: FacadeService) {}
+  constructor(private router: Router, private service: FacadeService, private statisticsService: StatisticsService) {}
 
   ngOnInit(): void {
     this.authority = this.service.getAuthorities()[0];
@@ -33,20 +38,54 @@ export class DeliveryListComponent implements OnInit {
     this.updateFilter('default');
   }
 
-  public loadDeliveries(page: string) {
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    });
+  }
+
+  public loadDeliveries(page: string): void {
     if (!this.isWithFilter) {
       if (this.authority === 'ADMIN') {
-        this.findDeliverysAdmin(Number(page));
+        this.loadAdminData(Number(page));
       } else {
-        this.findDeliverysByUser(this.service.getUser(), Number(page));
+        this.loadDataByUser(this.service.getUser(), Number(page));
       }
     } else {
       this.findByFilter(this.eventValue, Number(page));
     }
   }
 
-  public findDeliverysAdmin(page: number) {
-    this.service.findAllDeliveries(0).subscribe(
+  private loadAdminData(page: number): void {
+    const subscription = this.service
+      .countDeliveries()
+      .pipe(
+        finalize(() => {
+          this.findDeliverysAdmin(page);
+        })
+      )
+      .subscribe((response) => {
+        this.pages = Math.ceil(Number(response) / 25);
+      });
+    this.subscriptions.push(subscription);
+  }
+
+  private loadDataByUser(user: string, page: number): void {
+    const subscription = this.service
+      .countDeliveriesByAttendant(user)
+      .pipe(
+        finalize(() => {
+          this.findDeliverysByUser(user, page);
+        })
+      )
+      .subscribe((response) => {
+        this.pages = Math.ceil(Number(response) / 25);
+      });
+    this.subscriptions.push(subscription);
+  }
+
+  public findDeliverysAdmin(page: number): void {
+    const subscription = this.service.findAllDeliveries(0).subscribe(
       (resp) => {
         this.deliverys = resp;
       },
@@ -54,10 +93,11 @@ export class DeliveryListComponent implements OnInit {
         this.handlerError(err);
       }
     );
+    this.subscriptions.push(subscription);
   }
 
   public findDeliverysByUser(user: string, page: number) {
-    this.service.findDeliveriesByAttendant(user, page).subscribe(
+    const subscription = this.service.findDeliveriesByAttendant(user, page).subscribe(
       (resp) => {
         this.deliverys = resp;
       },
@@ -65,6 +105,7 @@ export class DeliveryListComponent implements OnInit {
         this.handlerError(err);
       }
     );
+    this.subscriptions.push(subscription);
   }
 
   public updateFilter(filter: string): void {
@@ -171,16 +212,25 @@ export class DeliveryListComponent implements OnInit {
   }
 
   public handlerError(err): void {
-    if (err.status === 400) {
-      // TODO Message
-    } else if (err.status === 401) {
-      // TODO Message
-    } else if (err.status === 403) {
-      // TODO Message
-    } else if (err.status === 404) {
-      // TODO Message
-    } else if (err.status === 500) {
-      this.router.navigate(['/server-error']);
-    }
-  }
+    if (err.status === 404) {
+        Swal.fire(
+          'Oops...!',
+          'No hay registros de  entregas y/o devoluciones.',
+          'error'
+        );
+     } else if (err.status === 500) {
+       Swal.fire(
+         'ERROR 500 !',
+         'INTERNAL, SERVER ERROR.',
+         'error'
+       );
+       //this.router.navigate(['/server-error']);
+     }else {
+       Swal.fire(
+         'Oops...!',
+         'ah ocurrido un error, intenta mas tarde.',
+         'error'
+       );
+     }
+   }
 }

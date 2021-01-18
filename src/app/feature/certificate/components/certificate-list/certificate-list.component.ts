@@ -10,6 +10,7 @@ import { StatisticsService } from 'src/app/core/services/statistics.service';
 import { finalize } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-certificate-list',
@@ -104,9 +105,9 @@ export class CertificateListComponent implements OnInit, OnDestroy {
   private findCertificatesAdmin(page: number): void {
     const subscription = this.service.findAllCertificates(page).subscribe(
       (resp) => {
-        this.certificates = resp;
+        this.certificates = resp;  
       },
-      (err) => {
+      (err) => {  
         this.handlerError(err);
       }
     );
@@ -307,18 +308,27 @@ export class CertificateListComponent implements OnInit, OnDestroy {
   }
 
   public handlerError(err): void {
-    if (err.status === 400) {
-      // TODO Message
-    } else if (err.status === 401) {
-      // TODO Message
-    } else if (err.status === 403) {
-      // TODO Message
-    } else if (err.status === 404) {
-      // TODO Message
-    } else if (err.status === 500) {
-      this.router.navigate(['/server-error']);
-    }
-  }
+    if (err.status === 404) {
+        Swal.fire(
+          'Oops...!',
+          'No hay registros de certificados.',
+          'error'
+        );
+     } else if (err.status === 500) {
+       Swal.fire(
+         'ERROR 500 !',
+         'INTERNAL, SERVER ERROR.',
+         'error'
+       );
+       //this.router.navigate(['/server-error']);
+     }else {
+       Swal.fire(
+         'Oops...!',
+         'ah ocurrido un error, intenta mas tarde.',
+         'error'
+       );
+     }
+   }
 
   private listTownships(): void {
     this.service.findAllTownships().subscribe(

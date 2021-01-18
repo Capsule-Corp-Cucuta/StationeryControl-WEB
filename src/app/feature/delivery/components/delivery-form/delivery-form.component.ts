@@ -1,12 +1,12 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-
 import { User } from '../../../../core/models/user.model';
-import { DeliveryType } from '../../../../core/models/delivery.model';
+import { DeliveryType, Delivery } from '../../../../core/models/delivery.model';
 import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
-import { DeliveryService } from '../../../../core/services/delivery.service';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-delivery-form',
@@ -14,6 +14,7 @@ import { DeliveryService } from '../../../../core/services/delivery.service';
   styleUrls: ['../../../../shared/styles/form.component.scss'],
 })
 export class DeliveryFormComponent implements OnInit {
+  public delivery: Delivery;
   public user: string;
   public receiver: string;
   public users: any[];
@@ -24,57 +25,50 @@ export class DeliveryFormComponent implements OnInit {
   public readonly TYPES = Constants.DELIVERIES_TYPES_MAPPER;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private deliveryService: DeliveryService,
     private router: Router,
+    private builder: FormBuilder,
     private service: FacadeService
-  ) {}
+  ) {  }
 
   ngOnInit(): void {
     this.user = this.service.getUser();
     this.buildForm();
+    
   }
 
-  public buildForm() {
-    this.form = this.formBuilder.group({
-      tradeNumber: ['', [Validators.required]],
+  private buildForm() {
+    this.form = this.builder.group({
+      tradeNumber:['', [Validators.required]],
+      deliveryType: DeliveryType.DEPARTURE,
       firstCertificate: ['', [Validators.required]],
       lastCertificate: ['', [Validators.required]],
-      sender: [this.user],
-      receiver: [this.receiver],
-      deliveryType: [DeliveryType.DEPARTURE, [Validators.required]],
+      sender: this.user,
+      receiver: ['', [Validators.required]],
     });
   }
 
   public create(e: Event) {
-    e.preventDefault();
-    this.form.value.receiver = this.receiver;
-    if (this.form.valid) {
-      const delivery = this.form.value;
-      this.deliveryService.create(delivery).subscribe(
-        (resp) => {
-          // TODO Message
-          this.router.navigate(['./entrega-devolucion/lista']);
-        },
-        (err) => {
-          if (err.status === 400) {
-            // TODO Message
-          } else if (err.status === 401) {
-            // TODO Message
-          } else if (err.status === 403) {
-            // TODO Message
-          } else if (err.status === 404) {
-            // TODO Message
-          }
-        }
+     e.preventDefault();
+     if (this.form.valid) {
+     const delivery = this.form.value;
+     delivery.receiver = this.receiver;
+    this.service.createDelivery(delivery).subscribe(() => {
+      Swal.fire(
+        'Exito!',
+        'entrega y/o devolucion Registrada.',
+        'success'
       );
-    }
+      this.router.navigate(['./entrega-devolucion/lista']);
+    },(err)=>{
+      this.handlerError(err);
+    });
+   }
   }
 
   public displayFn = (user) => {
     this.setId(user);
     return user && user.name ? user.name : '';
-  };
+  }
 
   private setId(user: User) {
     if (user && user.id) {
@@ -89,4 +83,27 @@ export class DeliveryFormComponent implements OnInit {
       });
     }
   }
+
+  public handlerError(err): void {
+    if (err.status === 404) {
+        Swal.fire(
+          'Oops...!',
+          'Error al registrar entrega y/o devolucion.',
+          'error'
+        );
+     } else if (err.status === 500) {
+       Swal.fire(
+         'ERROR 500 !',
+         'INTERNAL, SERVER ERROR.',
+         'error'
+       );
+       //this.router.navigate(['/server-error']);
+     }else {
+       Swal.fire(
+         'Oops...!',
+         'ah ocurrido un error, intenta mas tarde.',
+         'error'
+       );
+     }
+   }
 }

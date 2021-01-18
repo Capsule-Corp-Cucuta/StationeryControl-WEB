@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-recover-password',
@@ -33,14 +34,28 @@ export class RecoverPasswordComponent implements OnInit {
     if (this.form.controls['user'].value) {
       this.service.recoverPassword(this.form.controls['user'].value).subscribe(
         (response) => {
+          Swal.fire(
+            'Exito!',
+            'Se ha enviado la nueva contraseña al correo registrado para este numero de cedulas',
+            'success'
+          );
           this.redirect();
         },
         (error) => {
+          Swal.fire(
+            'Oops...!',
+            'Error al enviar correo con contraseña, intenta mas tarde',
+            'error'
+          );
           this.redirect();
         }
       );
     } else {
-      // TODO Message
+      Swal.fire(
+        'Oops...!',
+        'Por favor, ingresa numero de cedula',
+        'error'
+      );
     }
   }
 

@@ -1,91 +1,81 @@
 <section class="page">
-  <mat-card class="mat-elevation-z8 card">
-    <mat-card-header class="header">
-      <mat-card-title class="header__title">
-        <mat-icon class="header__title--icon">{{ ICONS.ACCOUNT_BOX }}</mat-icon>
-        <p *ngIf="isCreate" class="header__title--text">{{ LABELS.TITLE }}</p>
-        <p *ngIf="!isCreate" class="header__title--text">{{ LABELS.TTITLE_UPDATE }}</p>
-      </mat-card-title>
-    </mat-card-header>
+    <mat-card class="mat-elevation-z8 card">
+        <mat-card-header class="header">
+            <mat-card-title class="header__title">
+                <mat-icon class="header__title--icon">{{ ICONS.ACCOUNT_BOX }}</mat-icon>
+                <p *ngIf="isCreate" class="header__title--text">{{ LABELS.TITLE }}</p>
+                <p *ngIf="!isCreate" class="header__title--text">{{ LABELS.TTITLE_UPDATE }}</p>
+            </mat-card-title>
+        </mat-card-header>
 
-    <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
 
-    <div class="form">
-      <mat-card-content class="form__content">
-        <mat-form-field>
-          <input matInput type="text" placeholder="{{ LABELS.PLACEHOLDER.ID }}" [value]="user.id" required />
-        </mat-form-field>
+        <form [formGroup]="form" class="form">
+            <mat-card-content class="form__content">
+                <mat-form-field>
+                    <input matInput type="text" placeholder="{{ LABELS.PLACEHOLDER.ID }}" formControlName="id" required />
+                </mat-form-field>
 
-        <mat-form-field>
-          <input matInput type="text" placeholder="{{ LABELS.PLACEHOLDER.NAME }}" [value]="user.name" required />
-        </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="text" placeholder="{{ LABELS.PLACEHOLDER.NAME }}" formControlName="name" required />
+                </mat-form-field>
 
-        <mat-form-field>
-          <input matInput type="email" placeholder="{{ LABELS.PLACEHOLDER.EMAIL }}" [value]="user.email" required />
-        </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="email" placeholder="{{ LABELS.PLACEHOLDER.EMAIL }}" formControlName="email" required />
+                </mat-form-field>
 
-        <mat-form-field>
-          <input matInput type="tel" placeholder="{{ LABELS.PLACEHOLDER.PHONE }}" [value]="user.phone" required />
-        </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="tel" placeholder="{{ LABELS.PLACEHOLDER.PHONE }}" formControlName="phone" required />
+                </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>{{ LABELS.USER_TYPE }}</mat-label>
-          <mat-select placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" [value]="user.userType" required>
-            <mat-option *ngFor="let type of USER_TYPES" [value]="type.value">
-              {{ type.value | userType }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+                <mat-form-field>
+                    <mat-label>{{ LABELS.USER_TYPE }}</mat-label>
+                    <mat-select placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" formControlName="userType" required>
+                        <mat-option *ngFor="let type of USER_TYPES" [value]="type.value">
+                            {{ type.value | userType }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
 
-        <mat-form-field>
-          <input
-            matInput
-            disabled
-            type="text"
-            placeholder="{{ LABELS.PLACEHOLDER.DEPARTMENT }}"
-            [value]="user.department"
-          />
-        </mat-form-field>
+                <mat-form-field>
+                    <input matInput disabled type="text" placeholder="{{ LABELS.PLACEHOLDER.DEPARTMENT }}" formControlName="department" readonly/>
+                </mat-form-field>
 
-        <div *ngIf="!isCreate" class="form__content--group">
-          <mat-form-field>
-            <mat-label>{{ LABELS.PLACEHOLDER.TOWNSHIP }}</mat-label>
-            <mat-select
-              placeholder="{{ LABELS.PLACEHOLDER.TOWNSHIP }}"
-              [value]="user.township"
-              (selectionChange)="listInstitutions($event.value)"
-            >
-              <mat-option *ngFor="let township of TOWNSHIPS" [value]="user.township">
-                {{ township }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+                <div *ngIf="!isCreate" class="form__content--group">
+                    <mat-form-field>
+                        <mat-label>{{ LABELS.PLACEHOLDER.TOWNSHIP }}</mat-label>
+                        <mat-select placeholder="{{ LABELS.PLACEHOLDER.TOWNSHIP }}" formControlName="township" (selectionChange)="listInstitutions($event.value)" value="township">
+                            <mat-option *ngFor="let op of TOWNSHIPS" [value]="op">
+                                {{ op }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
 
-          <mat-form-field>
-            <mat-label>{{ LABELS.PLACEHOLDER.INSTITUTION }}</mat-label>
-            <mat-select placeholder="{{ LABELS.PLACEHOLDER.INSTITUTION }}" [value]="user.institution">
-              <mat-option *ngFor="let institution of INSTITUTIONS" [value]="user.institution">
-                {{ institution.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </mat-card-content>
+                    <mat-form-field>
+                        <mat-label>{{ LABELS.PLACEHOLDER.INSTITUTION }}</mat-label>
+                        <mat-select placeholder="{{ LABELS.PLACEHOLDER.INSTITUTION }}" formControlName="institution" value="institution">
+                            <mat-option *ngFor="let institution of INSTITUTIONS" [value]="institution.name">
+                                {{ institution.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </mat-card-content>
 
-      <mat-card-actions class="form__actions">
-        <button *ngIf="isCreate" mat-raised-button (click)="create($event)">
+            <mat-card-actions class="form__actions">
+                <button *ngIf="isCreate" mat-raised-button (click)="create($event)">
           <mat-icon>{{ ICONS.SAVE }}</mat-icon>
           <span>{{ LABELS.REGISTER_BUTTON }}</span>
         </button>
 
-        <button *ngIf="!isCreate" mat-raised-button color="accent" class="button-form" (click)="update($event)">
+                <button *ngIf="!isCreate" mat-raised-button color="accent" class="button-form" (click)="update($event)">
           {{ LABELS.UPDATE_BUTTON }}
         </button>
 
-        <button *ngIf="!isCreate" mat-raised-button color="warn" class="button-form" (click)="delete($event)">
+                <button *ngIf="!isCreate" mat-raised-button color="warn" class="button-form" (click)="delete($event)">
           {{ LABELS.DELETE_BUTTON }}
         </button>
-      </mat-card-actions>
-    </div>
-  </mat-card>
+            </mat-card-actions>
+        </form>
+    </mat-card>
 </section>

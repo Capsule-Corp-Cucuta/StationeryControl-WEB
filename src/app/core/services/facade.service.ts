@@ -275,6 +275,10 @@ export class FacadeService {
     return this.deliveryService.countDeliveries();
   }
 
+  public countDeliveriesByAttendant(cedula: string): Observable<number> {
+    return this.deliveryService.countDeliveriesByAttendant(cedula);
+  }
+
   public findAllTownships(): Observable<string[]> {
     return this.townshipService.findAll();
   }
@@ -295,6 +299,10 @@ export class FacadeService {
     return this.institutionService.findAll();
   }
 
+  public findAllInstitutionsPage(page: number): Observable<Institution[]> {
+    return this.institutionService.findAllPage(page);
+  }
+
   public findInstitutionsByName(name: string): Observable<Institution[]> {
     return this.institutionService.findByName(name);
   }
@@ -305,5 +313,9 @@ export class FacadeService {
 
   public findInstitutionsByAttendant(attendant: string): Observable<Institution[]> {
     return this.institutionService.findByAttendant(attendant);
+  }
+
+  public countInstitutions(): Observable<Response> {
+    return this.institutionService.countInstitutions();
   }
 }

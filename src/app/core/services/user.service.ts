@@ -15,8 +15,8 @@ export class UserService {
 
   public create(user: User): Observable<User> {
     console.log(user);
-    return null;
-    //return this.http.post<User>(this.endPoint, user);
+    //return null;
+    return this.http.post<User>(this.endPoint, user);
   }
 
   public update(user: User): Observable<User> {

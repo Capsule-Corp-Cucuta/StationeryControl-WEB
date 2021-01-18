@@ -1,1 +1,25 @@
-<p>users-filter works!</p>
+<div class="component">
+    <div class="component__filters">
+        <mat-form-field *ngIf="filter === 'byAttendant'">
+            <mat-label> {{ LABELS.ATTENDANT}} </mat-label>
+            <input matInput type="number" placeholder=" {{ PLACEHOLDER.ATTENDANT }} " [(ngModel)]="values.firstInput" />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="filter === 'byName'">
+            <mat-label> {{ LABELS.NAME }} </mat-label>
+            <input type="text" placeholder=" {{ PLACEHOLDER.NAME }} " matInput (keypress)="findUserByName($event.target.value)" [formControl]="myControl" [matAutocomplete]="auto" />
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+                <div *ngFor="let user of users">
+                    <mat-option [value]="user">
+                        {{ user.name }}
+                    </mat-option>
+                </div>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+    <button class="component__button" mat-stroked-button color="primary" (click)="sendEvent()">
+        <mat-icon class="separation"> {{ ICON.SEARCH }} </mat-icon>
+        <span> {{ BUTTON }} </span>
+    </button>
+
+</div>

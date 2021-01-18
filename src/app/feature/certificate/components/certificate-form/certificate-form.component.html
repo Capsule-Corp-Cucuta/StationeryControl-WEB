@@ -1,128 +1,133 @@
 <div class="page">
-  <section class="mat-elevation-z8 card">
-    <mat-card>
-      <mat-card-header class="header">
-        <mat-card-title class="header__title">
-          <mat-icon class="header__title--icon">{{ ICONS.LIBRARY_BOOKS }}</mat-icon>
-          <p class="header__title--text">{{ LABELS.TITLE }}</p>
-        </mat-card-title>
-      </mat-card-header>
+    <section class="mat-elevation-z8 card">
+        <mat-card>
+            <mat-card-header class="header">
+                <mat-card-title class="header__title">
+                    <mat-icon class="header__title--icon">{{ ICONS.LIBRARY_BOOKS }}</mat-icon>
+                    <p class="header__title--text">{{ LABELS.TITLE }}</p>
+                </mat-card-title>
+            </mat-card-header>
 
-      <mat-divider></mat-divider>
+            <mat-divider></mat-divider>
 
-      <form [formGroup]="form" class="form">
-        <mat-card-content class="form__content">
-          <mat-form-field *ngIf="isCreate">
-            <input matInput disabled value="Asignado a: {{ user }}" />
-          </mat-form-field>
+            <form [formGroup]="form" class="form">
+                <mat-card-content class="form__content">
+                    <mat-form-field *ngIf="isCreate">
+                        <input matInput disabled value="Asignado a: {{ user }}" />
+                    </mat-form-field>
 
-          <mat-form-field *ngIf="!isCreate">
-            <input matInput disabled formControlName="attendant" />
-          </mat-form-field>
+                    <mat-form-field *ngIf="!isCreate">
+                        <input matInput disabled formControlName="attendant" />
+                    </mat-form-field>
 
-          <mat-form-field>
-            <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.ID }}" formControlName="number" />
-          </mat-form-field>
+                    <mat-form-field>
+                        <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.ID }}" formControlName="number" />
+                    </mat-form-field>
 
-          <div class="form__content--group">
-            <mat-form-field>
-              <mat-select formControlName="type" placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" value="type">
-                <mat-option *ngFor="let op of TYPES" [value]="op.value"> {{ op.value | certificateType }} </mat-option>
-              </mat-select>
-            </mat-form-field>
+                    <div class="form__content--group">
+                        <mat-form-field>
+                            <mat-select formControlName="type" placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" value="type">
+                                <mat-option *ngFor="let op of TYPES" [value]="op.value"> {{ op.value | certificateType }} </mat-option>
+                            </mat-select>
+                        </mat-form-field>
 
-            <mat-form-field>
-              <mat-select formControlName="state" placeholder="{{ LABELS.PLACEHOLDER.STATE }}" value="state">
-                <mat-option *ngFor="let op of STATES" [value]="op.value">
-                  {{ op.value | certificateState }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+                        <mat-form-field>
+                            <mat-select formControlName="state" placeholder="{{ LABELS.PLACEHOLDER.STATE }}" value="state">
+                                <mat-option *ngFor="let op of STATES" [value]="op.value">
+                                    {{ op.value | certificateState }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
 
-            <mat-form-field>
-              <mat-select
-                formControlName="stateRuaf"
-                placeholder="{{ LABELS.PLACEHOLDER.STATERUAF }}"
-                value="stateRuaf"
-              >
-                <mat-option *ngFor="let op of STATES" [value]="op.value">
-                  {{ op.value | certificateState }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
 
-          <div class="form__content--group">
-            <mat-form-field>
-              <input matInput disabled value="{{ DEPARTMENT }}" />
-            </mat-form-field>
+                    </div>
 
-            <mat-form-field>
-              <mat-select formControlName="township" placeholder="{{ LABELS.PLACEHOLDER.TOWNSHIP }}" value="township">
-                <mat-option *ngFor="let op of TOWNSHIPS" [value]="op"> {{ op }} </mat-option>
-              </mat-select>
-            </mat-form-field>
+                    <div class="form__content--group">
+                        <mat-form-field>
+                            <mat-select formControlName="stateRUAF" placeholder="{{ LABELS.PLACEHOLDER.STATERUAF }}" value="stateRUAF">
+                                <mat-option *ngFor="let op of STATES" [value]="op.value">
+                                    {{ op.value | certificateState }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
 
-            <mat-form-field>
-              <input
-                matInput
-                type="text"
-                placeholder="{{ LABELS.PLACEHOLDER.INSTITUTION }}"
-                formControlName="institution"
-              />
-            </mat-form-field>
-          </div>
+                        <mat-form-field class="full-width ">
+                            <input matInput type="date" placeholder=" {{ LABELS.PLACEHOLDER.STATERUAF }} " formControlName="stateDateRUAF" />
+                        </mat-form-field>
+                    </div>
 
-          <div *ngIf="showUploadAttachment">
-            <p>{{ LABELS.ATTACH_FILE.TITLE }}</p>
+                    <div class="form__content--group">
+                        <mat-form-field>
+                            <input matInput disabled value="{{ DEPARTMENT }}" />
+                        </mat-form-field>
 
-            <input type="file" id="file" (change)="fileChange($event)" />
+                        <mat-form-field>
+                            <mat-select formControlName="township" placeholder="{{ LABELS.PLACEHOLDER.TOWNSHIP }}" (selectionChange)="listInstitutions($event.value)" value="township">
+                                <mat-option *ngFor="let op of TOWNSHIPS" [value]="op"> {{ op }} </mat-option>
+                            </mat-select>
+                        </mat-form-field>
 
-            <button mat-raised-button (click)="uploadFile()">
+                        <mat-form-field>
+                            <mat-select formControlName="institution" placeholder="{{ LABELS.PLACEHOLDER.INSTITUTION }}" value="institution">
+                                <mat-option *ngFor="let op of INSTITUTIONS" [value]="op.name">
+                                    {{ op.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+
+                    </div>
+
+                    <div *ngIf="showUploadAttachment">
+                        <p>{{ LABELS.ATTACH_FILE.TITLE }}</p>
+
+                        <input type="file" id="file" (change)="fileChange($event)" />
+
+                        <button mat-raised-button (click)="uploadFile()">
               <mat-icon>{{ ICONS.CLOUD_UPLOAD }}</mat-icon>
             </button>
-          </div>
-        </mat-card-content>
+                    </div>
+                </mat-card-content>
 
-        <mat-card-actions class="form__actions">
-          <button *ngIf="isCreate" mat-raised-button (click)="create($event)">
+                <mat-card-actions class="form__actions">
+                    <button *ngIf="isCreate" mat-raised-button (click)="create($event)">
             <mat-icon>{{ ICONS.SAVE }}</mat-icon>
             <span>{{ LABELS.REGISTER_BUTTON }}</span>
           </button>
 
-          <button *ngIf="!isCreate" mat-raised-button color="accent" (click)="update($event)">
+                    <button *ngIf="!isCreate" mat-raised-button color="accent" (click)="update($event)">
             {{ LABELS.UPDATE_BUTTON }}
           </button>
-        </mat-card-actions>
-      </form>
-    </mat-card>
+                </mat-card-actions>
+            </form>
+        </mat-card>
 
-    <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
 
-    <mat-card *ngIf="isCreate">
-      <mat-card-header class="header">
-        <mat-card-title class="header__title">
-          <mat-icon class="header__title--icon">{{ ICONS.LIBRARY_BOOKS }}</mat-icon>
-          <p class="header__title--text">{{ LABELS.MULTIPLE.TITLE }}</p>
-        </mat-card-title>
-      </mat-card-header>
+        <mat-card *ngIf="isCreate">
+            <mat-card-header class="header">
+                <mat-card-title class="header__title">
+                    <mat-icon class="header__title--icon">{{ ICONS.LIBRARY_BOOKS }}</mat-icon>
+                    <p class="header__title--text">{{ LABELS.MULTIPLE.TITLE }}</p>
+                </mat-card-title>
+            </mat-card-header>
 
-      <mat-divider></mat-divider>
+            <mat-divider></mat-divider>
 
-      <form [formGroup]="formFile" class="form" enctype="multipart/form-data">
-        <mat-card-content class="form__content">
-          <p>{{ LABELS.ATTACH_FILE.TITLE }}</p>
+            <form [formGroup]="formFile" class="form" enctype="multipart/form-data">
+                <mat-card-content class="form__content">
+                    <p>{{ LABELS.ATTACH_FILE.TITLE }}</p>
 
-          <input type="file" id="file" (change)="fileChangeExcel($event)" placeholder="Upload file" accept=".xlsx" />
-        </mat-card-content>
+                    <input type="file" id="file" (change)="fileChangeExcel($event)" placeholder="Upload file" accept=".xlsx" />
+                </mat-card-content>
 
-        <mat-card-actions class="form__actions">
-          <button mat-raised-button color="primary" (click)="uploadFileExcel()">
+                <mat-card-actions class="form__actions">
+                    <button mat-raised-button color="primary" (click)="uploadFileExcel()">
             <mat-icon>{{ ICONS.CLOUD_UPLOAD }}</mat-icon>
             {{ LABELS.MULTIPLE.BUTTON }}
           </button>
-        </mat-card-actions>
-      </form>
-    </mat-card>
-  </section>
+                </mat-card-actions>
+            </form>
+        </mat-card>
+    </section>
 </div>

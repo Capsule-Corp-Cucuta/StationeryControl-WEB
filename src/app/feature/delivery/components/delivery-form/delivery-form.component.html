@@ -1,84 +1,133 @@
-<form [formGroup]="form" class="form-card mat-elevation-z8">
-  <mat-card>
-    <mat-card-header>
-      <mat-icon>{{ ICONS.ASSIGNMENT }}</mat-icon>
-      <h3>{{ LABELS.TITLE }}</h3>
-    </mat-card-header>
-    <mat-divider></mat-divider>
-    <mat-card-content class="card-content">
-      <div class="row">
-        <div class="col-xs">
-          <mat-form-field class="example-full-width">
-            <input matInput type="text" placeholder="{{ LABELS.PLACEHOLDER.NUMBER }}" formControlName="tradeNumber" />
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs">
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              type="number"
-              placeholder="{{ LABELS.PLACEHOLDER.INITIAL }}"
-              formControlName="firstCertificate"
-            />
-          </mat-form-field>
-        </div>
-        <div class="col-xs">
-          <mat-form-field class="example-full-width">
-            <input
-              matInput
-              type="number"
-              placeholder="{{ LABELS.PLACEHOLDER.FINAL }}"
-              formControlName="lastCertificate"
-            />
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs">
-          <mat-form-field class="example-full-width">
-            <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.SENDER }}" formControlName="sender" />
-          </mat-form-field>
-        </div>
-      </div>
+<section class="page">
+    <mat-card class="mat-elevation-z8 card">
+        <mat-card-header class="header">
+            <mat-card-title class="header__title">
+                <mat-icon class="header__title--icon">{{ ICONS.ASSIGNMENT }}</mat-icon>
+                <p class="header__title--text">{{ LABELS.TITLE }}</p>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-divider>
 
-      <div class="row">
-        <div class="col-xs">
-          <mat-form-field class="example-full-width">
-            <input
-              type="text"
-              placeholder=" {{ LABELS.PLACEHOLDER.RECEIVER }}"
-              matInput
-              (keypress)="findUserByName($event.target.value)"
-              [matAutocomplete]="auto"
-            />
-            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
-              <div *ngFor="let user of users">
-                <mat-option [value]="user">
-                  {{ user.name }}
-                </mat-option>
-              </div>
-            </mat-autocomplete>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs">
-          <mat-form-field class="example-full-width">
-            <mat-select formControlName="deliveryType" placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" value="deliveryType">
-              <mat-option *ngFor="let op of TYPES" [value]="op.value"> {{ op.value | deliveryType }} </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button class="button-form" (click)="create($event)">
+        </mat-divider>
+
+        <form [formGroup]="form" class="form">
+            <mat-card-content class="form__content">
+
+                <mat-form-field>
+                    <input matInput type="text" placeholder="{{ LABELS.PLACEHOLDER.NUMBER }}" formControlName="tradeNumber" required />
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.INITIAL }}" formControlName="firstCertificate" required />
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.FINAL }}" formControlName="lastCertificate" required />
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput type="text" placeholder="{{ LABELS.PLACEHOLDER.SENDER }}" formControlName="sender" readonly required />
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input type="text" placeholder=" {{ LABELS.PLACEHOLDER.RECEIVER }}" matInput (keypress)="findUserByName($event.target.value)" [matAutocomplete]="auto" formControlName="receiver" />
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+                        <div *ngFor="let user of users">
+                            <mat-option [value]="user">
+                                {{ user.name }}
+                            </mat-option>
+                        </div>
+                    </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label></mat-label>
+                    <mat-select placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" formControlName="deliveryType" required>
+                        <mat-option *ngFor="let op of TYPES" [value]="op.value">
+                            {{ op.value | deliveryType }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </mat-card-content>
+            <mat-card-actions class="form__actions">
+
+                <button mat-raised-button (click)="create($event)">
+                <mat-icon >{{ ICONS.SAVE }}</mat-icon>
+                <span>{{ LABELS.BUTTON }}</span> 
+                </button>
+            </mat-card-actions>
+
+        </form>
+    </mat-card>
+</section>
+<!--
+<form [formGroup]="form" class="form-card mat-elevation-z8">
+    <mat-card>
+        <mat-card-header>
+            <mat-icon>{{ ICONS.ASSIGNMENT }}</mat-icon>
+            <h3>{{ LABELS.TITLE }}</h3>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content class="card-content">
+            <div class="row">
+                <div class="col-xs">
+                    <mat-form-field class="example-full-width">
+                        <input matInput type="text" placeholder="{{ LABELS.PLACEHOLDER.NUMBER }}" formControlName="tradeNumber" />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs">
+                    <mat-form-field class="example-full-width">
+                        <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.INITIAL }}" formControlName="firstCertificate" />
+                    </mat-form-field>
+                </div>
+                <div class="col-xs">
+                    <mat-form-field class="example-full-width">
+                        <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.FINAL }}" formControlName="lastCertificate" />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs">
+                    <mat-form-field class="example-full-width">
+                        <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.SENDER }}" formControlName="sender" />
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs">
+                    <mat-form-field class="example-full-width">
+                        <input type="text" placeholder=" {{ LABELS.PLACEHOLDER.RECEIVER }}" matInput (keypress)="findUserByName($event.target.value)" [matAutocomplete]="auto" />
+                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+                            <div *ngFor="let user of users">
+                                <mat-option [value]="user">
+                                    {{ user.name }}
+                                </mat-option>
+                            </div>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs">
+                    <mat-form-field class="example-full-width">
+                        <mat-select formControlName="deliveryType" placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" value="deliveryType">
+                            <mat-option *ngFor="let op of TYPES" [value]="op.value"> {{ op.value | deliveryType }} </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button class="button-form" (click)="create($event)">
         <mat-icon class="separation">{{ ICONS.SAVE }}</mat-icon>
         {{ LABELS.BUTTON }}
       </button>
-    </mat-card-actions>
-    <div style="clear: both;"></div>
-  </mat-card>
+        </mat-card-actions>
+        <div style="clear: both;"></div>
+    </mat-card>
 </form>
+-->

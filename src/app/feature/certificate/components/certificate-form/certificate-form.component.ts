@@ -7,9 +7,11 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Certificate } from '../../../../core/models/certificate.model';
 import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
+import { Institution } from 'src/app/core/models/institution.model';
 import { CertificateService } from '../../../../core/services/certificate.service';
 import { CertificateState, CertificateType } from '../../../../core/models/certificate.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-certificate-form',
@@ -30,6 +32,7 @@ export class CertificateFormComponent implements OnInit {
   private fileExcel: File;
   private arrayBufferExcel: any;
   public TOWNSHIPS: string[];
+  public INSTITUTIONS: Institution[];
 
   public readonly ICONS = Constants.ICONS;
   public readonly DEPARTMENT = Constants.DEPARTMENT;
@@ -67,8 +70,7 @@ export class CertificateFormComponent implements OnInit {
             resp.state === CertificateState.GUARDED
           ) {
             this.showUploadAttachment = false;
-          }
-
+          }  
           this.form.patchValue(resp);
         });
       } else {
@@ -82,11 +84,12 @@ export class CertificateFormComponent implements OnInit {
     this.form = this.builder.group({
       attendant: [''],
       department: [this.DEPARTMENT],
-      institution: ['', [Validators.required]],
+      institution: ['',],
       number: ['', [Validators.required]],
       state: [CertificateState.IDLE, [Validators.required]],
-      stateRuaf: [CertificateState.IDLE, [Validators.required]],
-      township: ['', [Validators.required]],
+      stateRUAF: [CertificateState.IDLE, [Validators.required]],
+      stateDateRUAF:[''],
+      township: ['',],
       type: [CertificateType.CA_NV, [Validators.required]],
     });
   }
@@ -101,10 +104,14 @@ export class CertificateFormComponent implements OnInit {
     e.preventDefault();
     if (this.form.valid) {
       const certificate = this.form.value;
-      certificate.attendant = this.user;
+      certificate.attendant = this.user; 
       this.service.createCertificate(certificate).subscribe(
         (resp) => {
-          // TODO Message
+          Swal.fire(
+            'Exito!',
+            'Certificado Registrado.',
+            'success'
+          );
           this.router.navigate(['./certificado/lista']);
         },
         (err) => {
@@ -121,7 +128,11 @@ export class CertificateFormComponent implements OnInit {
       const certificate = this.form.value;
       this.service.updateCertificate(certificate.number, certificate).subscribe(
         (resp) => {
-          // TODO Message
+          Swal.fire(
+            'Exito!',
+            'Certificado Actualizado.',
+            'success'
+          );
           this.router.navigate(['./certificado/lista']);
         },
         (err) => {
@@ -146,19 +157,31 @@ export class CertificateFormComponent implements OnInit {
       this.attachmentFormData.append('file', file);
       this.attachmentFormData.append('reportProgress', 'true');
     }
+    
   }
 
   public handlerError(err): void {
-    if (err.status === 400) {
-      // TODO Message
-    } else if (err.status === 401) {
-      // TODO Message
-    } else if (err.status === 403) {
-      // TODO Message
-    } else if (err.status === 404) {
-      // TODO Message
-    }
-  }
+    if (err.status === 404) {
+        Swal.fire(
+          'Oops...!',
+          'Error al registrar/actualizar certificado.',
+          'error'
+        );
+     } else if (err.status === 500) {
+       Swal.fire(
+         'ERROR 500 !',
+         'INTERNAL, SERVER ERROR.',
+         'error'
+       );
+       //this.router.navigate(['/server-error']);
+     }else {
+       Swal.fire(
+         'Oops...!',
+         'ah ocurrido un error, intenta mas tarde.',
+         'error'
+       );
+     }
+   }
 
   public fileChangeExcel(event) {
     this.fileExcel = event.target.files[0];
@@ -187,6 +210,8 @@ export class CertificateFormComponent implements OnInit {
           department: raw['DEPARTAMENTO'] ? raw['DEPARTAMENTO'] : null,
           township: raw['MUNICIPIO'] ? raw['MUNICIPIO'] : null,
           institution: raw['NOMBRE INSTITUCIÓN'] ? raw['NOMBRE INSTITUCIÓN'] : null,
+          stateRUAF: raw['STADORUAF'] ? raw['ESTADORUAF'] : CertificateState.IDLE,
+          stateDateRUAF: raw['STADODATERUAF'] ? raw['FECHAESTADORUAF'] : null,
         };
         certificatesToRegister.push(certificate);
       });
@@ -199,6 +224,11 @@ export class CertificateFormComponent implements OnInit {
         )
         .subscribe((response) => {
           // TODO
+          Swal.fire(
+            'Exito!',
+            'Certificados Registrados.',
+            'success'
+          );
         });
     };
     fileReader.readAsArrayBuffer(this.fileExcel);
@@ -213,5 +243,18 @@ export class CertificateFormComponent implements OnInit {
         // TODO
       }
     );
+  }
+
+  public listInstitutions(township: string): void {
+    this.INSTITUTIONS = [];
+    if (Boolean(township)) {
+      this.service.findInstitutionsByTownship(township).subscribe((response: Institution[]) => {
+        this.INSTITUTIONS = response;
+      });
+    } else {
+      this.service.findAllInstitutions().subscribe((response: Institution[]) => {
+        this.INSTITUTIONS = response;
+      });
+    }
   }
 }

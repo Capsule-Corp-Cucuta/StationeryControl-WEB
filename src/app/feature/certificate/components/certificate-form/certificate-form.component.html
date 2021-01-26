@@ -13,11 +13,11 @@
             <form [formGroup]="form" class="form">
                 <mat-card-content class="form__content">
                     <mat-form-field *ngIf="isCreate">
-                        <input matInput disabled value="Asignado a: {{ user }}" />
+                        <input matInput disabled placeholder="{{ LABELS.PLACEHOLDER.ATTENDANT }}" value="{{ user }}" />
                     </mat-form-field>
 
                     <mat-form-field *ngIf="!isCreate">
-                        <input matInput disabled formControlName="attendant" />
+                        <input matInput placeholder="{{ LABELS.PLACEHOLDER.ATTENDANT }}" formControlName="attendant" />
                     </mat-form-field>
 
                     <mat-form-field>
@@ -74,9 +74,8 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-
-
                     </div>
+
 
                     <div *ngIf="showUploadAttachment">
                         <p>{{ LABELS.ATTACH_FILE.TITLE }}</p>
@@ -84,9 +83,10 @@
                         <input type="file" id="file" (change)="fileChange($event)" />
 
                         <button mat-raised-button (click)="uploadFile()">
-              <mat-icon>{{ ICONS.CLOUD_UPLOAD }}</mat-icon>
-            </button>
+                           <mat-icon>{{ ICONS.CLOUD_UPLOAD }}</mat-icon>
+                        </button>
                     </div>
+
                 </mat-card-content>
 
                 <mat-card-actions class="form__actions">
@@ -113,6 +113,12 @@
             </mat-card-header>
 
             <mat-divider></mat-divider>
+            <mat-card-content class="form__content">
+                <a mat-raised-button color="primary" href="assets/MASIVO.xlsx" download>
+                    <mat-icon>{{ ICONS.CLOUD_DOWNLOAD }}</mat-icon>
+                    {{ LABELS.MULTIPLE.BUTTONEXCEL }}
+                </a>
+            </mat-card-content>
 
             <form [formGroup]="formFile" class="form" enctype="multipart/form-data">
                 <mat-card-content class="form__content">

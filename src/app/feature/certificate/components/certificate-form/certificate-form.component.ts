@@ -12,6 +12,8 @@ import { CertificateService } from '../../../../core/services/certificate.servic
 import { CertificateState, CertificateType } from '../../../../core/models/certificate.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { TokenService } from '../../../../core/services/token.service';
+
 
 @Component({
   selector: 'app-certificate-form',
@@ -56,6 +58,7 @@ export class CertificateFormComponent implements OnInit {
       this.userSesiom = true;
     }
     this.listTownships();
+    this.listInstitutions(null);
   }
 
   private validateExistentCertificate(): void {
@@ -65,12 +68,13 @@ export class CertificateFormComponent implements OnInit {
         this.isCreate = false;
         this.service.findCertificateByNumber(this.certificateNumber).subscribe((resp) => {
           if (
-            resp.state === CertificateState.IDLE ||
-            resp.state === CertificateState.ASSIGNED ||
-            resp.state === CertificateState.GUARDED
+           this.validateStatus(resp.state.toString()) === CertificateState.IDLE || 
+           this.validateStatus(resp.state.toString()) === CertificateState.ASSIGNED ||
+           this.validateStatus(resp.state.toString()) === CertificateState.GUARDED
           ) {
             this.showUploadAttachment = false;
           }  
+          this.validateInput(true);
           this.form.patchValue(resp);
         });
       } else {
@@ -79,7 +83,7 @@ export class CertificateFormComponent implements OnInit {
       }
     });
   }
-
+ 
   private buildForm() {
     this.form = this.builder.group({
       attendant: [''],
@@ -87,11 +91,32 @@ export class CertificateFormComponent implements OnInit {
       institution: ['',],
       number: ['', [Validators.required]],
       state: [CertificateState.IDLE, [Validators.required]],
-      stateRUAF: [CertificateState.IDLE, [Validators.required]],
+      stateRUAF: [CertificateState.IDLE],
       stateDateRUAF:[''],
       township: ['',],
       type: [CertificateType.CA_NV, [Validators.required]],
     });
+  }
+
+  private validateInput(exito:Boolean){
+    if(exito){
+      this.form.controls['attendant'].disable();
+      this.form.controls['number'].disable();
+    }else{
+      this.form.controls['attendant'].enable();
+      this.form.controls['number'].enable();
+    }
+  }
+
+  private validateStatus(state : string){
+    switch (state) {
+      case 'IDLE':
+        return 0;
+      case 'ASSIGNED':
+        return 1;
+      case 'GUARDED':
+        return 2;
+    }
   }
 
   private buildFormFile() {
@@ -104,7 +129,7 @@ export class CertificateFormComponent implements OnInit {
     e.preventDefault();
     if (this.form.valid) {
       const certificate = this.form.value;
-      certificate.attendant = this.user; 
+      certificate.attendant = this.user;  
       this.service.createCertificate(certificate).subscribe(
         (resp) => {
           Swal.fire(
@@ -123,9 +148,11 @@ export class CertificateFormComponent implements OnInit {
 
   public update(e: Event) {
     e.preventDefault();
-
+    this.validateInput(false);// Se habilitan campos Desabilitados para obtener su informacion
     if (this.form.valid) {
       const certificate = this.form.value;
+      console.log(certificate);
+      
       this.service.updateCertificate(certificate.number, certificate).subscribe(
         (resp) => {
           Swal.fire(
@@ -143,8 +170,8 @@ export class CertificateFormComponent implements OnInit {
   }
 
   public uploadFile() {
+    this.validateInput(false);
     this.service.postCertificateFile(this.certificateNumber, this.attachmentFormData).subscribe((resp) => {
-      // TODO Message
     });
   }
 
@@ -211,10 +238,10 @@ export class CertificateFormComponent implements OnInit {
           township: raw['MUNICIPIO'] ? raw['MUNICIPIO'] : null,
           institution: raw['NOMBRE INSTITUCIÓN'] ? raw['NOMBRE INSTITUCIÓN'] : null,
           stateRUAF: raw['STADORUAF'] ? raw['ESTADORUAF'] : CertificateState.IDLE,
-          stateDateRUAF: raw['STADODATERUAF'] ? raw['FECHAESTADORUAF'] : null,
+          stateDateRUAF: raw['ESTADORUAF'] ? new Date((raw['FECHAESTADORUAF'] - 25569) * 86400 * 1000): null,
         };
         certificatesToRegister.push(certificate);
-      });
+      }); 
       this.service
         .createMultipleCertificates(certificatesToRegister)
         .pipe(
@@ -229,7 +256,11 @@ export class CertificateFormComponent implements OnInit {
             'Certificados Registrados.',
             'success'
           );
-        });
+        },
+        (err) => {
+          this.handlerError(err);
+        }
+        );
     };
     fileReader.readAsArrayBuffer(this.fileExcel);
   }
@@ -245,7 +276,7 @@ export class CertificateFormComponent implements OnInit {
     );
   }
 
-  public listInstitutions(township: string): void {
+  public listInstitutions(township: string): void {  
     this.INSTITUTIONS = [];
     if (Boolean(township)) {
       this.service.findInstitutionsByTownship(township).subscribe((response: Institution[]) => {

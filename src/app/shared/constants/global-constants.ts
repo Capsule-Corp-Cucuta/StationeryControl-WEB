@@ -142,7 +142,7 @@ export class Constants {
         PLACEHOLDER: {
           ID: 'Número:',
           CODE: 'Código de Verificación:',
-          ATTENDANT: 'Cédula:',
+          ATTENDANT: 'Usuario Asignado:',
           TYPE: 'Tipo del Certificado:',
           STATE: 'Estado del Certificado:',
           STATERUAF: 'Estado RUAF',
@@ -160,6 +160,7 @@ export class Constants {
         MULTIPLE: {
           TITLE: 'Registrar múltiples Certificados',
           BUTTON: 'Registrar',
+          BUTTONEXCEL: 'Descargar Excel'
         },
       },
       LIST: {
@@ -334,6 +335,7 @@ export class Constants {
     VISIBILITY: 'visibility',
     ACCOUNT_BOX: 'account_box',
     CLOUD_UPLOAD: 'cloud_upload',
+    CLOUD_DOWNLOAD: 'cloud_download',
     LIBRARY_BOOKS: 'library_books',
     ACCOUNT_CIRCLE: 'account_circle',
     ASSIGNMENT_IND: 'assignment_ind',

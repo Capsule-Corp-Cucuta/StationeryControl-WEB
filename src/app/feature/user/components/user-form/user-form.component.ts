@@ -55,6 +55,7 @@ export class UserFormComponent implements OnInit {
           this.user = response;
           this.form.patchValue(response);
         });
+        this.validateInput(true);
       } else {
         this.isCreate = true;
       }
@@ -72,6 +73,15 @@ export class UserFormComponent implements OnInit {
       township:[''],
       institution: ['']
     });
+  }
+
+  private validateInput(exito:Boolean){
+    if(exito){
+      this.form.controls['id'].disable();
+    }else{
+      this.form.controls['id'].enable();
+    }
+    
   }
 
   public create(e: Event) {
@@ -93,7 +103,7 @@ export class UserFormComponent implements OnInit {
 
   public update(e: Event) {
     e.preventDefault();
-    
+    this.validateInput(false);
     if (this.form.valid) {
     const user = this.form.value;
     this.service.updateUser(user).subscribe((resp) => {

@@ -1,19 +1,16 @@
 import * as XLSX from 'xlsx';
+import Swal from 'sweetalert2';
 import { finalize } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+import { Institution } from 'src/app/core/models/institution.model';
 import { Certificate } from '../../../../core/models/certificate.model';
 import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
-import { Institution } from 'src/app/core/models/institution.model';
-import { CertificateService } from '../../../../core/services/certificate.service';
 import { CertificateState, CertificateType } from '../../../../core/models/certificate.model';
-import { HttpErrorResponse } from '@angular/common/http';
-import Swal from 'sweetalert2';
-import { TokenService } from '../../../../core/services/token.service';
-
 
 @Component({
   selector: 'app-certificate-form',
@@ -68,12 +65,12 @@ export class CertificateFormComponent implements OnInit {
         this.isCreate = false;
         this.service.findCertificateByNumber(this.certificateNumber).subscribe((resp) => {
           if (
-           this.validateStatus(resp.state.toString()) === CertificateState.IDLE || 
-           this.validateStatus(resp.state.toString()) === CertificateState.ASSIGNED ||
-           this.validateStatus(resp.state.toString()) === CertificateState.GUARDED
+            this.validateStatus(resp.state.toString()) === CertificateState.IDLE ||
+            this.validateStatus(resp.state.toString()) === CertificateState.ASSIGNED ||
+            this.validateStatus(resp.state.toString()) === CertificateState.GUARDED
           ) {
             this.showUploadAttachment = false;
-          }  
+          }
           this.validateInput(true);
           this.form.patchValue(resp);
         });
@@ -83,32 +80,32 @@ export class CertificateFormComponent implements OnInit {
       }
     });
   }
- 
+
   private buildForm() {
     this.form = this.builder.group({
       attendant: [''],
       department: [this.DEPARTMENT],
-      institution: ['',],
+      institution: [''],
       number: ['', [Validators.required]],
       state: [CertificateState.IDLE, [Validators.required]],
       stateRUAF: [CertificateState.IDLE],
-      stateDateRUAF:[''],
-      township: ['',],
+      stateDateRUAF: [''],
+      township: [''],
       type: [CertificateType.CA_NV, [Validators.required]],
     });
   }
 
-  private validateInput(exito:Boolean){
-    if(exito){
+  private validateInput(exito: Boolean) {
+    if (exito) {
       this.form.controls['attendant'].disable();
       this.form.controls['number'].disable();
-    }else{
+    } else {
       this.form.controls['attendant'].enable();
       this.form.controls['number'].enable();
     }
   }
 
-  private validateStatus(state : string){
+  private validateStatus(state: string) {
     switch (state) {
       case 'IDLE':
         return 0;
@@ -129,14 +126,10 @@ export class CertificateFormComponent implements OnInit {
     e.preventDefault();
     if (this.form.valid) {
       const certificate = this.form.value;
-      certificate.attendant = this.user;  
+      certificate.attendant = this.user;
       this.service.createCertificate(certificate).subscribe(
         (resp) => {
-          Swal.fire(
-            'Exito!',
-            'Certificado Registrado.',
-            'success'
-          );
+          Swal.fire('Exito!', 'Certificado Registrado.', 'success');
           this.router.navigate(['./certificado/lista']);
         },
         (err) => {
@@ -148,18 +141,14 @@ export class CertificateFormComponent implements OnInit {
 
   public update(e: Event) {
     e.preventDefault();
-    this.validateInput(false);// Se habilitan campos Desabilitados para obtener su informacion
+    this.validateInput(false); // Se habilitan campos Desabilitados para obtener su informacion
     if (this.form.valid) {
       const certificate = this.form.value;
       console.log(certificate);
-      
+
       this.service.updateCertificate(certificate.number, certificate).subscribe(
         (resp) => {
-          Swal.fire(
-            'Exito!',
-            'Certificado Actualizado.',
-            'success'
-          );
+          Swal.fire('Exito!', 'Certificado Actualizado.', 'success');
           this.router.navigate(['./certificado/lista']);
         },
         (err) => {
@@ -171,8 +160,7 @@ export class CertificateFormComponent implements OnInit {
 
   public uploadFile() {
     this.validateInput(false);
-    this.service.postCertificateFile(this.certificateNumber, this.attachmentFormData).subscribe((resp) => {
-    });
+    this.service.postCertificateFile(this.certificateNumber, this.attachmentFormData).subscribe((resp) => {});
   }
 
   public fileChange(event) {
@@ -184,31 +172,17 @@ export class CertificateFormComponent implements OnInit {
       this.attachmentFormData.append('file', file);
       this.attachmentFormData.append('reportProgress', 'true');
     }
-    
   }
 
   public handlerError(err): void {
     if (err.status === 404) {
-        Swal.fire(
-          'Oops...!',
-          'Error al registrar/actualizar certificado.',
-          'error'
-        );
-     } else if (err.status === 500) {
-       Swal.fire(
-         'ERROR 500 !',
-         'INTERNAL, SERVER ERROR.',
-         'error'
-       );
-       //this.router.navigate(['/server-error']);
-     }else {
-       Swal.fire(
-         'Oops...!',
-         'ah ocurrido un error, intenta mas tarde.',
-         'error'
-       );
-     }
-   }
+      Swal.fire('Oops...!', 'Error al registrar/actualizar certificado.', 'error');
+    } else if (err.status === 500) {
+      Swal.fire('ERROR 500 !', 'INTERNAL, SERVER ERROR.', 'error');
+    } else {
+      Swal.fire('Oops...!', 'ah ocurrido un error, intenta mas tarde.', 'error');
+    }
+  }
 
   public fileChangeExcel(event) {
     this.fileExcel = event.target.files[0];
@@ -232,16 +206,16 @@ export class CertificateFormComponent implements OnInit {
         const certificate: Certificate = {
           number: Number(raw['NO_CERTIFICADO'].toString()),
           type: raw['TIPO'] ? raw['TIPO'] : CertificateType.CA_NV,
-          state: raw['STADO'] ? raw['ESTADO'] : CertificateState.GUARDED,
+          state: raw['ESTADO'] ? raw['ESTADO'] : CertificateState.GUARDED,
           attendant: this.service.getUser(),
           department: raw['DEPARTAMENTO'] ? raw['DEPARTAMENTO'] : null,
           township: raw['MUNICIPIO'] ? raw['MUNICIPIO'] : null,
           institution: raw['NOMBRE INSTITUCIÓN'] ? raw['NOMBRE INSTITUCIÓN'] : null,
-          stateRUAF: raw['STADORUAF'] ? raw['ESTADORUAF'] : CertificateState.IDLE,
-          stateDateRUAF: raw['ESTADORUAF'] ? new Date((raw['FECHAESTADORUAF'] - 25569) * 86400 * 1000): null,
+          stateRUAF: raw['ESTADORUAF'] ? raw['ESTADORUAF'] : CertificateState.IDLE,
+          stateDateRUAF: raw['ESTADORUAF'] ? new Date((raw['FECHAESTADORUAF'] - 25569) * 86400 * 1000) : null,
         };
         certificatesToRegister.push(certificate);
-      }); 
+      });
       this.service
         .createMultipleCertificates(certificatesToRegister)
         .pipe(
@@ -249,17 +223,13 @@ export class CertificateFormComponent implements OnInit {
             this.router.navigate(['/']);
           })
         )
-        .subscribe((response) => {
-          // TODO
-          Swal.fire(
-            'Exito!',
-            'Certificados Registrados.',
-            'success'
-          );
-        },
-        (err) => {
-          this.handlerError(err);
-        }
+        .subscribe(
+          (response) => {
+            Swal.fire('Exito!', 'Certificados Registrados.', 'success');
+          },
+          (err) => {
+            this.handlerError(err);
+          }
         );
     };
     fileReader.readAsArrayBuffer(this.fileExcel);
@@ -276,7 +246,7 @@ export class CertificateFormComponent implements OnInit {
     );
   }
 
-  public listInstitutions(township: string): void {  
+  public listInstitutions(township: string): void {
     this.INSTITUTIONS = [];
     if (Boolean(township)) {
       this.service.findInstitutionsByTownship(township).subscribe((response: Institution[]) => {

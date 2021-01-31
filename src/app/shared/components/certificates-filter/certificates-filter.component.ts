@@ -25,6 +25,8 @@ export class CertificatesFilterComponent implements OnInit {
   @Output() filterEvent = new EventEmitter();
 
   public users: any[];
+  public user: string;
+  public authority: string;
   myControl = new FormControl();
   constructor(private service: FacadeService) {
     this.values = {
@@ -33,9 +35,15 @@ export class CertificatesFilterComponent implements OnInit {
     };
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.user = this.service.getUser();
+    this.authority = this.service.getAuthorities()[0];
+  }
 
   public sendEvent(): void {
+    if (this.authority === 'USER') {  
+      this.values.secondInput = this.user;
+    }
     this.filterEvent.emit(this.values);
   }
 

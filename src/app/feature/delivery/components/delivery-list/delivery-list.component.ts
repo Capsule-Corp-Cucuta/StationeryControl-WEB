@@ -145,7 +145,7 @@ export class DeliveryListComponent implements OnInit {
     this.loadDeliveries('0');
   }
 
-  private findByFilter(e: any, page: number): void {
+  private findByFilter(e: any, page: number): void { 
     switch (this.filter) {
       case 'byTradeNumber':
         this.service.findDeliveryByTradeNumber(e.firstInput).subscribe(
@@ -189,8 +189,8 @@ export class DeliveryListComponent implements OnInit {
         );
         break;
       case 'byTypeUser':
-        this.service.findDeliveriesByTypeAndUser(e.firstInputm, e.secondInput, page).subscribe(
-          (response) => {
+        this.service.findDeliveriesByTypeAndUser(e.firstInput, e.secondInput, page).subscribe(
+          (response) => { 
             this.deliverys = response;
           },
           (err) => {
@@ -199,7 +199,7 @@ export class DeliveryListComponent implements OnInit {
         );
         break;
       case 'byUser':
-        this.service.findDeliveriesByUser(e.firstInputm, page).subscribe(
+        this.service.findDeliveriesByUser(e.firstInput, page).subscribe(
           (response) => {
             this.deliverys = response;
           },

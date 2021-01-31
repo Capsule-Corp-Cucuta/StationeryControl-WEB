@@ -39,21 +39,9 @@
         <div *ngIf="filter==='byTypeUser' ">
             <mat-form-field class="full-width ">
                 <mat-label> {{ LABELS.TYPEDELIVERY }} </mat-label>
-                <mat-select placeholder="{{ PLACEHOLDER.TYPEDELIVERY }} " [(ngModel)]="values.firstInput ">
+                <mat-select placeholder="{{ PLACEHOLDER.TYPEDELIVERY }} " [(ngModel)]="values.firstInput">
                     <mat-option *ngFor="let op of TYPES " [value]="op.value "> {{ op.value | deliveryType }} </mat-option>
                 </mat-select>
-            </mat-form-field>
-
-            <mat-form-field class="full-width ">
-                <mat-label> {{ LABELS.USER }} </mat-label>
-                <input type="text " placeholder=" {{ PLACEHOLDER.USER }} " matInput (keypress)="findUserByName($event.target.value) " [formControl]="myControl " [matAutocomplete]="auto " />
-                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFnS ">
-                    <div *ngFor="let user of users ">
-                        <mat-option [value]="user ">
-                            {{ user.name }}
-                        </mat-option>
-                    </div>
-                </mat-autocomplete>
             </mat-form-field>
         </div>
 

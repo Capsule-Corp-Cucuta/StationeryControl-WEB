@@ -41,8 +41,7 @@
                 </mat-form-field>
 
                 <mat-form-field>
-                    <mat-label></mat-label>
-                    <mat-select placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" formControlName="deliveryType" required>
+                    <mat-select formControlName="deliveryType" placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" required>
                         <mat-option *ngFor="let op of TYPES" [value]="op.value">
                             {{ op.value | deliveryType }}
                         </mat-option>

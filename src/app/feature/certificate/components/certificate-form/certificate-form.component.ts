@@ -99,9 +99,11 @@ export class CertificateFormComponent implements OnInit {
     if (exito) {
       this.form.controls['attendant'].disable();
       this.form.controls['number'].disable();
+      this.form.controls['type'].disable();
     } else {
       this.form.controls['attendant'].enable();
       this.form.controls['number'].enable();
+      this.form.controls['type'].enable();
     }
   }
 
@@ -127,6 +129,8 @@ export class CertificateFormComponent implements OnInit {
     if (this.form.valid) {
       const certificate = this.form.value;
       certificate.attendant = this.user;
+      console.log(certificate);
+      
       this.service.createCertificate(certificate).subscribe(
         (resp) => {
           Swal.fire('Exito!', 'Certificado Registrado.', 'success');
@@ -144,8 +148,6 @@ export class CertificateFormComponent implements OnInit {
     this.validateInput(false); // Se habilitan campos Desabilitados para obtener su informacion
     if (this.form.valid) {
       const certificate = this.form.value;
-      console.log(certificate);
-
       this.service.updateCertificate(certificate.number, certificate).subscribe(
         (resp) => {
           Swal.fire('Exito!', 'Certificado Actualizado.', 'success');
@@ -160,7 +162,14 @@ export class CertificateFormComponent implements OnInit {
 
   public uploadFile() {
     this.validateInput(false);
-    this.service.postCertificateFile(this.certificateNumber, this.attachmentFormData).subscribe((resp) => {});
+    this.service.postCertificateFile(this.certificateNumber, this.attachmentFormData).subscribe((resp) => {
+      Swal.fire('Exito!', 'Archivo subido.', 'success');
+      this.router.navigate(['./certificado/lista']);
+    },
+    (err) => {
+      this.handlerError(err);
+    }
+    );
   }
 
   public fileChange(event) {
@@ -205,13 +214,13 @@ export class CertificateFormComponent implements OnInit {
       XLSX.utils.sheet_to_json(worksheet, { raw: true }).map((raw) => {
         const certificate: Certificate = {
           number: Number(raw['NO_CERTIFICADO'].toString()),
-          type: raw['TIPO'] ? raw['TIPO'] : CertificateType.CA_NV,
-          state: raw['ESTADO'] ? raw['ESTADO'] : CertificateState.GUARDED,
+          type: this.validateTypesExcel(raw['TIPO'].toString()),
+          state: this.validatStatesExcel(raw['ESTADO'].toString()),
           attendant: this.service.getUser(),
           department: raw['DEPARTAMENTO'] ? raw['DEPARTAMENTO'] : null,
           township: raw['MUNICIPIO'] ? raw['MUNICIPIO'] : null,
           institution: raw['NOMBRE INSTITUCIÓN'] ? raw['NOMBRE INSTITUCIÓN'] : null,
-          stateRUAF: raw['ESTADORUAF'] ? raw['ESTADORUAF'] : CertificateState.IDLE,
+          stateRUAF: raw['ESTADORUAF'] ? raw['ESTADORUAF'] : null,
           stateDateRUAF: raw['ESTADORUAF'] ? new Date((raw['FECHAESTADORUAF'] - 25569) * 86400 * 1000) : null,
         };
         certificatesToRegister.push(certificate);
@@ -235,13 +244,42 @@ export class CertificateFormComponent implements OnInit {
     fileReader.readAsArrayBuffer(this.fileExcel);
   }
 
+  private validateTypesExcel(type: string) {
+    switch (type) {
+      case 'CA de Nacido Vivo':
+        return CertificateType.CA_NV;
+      case 'Nacido vivo':
+        return CertificateType.NV;
+      case 'CA de Defuncion':
+        return CertificateType.CA_DEF;
+      case 'Defuncion':
+        return CertificateType.DEF;
+    }
+  }
+
+  private validatStatesExcel(state: string) {
+    switch (state) {
+      case 'Sin uso':
+        return CertificateState.IDLE;
+      case 'Asignado':
+        return CertificateState.ASSIGNED;
+      case 'Guardado':
+        return CertificateState.GUARDED;
+      case 'Extraviado':
+        return CertificateState.STRAY;
+      case 'Anulado':
+        return CertificateState.ANNULLED;
+      case 'Con incongruencias':
+        return CertificateState.WITH_INCONGRUENCES;
+    }
+  }
+
   private listTownships(): void {
     this.service.findAllTownships().subscribe(
       (response) => {
         this.TOWNSHIPS = response;
       },
       (error: HttpErrorResponse) => {
-        // TODO
       }
     );
   }

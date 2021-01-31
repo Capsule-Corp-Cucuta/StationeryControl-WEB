@@ -24,16 +24,25 @@ export class DeliverysFilterComponent implements OnInit {
   @Input() filter: string;
   @Output() filterEvent = new EventEmitter();
 
-  constructor(private servce: FacadeService) {
+  public user: string;
+  public authority: string;
+
+  constructor(private service: FacadeService) {
     this.values = {
       firstInput: '',
       secondInput: '',
     };
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.user = this.service.getUser();
+    this.authority = this.service.getAuthorities()[0];
+  }
 
   public sendEvent(): void {
+    if (this.authority === 'USER') {  
+      this.values.secondInput = this.user;
+    } 
     this.filterEvent.emit(this.values);
   }
 
@@ -61,7 +70,7 @@ export class DeliverysFilterComponent implements OnInit {
 
   public findUserByName(e) {
     if (e !== '') {
-      this.servce.findUserByUserName(e, 0).subscribe((resp) => {
+      this.service.findUserByUserName(e, 0).subscribe((resp) => {
         this.users = resp as any[];
       });
     }

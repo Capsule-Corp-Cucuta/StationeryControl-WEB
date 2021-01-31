@@ -39,7 +39,7 @@ export class DeliveryFormComponent implements OnInit {
   private buildForm() {
     this.form = this.builder.group({
       tradeNumber:['', [Validators.required]],
-      deliveryType: DeliveryType.DEPARTURE,
+      deliveryType:[DeliveryType.DEPARTURE,[Validators.required]],
       firstCertificate: ['', [Validators.required]],
       lastCertificate: ['', [Validators.required]],
       sender: this.user,

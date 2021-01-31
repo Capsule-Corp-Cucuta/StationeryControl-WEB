@@ -182,7 +182,7 @@ export class Constants {
           STATE: 'Estado del Certificado:',
           STATERUAF: 'Estado Ruaf',
           DATE: 'Última fecha de modificación:',
-          REGISTRATION: 'Fecha de registro',
+          REGISTRATION: 'Fecha de registro Ruaf',
           DEPARTMENT: 'Departamento:',
           TOWNSHIP: 'Municipio:',
           INSTITUTION: 'Institución:',
@@ -200,7 +200,7 @@ export class Constants {
           TYPECERTIFICATE: 'Tipo de Certificado',
           INSTITUTION: 'Institucion',
           STATE: 'Estado del Certificado',
-          ATTENDANT: 'Usuario',
+          ATTENDANT: 'Nombre Usuario',
           TWONSHIP: 'Municpio',
         },
         PLACEHOLDER: {
@@ -210,7 +210,7 @@ export class Constants {
           TYPECERTIFICATE: 'Seleccione un Tipo de Certificado',
           INSTITUTION: 'Ingrese una Institucion',
           STATE: 'Seleccione un Estado de Certificado',
-          ATTENDANT: 'Ingrese un Usuario',
+          ATTENDANT: 'Ingrese nombre del usuario',
           TWONSHIP: 'Ingrese un Municipio',
         },
         BUTTON: 'Buscar',
@@ -225,7 +225,7 @@ export class Constants {
           INITIAL: 'Número de Certificado Inicial sin Código de Verificación:',
           FINAL: 'Número de Certificado Final sin Código de Verificación:',
           SENDER: 'Cédula del Remitente:',
-          RECEIVER: 'Cédula del Receptor:',
+          RECEIVER: 'Nombre del Receptor:',
           TYPE: 'Tipo (Entrega/Devolución):',
         },
         BUTTON: 'Registrar',
@@ -277,7 +277,7 @@ export class Constants {
         PLACEHOLDER: {
           NAME: 'Nombre de la Institución',
           T0WNSHIP: 'Seleccione Municipio',
-          ATTENDANT: 'Usuario'
+          ATTENDANT: 'Nombre del Usuario encargado'
         },
         BUTTON: 'Registrar',
         ATTACH_FILE: {
@@ -412,7 +412,7 @@ export class Constants {
     { authority: 'ADMIN', value: 'Estado de Certificado' },
     { authority: 'USER', value: 'Estado/Cedula' },
     { authority: 'ADMIN', value: 'Estado/Institucion' },
-    { authority: 'ADMIN', value: 'Cedula' },
+    { authority: 'ADMIN', value: 'Usuario' },
     { authority: 'ADMIN', value: 'Municipio' },
     { authority: 'ADMIN', value: 'Institucion' },
   ];

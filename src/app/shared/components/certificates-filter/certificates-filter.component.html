@@ -94,18 +94,6 @@
                     <mat-option *ngFor="let op of TYPES" [value]="op.value"> {{ op.value | certificateType }} </mat-option>
                 </mat-select>
             </mat-form-field>
-
-            <mat-form-field>
-                <mat-label> {{ LABELS.ATTENDANT }} </mat-label>
-                <input type="text" placeholder=" {{ PLACEHOLDER.ATTENDANT }} " matInput (keypress)="findUserByName($event.target.value)" [formControl]="myControl" [matAutocomplete]="auto" />
-                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFnS">
-                    <div *ngFor="let user of users">
-                        <mat-option [value]="user">
-                            {{ user.name }}
-                        </mat-option>
-                    </div>
-                </mat-autocomplete>
-            </mat-form-field>
         </div>
 
         <div *ngIf="filter === 'byStateAttendant'">
@@ -114,18 +102,6 @@
                 <mat-select placeholder="{{ PLACEHOLDER.STATE }}" [(ngModel)]="values.firstInput">
                     <mat-option *ngFor="let op of STATES" [value]="op.value"> {{ op.value | certificateState }} </mat-option>
                 </mat-select>
-            </mat-form-field>
-
-            <mat-form-field>
-                <mat-label> {{ LABELS.ATTENDANT }} </mat-label>
-                <input type="text" placeholder=" {{ PLACEHOLDER.ATTENDANT }} " matInput (keypress)="findUserByName($event.target.value)" [formControl]="myControl" [matAutocomplete]="auto" />
-                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFnS">
-                    <div *ngFor="let user of users">
-                        <mat-option [value]="user">
-                            {{ user.name }}
-                        </mat-option>
-                    </div>
-                </mat-autocomplete>
             </mat-form-field>
         </div>
     </div>

@@ -1,4 +1,5 @@
 export interface User {
+  username: string;
   id: string;
   userType?: UserType;
   name?: string;
@@ -7,6 +8,7 @@ export interface User {
   department?: string;
   township?: string;
   institution?: string;
+  enable?: boolean;
 }
 
 export enum UserType {

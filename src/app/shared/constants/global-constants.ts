@@ -34,7 +34,7 @@ export class Constants {
       TITLE: 'Inicio de Sesión',
       SUBTITLE: 'Instituto Departamental de Salud',
       PLACEHOLDER: {
-        USER: 'Cédula:',
+        USER: 'Nombre de Usuario:',
         PASS: 'Contraseña:',
       },
       ERROR: '¡Ups! parece que las credenciales no son correctas.',
@@ -53,9 +53,9 @@ export class Constants {
     },
     RECOVER_PASSWORD: {
       TITLE: '¿Olvidaste tu contraseña? Te ayudaremos.',
-      TEXT: 'Escribe aquí tu cédula para buscar tu usuario y enviarte un correo de recuperación de contraseña:',
+      TEXT: 'Escribe aquí tu nombre de usuario para enviarte un correo de recuperación de contraseña:',
       PLACEHOLDER: {
-        ID: 'Cédula:',
+        ID: 'Nombre de Usuario:',
       },
       BUTTON: 'Enviar correo de recuperación',
       LINK: 'Volver a Inicio de Sesión',
@@ -160,7 +160,7 @@ export class Constants {
         MULTIPLE: {
           TITLE: 'Registrar múltiples Certificados',
           BUTTON: 'Registrar',
-          BUTTONEXCEL: 'Descargar Excel'
+          BUTTONEXCEL: 'Descargar Excel',
         },
       },
       LIST: {
@@ -277,7 +277,7 @@ export class Constants {
         PLACEHOLDER: {
           NAME: 'Nombre de la Institución',
           T0WNSHIP: 'Seleccione Municipio',
-          ATTENDANT: 'Nombre del Usuario encargado'
+          ATTENDANT: 'Nombre del Usuario encargado',
         },
         BUTTON: 'Registrar',
         ATTACH_FILE: {

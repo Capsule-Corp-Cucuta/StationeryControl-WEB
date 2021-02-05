@@ -26,8 +26,14 @@ export class UserFormComponent implements OnInit {
   public readonly LABELS = Constants.LABELS.USER.FORM;
   public readonly USER_TYPES = Constants.USER_TYPES_MAPPER;
 
-  constructor(private builder: FormBuilder,private router: Router, private service: FacadeService, private activeRoute: ActivatedRoute) {
+  constructor(
+    private builder: FormBuilder,
+    private router: Router,
+    private service: FacadeService,
+    private activeRoute: ActivatedRoute
+  ) {
     this.user = {
+      username: null,
       id: null,
       name: null,
       email: null,
@@ -70,52 +76,49 @@ export class UserFormComponent implements OnInit {
       phone: ['', [Validators.required]],
       userType: [UserType.ADMINISTRATOR, [Validators.required]],
       department: [this.DEPARTMENT],
-      township:[''],
-      institution: ['']
+      township: [''],
+      institution: [''],
     });
   }
 
-  private validateInput(exito:Boolean){
-    if(exito){
+  private validateInput(exito: Boolean) {
+    if (exito) {
       this.form.controls['id'].disable();
-    }else{
+    } else {
       this.form.controls['id'].enable();
     }
-    
   }
 
   public create(e: Event) {
     e.preventDefault();
     if (this.form.valid) {
-    const user = this.form.value;
-    this.service.createUser(user).subscribe((rep) => {
-      Swal.fire(
-        'Exito!',
-        'Usuario Registrado.',
-        'success'
+      const user = this.form.value;
+      this.service.createUser(user).subscribe(
+        (rep) => {
+          Swal.fire('Exito!', 'Usuario Registrado.', 'success');
+          this.router.navigate(['./usuario/lista']);
+        },
+        (err) => {
+          this.handlerError(err);
+        }
       );
-      this.router.navigate(['./usuario/lista']);
-    },(err)=>{
-     this.handlerError(err);
-    });
-  }
+    }
   }
 
   public update(e: Event) {
     e.preventDefault();
     this.validateInput(false);
     if (this.form.valid) {
-    const user = this.form.value;
-    this.service.updateUser(user).subscribe((resp) => {
-      Swal.fire(
-        'Exito!',
-        'Usuario Actualizado.',
-        'success'
+      const user = this.form.value;
+      this.service.updateUser(user).subscribe(
+        (resp) => {
+          Swal.fire('Exito!', 'Usuario Actualizado.', 'success');
+          this.router.navigate(['./usuario/lista']);
+        },
+        (err) => {
+          this.handlerError(err);
+        }
       );
-      this.router.navigate(['./usuario/lista']);
-    },(err)=>{
-      this.handlerError(err);
-    });
     }
   }
 
@@ -126,15 +129,11 @@ export class UserFormComponent implements OnInit {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Si!',
-      cancelButtonText: 'No'
+      cancelButtonText: 'No',
     }).then((result) => {
       if (result.value) {
         this.service.deleteUser(this.user.id).subscribe(() => {
-          Swal.fire(
-            'Eliminado!',
-            'Usuario Eliminado.',
-            'success'
-          );
+          Swal.fire('Eliminado!', 'Usuario Eliminado.', 'success');
           this.router.navigate(['./usuario/lista']);
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -167,24 +166,12 @@ export class UserFormComponent implements OnInit {
 
   public handlerError(err): void {
     if (err.status === 404) {
-        Swal.fire(
-          'Oops...!',
-          'Error al registrar/actualizar usuario.',
-          'error'
-        );
-     } else if (err.status === 500) {
-       Swal.fire(
-         'ERROR 500 !',
-         'INTERNAL, SERVER ERROR.',
-         'error'
-       );
-       //this.router.navigate(['/server-error']);
-     }else {
-       Swal.fire(
-         'Oops...!',
-         'ah ocurrido un error, intenta mas tarde.',
-         'error'
-       );
-     }
-   }
+      Swal.fire('Oops...!', 'Error al registrar/actualizar usuario.', 'error');
+    } else if (err.status === 500) {
+      Swal.fire('ERROR 500 !', 'INTERNAL, SERVER ERROR.', 'error');
+      //this.router.navigate(['/server-error']);
+    } else {
+      Swal.fire('Oops...!', 'ah ocurrido un error, intenta mas tarde.', 'error');
+    }
+  }
 }

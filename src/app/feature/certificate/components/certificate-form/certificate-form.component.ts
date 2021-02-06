@@ -11,6 +11,9 @@ import { Certificate } from '../../../../core/models/certificate.model';
 import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
 import { CertificateState, CertificateType } from '../../../../core/models/certificate.model';
+import { Historical } from 'src/app/core/models/historical.model';
+import { MatDialog } from '@angular/material/dialog';
+import { CertificateModalHistoricalComponent } from '../certificate-modal-historical/certificate-modal-historical.component';
 
 @Component({
   selector: 'app-certificate-form',
@@ -21,6 +24,10 @@ export class CertificateFormComponent implements OnInit {
   public user: string;
   public fileName: string;
   public authority: string;
+  public messageError:string;
+  public messageErrorInitial:string;
+  public errorInitial=false;
+  public error=false;
   public isCreate = true;
   public userSesiom = false;
   public showUploadAttachment = true;
@@ -32,6 +39,7 @@ export class CertificateFormComponent implements OnInit {
   private arrayBufferExcel: any;
   public TOWNSHIPS: string[];
   public INSTITUTIONS: Institution[];
+  public historical: Historical[] = [];
 
   public readonly ICONS = Constants.ICONS;
   public readonly DEPARTMENT = Constants.DEPARTMENT;
@@ -39,8 +47,10 @@ export class CertificateFormComponent implements OnInit {
   public readonly TYPES = Constants.CERTIFICATES_TYPES_MAPPER;
   public readonly STATES = Constants.CERTIFICATES_STATES_MAPPER;
 
+
   constructor(
     private router: Router,
+    public dialog: MatDialog,
     private builder: FormBuilder,
     private activateRoute: ActivatedRoute,
     private service: FacadeService
@@ -71,6 +81,7 @@ export class CertificateFormComponent implements OnInit {
           ) {
             this.showUploadAttachment = false;
           }
+          this.validateStatesEnabled(resp.state.toString());
           this.validateInput(true);
           this.form.patchValue(resp);
         });
@@ -86,7 +97,7 @@ export class CertificateFormComponent implements OnInit {
       attendant: [''],
       department: [this.DEPARTMENT],
       institution: [''],
-      number: ['', [Validators.required]],
+      number: ['', [Validators.required, Validators.minLength(8),Validators.maxLength(9)]],
       state: [CertificateState.IDLE, [Validators.required]],
       stateRUAF: [CertificateState.IDLE],
       stateDateRUAF: [''],
@@ -95,35 +106,13 @@ export class CertificateFormComponent implements OnInit {
     });
   }
 
-  private validateInput(exito: Boolean) {
-    if (exito) {
-      this.form.controls['attendant'].disable();
-      this.form.controls['number'].disable();
-      this.form.controls['type'].disable();
-    } else {
-      this.form.controls['attendant'].enable();
-      this.form.controls['number'].enable();
-      this.form.controls['type'].enable();
-    }
-  }
-
-  private validateStatus(state: string) {
-    switch (state) {
-      case 'IDLE':
-        return 0;
-      case 'ASSIGNED':
-        return 1;
-      case 'GUARDED':
-        return 2;
-    }
-  }
-
   private buildFormFile() {
     this.formFile = this.builder.group({
       attachment: [''],
     });
   }
 
+ 
   public create(e: Event) {
     e.preventDefault();
     if (this.form.valid) {
@@ -161,7 +150,6 @@ export class CertificateFormComponent implements OnInit {
   }
 
   public uploadFile() {
-    this.validateInput(false);
     this.service.postCertificateFile(this.certificateNumber, this.attachmentFormData).subscribe((resp) => {
       Swal.fire('Exito!', 'Archivo subido.', 'success');
       this.router.navigate(['./certificado/lista']);
@@ -274,6 +262,84 @@ export class CertificateFormComponent implements OnInit {
     }
   }
 
+  public validateNumberInput(e){
+    this.messageError=" ";
+    if (e !== '') {
+      if(e.length < 8 || e.length > 9){
+        this.error=true;
+        this.messageError = 'El numero de Certificado debe contener entre (8-9) caracteres';
+      }
+    }else{
+      this.error=true;
+      this.messageError = 'Numero de Certificado requerido';
+    }
+  }
+
+  public validateInitialNumber(type:string){
+    this.messageErrorInitial=" ";
+    if(this.validateTypes(type) === CertificateType.NV ||this.validateTypes(type) === CertificateType.CA_NV){
+      this.errorInitial=true;
+      this.messageErrorInitial ='Numero de certificado debe empezar por el digito 1 o 5';
+    }else if(this.validateTypes(type) === CertificateType.DEF ||this.validateTypes(type) === CertificateType.CA_DEF){
+      this.errorInitial=true;
+      this.messageErrorInitial ='Numero de certificado debe empezar por el digito 7 o 8';
+    }
+  }
+
+  private validateInput(exito: Boolean) {
+    if (exito) {
+      this.form.controls['attendant'].disable();
+      this.form.controls['number'].disable();
+      this.form.controls['type'].disable();
+    } else {
+      this.form.controls['attendant'].enable();
+      this.form.controls['number'].enable();
+      this.form.controls['type'].enable();
+      this.form.controls['state'].enable();
+    }
+  }
+
+  private validateStatus(state: string) {
+    switch (state) {
+      case 'IDLE':
+        return 0;
+      case 'ASSIGNED':
+        return 1;
+      case 'GUARDED':
+        return 2;
+      case 'STRAY':
+        return 3;
+      case 'ANNULLED':
+        return 4;
+      case 'WITH_INCONGRUENCES':
+        return 5;  
+    }
+  }
+  private validateTypes(type: string) {
+    switch (type) {
+      case 'CA_NV':
+        return 0;
+      case 'NV':
+        return 1;
+      case 'CA_DEF':
+        return 2;
+      case 'DEF':
+        return 3;
+    }
+  }
+
+  private validateStatesEnabled(state:string){
+    if(this.authority === 'USER'){
+       if(this.validateStatus(state) === CertificateState.STRAY ||
+          this.validateStatus(state) === CertificateState.ANNULLED ||
+          this.validateStatus(state) === CertificateState.WITH_INCONGRUENCES
+        ){
+          this.form.controls['state'].disable();
+       }
+    }
+  }
+
+
   private listTownships(): void {
     this.service.findAllTownships().subscribe(
       (response) => {
@@ -295,5 +361,12 @@ export class CertificateFormComponent implements OnInit {
         this.INSTITUTIONS = response;
       });
     }
+  }
+
+  public openDialog(){
+    const certificateNumber = this.certificateNumber;
+    this.dialog.open(CertificateModalHistoricalComponent, {
+      data: certificateNumber,
+    });
   }
 }

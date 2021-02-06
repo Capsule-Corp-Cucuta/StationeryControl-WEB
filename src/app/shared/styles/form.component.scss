@@ -38,3 +38,16 @@
         justify-content: space-around;
     }
 }
+
+.message {
+    &__error {
+        font-size: smaller !important;
+        color: red;
+        padding-bottom: 10px;
+    }
+    &__initial {
+        font-size: smaller !important;
+        color: royalblue;
+        padding-bottom: 10px;
+    }
+}

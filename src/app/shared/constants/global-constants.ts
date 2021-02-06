@@ -114,13 +114,14 @@ export class Constants {
         DELETE_BUTTON: 'Eliminar',
       },
       LIST: {
-        COLUMNS: ['id', 'name', 'email', 'phone', 'userType', 'actions'],
+        COLUMNS: ['id', 'name', 'email', 'phone', 'userType','state', 'actions'],
         CELLS: {
           ID: 'Cédula:',
           NAME: 'Nombre completo:',
           EMAIL: 'Correo electrónico:',
           PHONE: 'Número telefónico:',
           TYPE: 'Tipo de Usuario:',
+          STATE:'Estado'
         },
       },
       FILTER: {
@@ -157,6 +158,7 @@ export class Constants {
         },
         REGISTER_BUTTON: 'Registrar',
         UPDATE_BUTTON: 'Actualizar',
+        HISTORICAL_BUTTON:'Ver Historico',
         MULTIPLE: {
           TITLE: 'Registrar múltiples Certificados',
           BUTTON: 'Registrar',
@@ -234,10 +236,12 @@ export class Constants {
         COLUMNS: [
           'tradeNumber',
           'deliveryType',
+          'date',
           'firstCertificate',
           'lastCertificate',
           'sender',
           'receiver',
+          'institution',
           'actions',
         ],
         CELLS: {
@@ -247,6 +251,8 @@ export class Constants {
           SENDER: 'Cédula del Remitente:',
           RECEIVER: 'Cédula del Receptor:',
           TYPE: 'Tipo (Entrega/Devolución):',
+          DATE:'Fecha registro',
+          INSTITUTION:'Institucion receptora'
         },
         TOOLTIP: 'Asginar Certificados',
       },
@@ -314,6 +320,17 @@ export class Constants {
         },
         BUTTON: 'Buscar',
         SELECT: 'Seleccione Filtro',
+      },
+    },
+    HISTORICAL: {
+      TITLE:"Historial estados del certificado: ",
+      LIST: {
+        COLUMNS: ['number', 'state', 'date'],
+        CELLS: {
+          NUMBER: 'N° de certificado:',
+          STATE: 'Estado',
+          DATE: 'Fecha modificacion estado',
+        },
       },
     },
   };

@@ -78,8 +78,12 @@ export class UserFormComponent implements OnInit {
   private validateInput(exito:Boolean){
     if(exito){
       this.form.controls['id'].disable();
+      this.form.controls['township'].disable();
+      this.form.controls['institution'].disable();
     }else{
       this.form.controls['id'].enable();
+      this.form.controls['township'].enable();
+      this.form.controls['institution'].enable();
     }
     
   }

@@ -21,12 +21,15 @@
                     </mat-form-field>
 
                     <mat-form-field>
-                        <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.ID }}" formControlName="number" />
+                        <input matInput type="number" placeholder="{{ LABELS.PLACEHOLDER.ID }}" formControlName="number" (change)="validateNumberInput($event.target.value)" />
                     </mat-form-field>
+
+                    <span class="message__error" *ngIf="error">  {{messageError}}</span>
+                    <span class="message__initial" *ngIf="errorInitial">  {{messageErrorInitial}}</span>
 
                     <div class="form__content--group">
                         <mat-form-field>
-                            <mat-select formControlName="type" placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" value="type">
+                            <mat-select formControlName="type" placeholder="{{ LABELS.PLACEHOLDER.TYPE }}" (selectionChange)="validateInitialNumber($event.value)" value="type">
                                 <mat-option *ngFor="let op of TYPES" [value]="op.value"> {{ op.value | certificateType }} </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -38,8 +41,6 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-
-
                     </div>
 
                     <div class="form__content--group">
@@ -76,28 +77,32 @@
                         </mat-form-field>
                     </div>
 
-
                     <div *ngIf="showUploadAttachment">
                         <p>{{ LABELS.ATTACH_FILE.TITLE }}</p>
 
                         <input type="file" id="file" (change)="fileChange($event)" />
 
                         <button mat-raised-button (click)="uploadFile()">
-                           <mat-icon>{{ ICONS.CLOUD_UPLOAD }}</mat-icon>
-                        </button>
+                               <mat-icon>{{ ICONS.CLOUD_UPLOAD }}</mat-icon>
+                            </button>
                     </div>
 
                 </mat-card-content>
 
                 <mat-card-actions class="form__actions">
                     <button *ngIf="isCreate" mat-raised-button (click)="create($event)">
-            <mat-icon>{{ ICONS.SAVE }}</mat-icon>
-            <span>{{ LABELS.REGISTER_BUTTON }}</span>
-          </button>
+                        <mat-icon>{{ ICONS.SAVE }}</mat-icon>
+                        <span>{{ LABELS.REGISTER_BUTTON }}</span>
+                    </button>
 
                     <button *ngIf="!isCreate" mat-raised-button color="accent" (click)="update($event)">
-            {{ LABELS.UPDATE_BUTTON }}
-          </button>
+                         {{ LABELS.UPDATE_BUTTON }}
+                    </button>
+
+                    <button *ngIf="!isCreate" mat-raised-button (click)="openDialog()">
+                        <mat-icon>{{ ICONS.LIBRARY_BOOKS }}</mat-icon>
+                        <span>{{ LABELS.HISTORICAL_BUTTON }}</span>
+                    </button>
                 </mat-card-actions>
             </form>
         </mat-card>
@@ -129,9 +134,9 @@
 
                 <mat-card-actions class="form__actions">
                     <button mat-raised-button color="primary" (click)="uploadFileExcel()">
-            <mat-icon>{{ ICONS.CLOUD_UPLOAD }}</mat-icon>
-            {{ LABELS.MULTIPLE.BUTTON }}
-          </button>
+                <mat-icon>{{ ICONS.CLOUD_UPLOAD }}</mat-icon>
+                {{ LABELS.MULTIPLE.BUTTON }}
+              </button>
                 </mat-card-actions>
             </form>
         </mat-card>

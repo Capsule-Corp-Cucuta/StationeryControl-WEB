@@ -8,9 +8,10 @@ import { MaterialModule } from '../../shared/material/material.module';
 import { CertificateFormComponent } from './components/certificate-form/certificate-form.component';
 import { CertificateListComponent } from './components/certificate-list/certificate-list.component';
 import { CertificateModalComponent } from './components/certificate-modal/certificate-modal.component';
+import { CertificateModalHistoricalComponent } from './components/certificate-modal-historical/certificate-modal-historical.component';
 
 @NgModule({
-  declarations: [CertificateFormComponent, CertificateListComponent, CertificateModalComponent],
+  declarations: [CertificateFormComponent, CertificateListComponent, CertificateModalComponent, CertificateModalHistoricalComponent],
   imports: [CommonModule, CertificadoRoutingModule, SharedModule, MaterialModule, ReactiveFormsModule],
 })
 export class CertificadoModule {}

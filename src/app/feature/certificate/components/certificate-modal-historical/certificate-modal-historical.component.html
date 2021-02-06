@@ -1,0 +1,29 @@
+<section class="page" width="600" height="550" style="border: none;">
+    <div class="mat-elevation-z1 table">
+        <mat-card class="page__header">
+            <mat-card-title class="page__header__title">
+                <mat-icon class="page__header__title--icon">{{ ICONS.LIBRARY_BOOKS }}</mat-icon>
+                <p class="page__header__title--text">{{ LABELS }} {{id}}</p>
+            </mat-card-title>
+        </mat-card>
+        <table mat-table [dataSource]="historical" class="table--content">
+            <ng-container matColumnDef="number">
+                <th mat-header-cell *matHeaderCellDef>{{ CELLS.NUMBER }}</th>
+                <td mat-cell *matCellDef="let historical"> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef>{{ CELLS.STATE }}</th>
+                <td mat-cell *matCellDef="let historical"></td>
+            </ng-container>
+
+            <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>{{ CELLS.DATE }}</th>
+                <td mat-cell *matCellDef="let historical"></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="COLUMNS"></tr>
+            <tr mat-row *matRowDef="let row; columns: COLUMNS"></tr>
+        </table>
+    </div>
+</section>

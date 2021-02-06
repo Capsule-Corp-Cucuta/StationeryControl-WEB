@@ -4,13 +4,13 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { FacadeService } from '../../../../core/services/facade.service';
 import { Constants } from '../../../../shared/constants/global-constants';
-import { CertificateService } from '../../../../core/services/certificate.service';
 import { CertificateModalComponent } from '../certificate-modal/certificate-modal.component';
 import { StatisticsService } from 'src/app/core/services/statistics.service';
 import { finalize } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-certificate-list',
@@ -139,6 +139,8 @@ export class CertificateListComponent implements OnInit, OnDestroy {
       });
     }
   }
+
+ 
 
   public updateFilter(filter: string): void {
     switch (filter) {

@@ -1,9 +1,10 @@
 export interface Certificate {
   number: number;
+  verificationCode: number;
   type: CertificateType;
   state: CertificateState;
   stateRUAF?: CertificateState;
-  stateDateRUAF?:Date;
+  stateDateRUAF?: Date;
   attendant?: string;
   department?: string;
   township?: string;
